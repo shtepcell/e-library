@@ -4,9 +4,8 @@
   "description": "E-library",
   "main": "index.js",
   "scripts": {
-    "start:server": "nodemon",
-    "start:client": "webpack-dev-server --config configs/webpack.config.js",
-    "dev": "npm run start:server & npm run start:client",
+    "server": "nodemon",
+    "client": "webpack-dev-server --config configs/webpack.config.js",
     "build": "webpack --config configs/webpack.js --mode=production"
   },
   "repository": {
