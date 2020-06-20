@@ -4,7 +4,10 @@
   "description": "E-library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:server": "nodemon",
+    "start:client": "webpack-dev-server --config configs/webpack.config.js",
+    "dev": "npm run start:server & npm run start:client",
+    "build": "webpack --config configs/webpack.js --mode=production"
   },
   "repository": {
     "type": "git",
@@ -21,14 +24,28 @@
     "@babel/preset-env": "7.10.3",
     "@babel/preset-react": "7.10.1",
     "@babel/preset-typescript": "7.10.1",
+    "@types/cors": "2.8.6",
+    "@types/express": "4.17.6",
+    "@types/node": "14.0.13",
+    "@types/react": "16.9.38",
     "babel-loader": "8.1.0",
+    "css-loader": "3.6.0",
+    "file-loader": "6.0.0",
+    "nodemon": "2.0.4",
+    "sass": "1.26.8",
+    "sass-loader": "8.0.2",
+    "style-loader": "1.2.1",
     "webpack": "4.43.0",
     "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.0",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
-    "@types/express": "4.17.6",
-    "@types/node": "14.0.13",
-    "express": "4.17.1"
+    "cors": "2.8.5",
+    "express": "4.17.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "ts-node": "8.10.2",
+    "typescript": "3.9.5"
   }
 }
