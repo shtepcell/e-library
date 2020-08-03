@@ -1,0 +1,36 @@
+.Icon {
+    display: inline-block;
+
+    background-size: contain;
+
+    &_size {
+        &_s {
+            width: 8px;
+            height: 8px;
+        }
+
+        &_m {
+            width: 16px;
+            height: 16px;
+        }
+
+        &_l {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &_view {
+        &_logout {
+            background-image: url('./assets/logout.svg');
+        }
+
+        &_logo-white {
+            background-image: url('./assets/logo-white.svg');
+        }
+
+        &_logo-black {
+            background-image: url('./assets/logo-black.svg');
+        }
+    }
+}

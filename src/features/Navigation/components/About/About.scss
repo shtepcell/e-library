@@ -1,0 +1,39 @@
+.About {
+    display: flex;
+    align-items: center;
+    padding: 14px;
+
+    &-Logo {
+        flex: 0 0 40px;
+
+        .Icon {
+            height: 28px;
+            width: 28px;
+        }
+    }
+
+    &-Info {
+        flex: 1 1 auto;
+
+        text-align: center;
+    }
+
+    &-Name {
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+
+        margin-bottom: 4px;
+
+        text-transform: uppercase;
+    }
+
+    &-Corp {
+        font-size: 10px;
+        line-height: 14px;
+    }
+
+    &-Version {
+        text-align: center;
+    }
+}

@@ -1,8 +1,29 @@
 .Navigation {
+    display: flex;
+
+    flex-direction: column;
+    box-sizing: border-box;
+
     background-color: #38484E;
 
-    width: 248px;
+    width: 260px;
     height: 100vh;
 
-    flex: 0 0 248px;
+    flex: 0 0 260px;
+
+    padding: 16px 12px;
+
+    color: #fff;
+
+    &-Card {
+        margin-bottom: 18px;
+    }
+
+    &-Top {
+        flex: 1 1 auto;
+    }
+
+    &-Bottom {
+        flex: 0 0 auto;
+    }
 }

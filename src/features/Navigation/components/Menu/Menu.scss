@@ -1,0 +1,20 @@
+.Menu {
+    overflow: hidden;
+
+    &-Tab {
+        display: block;
+        padding: 14px;
+
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 14px;
+
+        &:hover {
+            background-color: #50595C;
+        }
+
+        &.Menu-Tab_active {
+            background-color: #0183F6;
+        }
+    }
+}
