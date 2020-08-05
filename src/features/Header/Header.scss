@@ -1,0 +1,11 @@
+.Header {
+    min-height: 44px;
+
+    &-Name {
+        font-size: 28px;
+        line-height: 32px;
+        font-weight: bold;
+    }
+
+    border-bottom: 1px solid #E3E3E3;
+}
