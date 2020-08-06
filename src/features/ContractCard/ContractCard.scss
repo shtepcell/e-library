@@ -1,0 +1,97 @@
+$activeColor: #0183F6;
+$waitingColor: #38484E;
+$deletedColor: #C3C3C3;
+$blockedColor: #D1224C;
+
+.ContractCard {
+    grid-row: 1 span;
+
+    height: 120px;
+
+    box-shadow: 0 0 4px rgba(0, 0, 0, .25);
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    &:hover {
+        .ContractCard-StatusLine {
+            height: 12px;
+        }
+    }
+
+    &-StatusLine {
+        transition: all ease-in-out .3s;
+
+        height: 8px;
+
+        background-color: #C3C3C3;
+    }
+
+    &-Header {
+        display: flex;
+        justify-content: space-between;
+
+        padding: 8px 8px;
+
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: bold;
+    }
+
+    &-Status {
+        color: #C3C3C3;
+    }
+
+    &-Client {
+        padding: 12px 8px;
+        font-size: 14px;
+    }
+
+
+    &_status {
+        &_active {
+            .ContractCard-StatusLine {
+                background-color: $activeColor;
+            }
+
+            .ContractCard-Status {
+                color: $activeColor;
+            }
+        }
+
+        &_waiting {
+            .ContractCard-StatusLine {
+                background-color: $waitingColor;
+            }
+
+            .ContractCard-Status {
+                color: $waitingColor;
+            }
+        }
+
+        &_deleted {
+            .ContractCard-StatusLine {
+                background-color: $deletedColor;
+            }
+
+            .ContractCard-Status {
+                color: $deletedColor;
+            }
+        }
+
+        &_blocked {
+            .ContractCard-StatusLine {
+                background-color: $blockedColor;
+            }
+
+            .ContractCard-Status {
+                color: $blockedColor;
+            }
+        }
+
+    }
+
+}

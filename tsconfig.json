@@ -3,5 +3,23 @@
         "jsx": "react",
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "baseUrl": "./",
+        "paths": {
+            "@lib/*": [
+                "src/lib/*"
+            ],
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@features/*": [
+                "src/features/*"
+            ],
+            "@const/*": [
+                "src/const/*"
+            ],
+            "@typings/*": [
+                "typings/*"
+            ]
+        }
     }
 }

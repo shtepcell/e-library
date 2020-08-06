@@ -4,7 +4,7 @@ import { IClassNameProps } from '@bem-react/core';
 import { version } from '../../../../../package.json';
 
 import { Card } from '../Card';
-import { Icon } from '../../../../components/Icon';
+import { Icon } from '@components/Icon';
 
 import './About.scss';
 

@@ -1,18 +1,58 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+} from "react-router-dom";
 
-import { Navigation } from './features/Navigation/Navigation';
-import { Header } from './features/Header/Header';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+
+import { Page } from '@features/Page/Page';
+import { ContractsPage } from '@features/ContractsPage/ContractsPage';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+        main: '#0183F6'
+    },
+  },
+});
 
 import './Root.scss';
 
-ReactDOM.render(
-    <div className="Root">
-        <Navigation />
-        <div className="Right">
-            <Header />
-            <div className="Foot"></div>
+export const Root: FunctionComponent<{}> = ({ children }) => {
+    return (
+        <div className="Root">
+            <Switch>
+
+                <Route path="/" exact>
+                    <Page type="contracts">
+                        <ContractsPage />
+                    </Page>
+                </Route>
+                <Route path="/settings">
+                    <Page type="settings">
+                        Settings
+                    </Page>
+                </Route>
+                <Route>
+                    <Page type="settings">
+                        Не найдено
+                    </Page>
+                </Route>
+            </Switch>
         </div>
-    </div>,
+    );
+}
+
+ReactDOM.render(
+    <ThemeProvider theme={theme}>
+        <Router>
+            <Root />
+        </Router>
+
+    </ThemeProvider>,
     document.getElementById('react-root'),
 );

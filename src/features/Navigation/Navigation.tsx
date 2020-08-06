@@ -9,13 +9,19 @@ import './Navigation.scss';
 
 const cnNavigation = cn('Navigation');
 
-export class Navigation extends PureComponent {
+interface INavigationProps {
+    page: PageType;
+}
+
+export class Navigation extends PureComponent<INavigationProps> {
     render() {
+        const { page } = this.props;
+
         return (
             <div className={cnNavigation()}>
                 <div className={cnNavigation('Top')}>
                     <Profile className={cnNavigation('Card')} />
-                    <Menu className={cnNavigation('Card')} />
+                    <Menu className={cnNavigation('Card')} activePage={page} />
                 </div>
                 <div className={cnNavigation('Bottom')}>
                     <About className={cnNavigation('Card')} />

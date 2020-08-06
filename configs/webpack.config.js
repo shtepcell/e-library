@@ -12,6 +12,13 @@ module.exports = {
 
     resolve: {
         extensions: ['.ts', '.tsx', '.jsx', '.js', '.json'],
+        alias: {
+            '@components': path.resolve('src/components'),
+            '@features': path.resolve('src/features'),
+            '@lib': path.resolve('src/lib'),
+            '@const': path.resolve('src/const'),
+            '@typings': path.resolve('typings'),
+        }
     },
 
     devServer: {
@@ -23,7 +30,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(jsx|tsx)?$/,
+                test: /\.(jsx|tsx|ts)?$/,
                 exclude: /(node_modules)/,
                 loader: 'babel-loader',
                 options: {

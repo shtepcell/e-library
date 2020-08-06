@@ -3,7 +3,7 @@ import { cn } from '@bem-react/classname';
 import { IClassNameProps } from '@bem-react/core';
 
 import { Card } from '../Card';
-import { Icon } from '../../../../components/Icon';
+import { Icon } from '@components/Icon';
 
 import './Profile.scss';
 

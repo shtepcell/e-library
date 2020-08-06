@@ -1,0 +1,13 @@
+.ContractsPage {
+    &-Add {
+        position: fixed !important;
+
+        bottom: 40px;
+        right: 20px;
+    }
+
+    &-Progress {
+        padding: 40px 0;
+        text-align: center;
+    }
+}

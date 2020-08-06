@@ -1,5 +1,10 @@
 .Header {
+    display: flex;
     min-height: 44px;
+    align-items: center;
+
+    border-bottom: 1px solid #E3E3E3;
+    padding-bottom: 12px;
 
     &-Name {
         font-size: 28px;
@@ -7,5 +12,15 @@
         font-weight: bold;
     }
 
-    border-bottom: 1px solid #E3E3E3;
+    &-Left {
+        flex: 1 1 auto;
+    }
+
+    &-Right {
+        flex: 0 0 auto;
+    }
+
+    &-Search {
+        width: 260px;
+    }
 }
