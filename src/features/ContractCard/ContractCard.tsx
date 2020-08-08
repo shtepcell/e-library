@@ -14,16 +14,16 @@ interface IContractCardProps {
 };
 
 export const ContractCard: FunctionComponent<IContractCardProps> = ({ contract }) => {
-    const { id, status } = contract;
+    const { id, status, client } = contract;
 
     return (
-        <Link className={cnContractCard({ status })}>
+        <Link className={cnContractCard({ status })} href={`/contract/${id}`}>
             <div className={cnContractCard('StatusLine')} />
             <div className={cnContractCard('Header')}>
                 <div className={cnContractCard('Id')}>#{id}</div>
                 <div className={cnContractCard('Status')}>{i18n('statuses', status)}</div>
             </div>
-            <div className={cnContractCard('Client')}>ПАО "РНКБ"</div>
+            <div className={cnContractCard('Client')}>{client.name}</div>
         </Link>
     )
 }

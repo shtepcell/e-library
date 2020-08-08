@@ -14,7 +14,7 @@ interface IMenuProps extends IClassNameProps {
 }
 
 const tabs = [
-    { title: 'Контракты', url: '/', key: 'contracts' },
+    { title: 'Контракты', url: '/', key: 'main' },
     { title: 'Настройки', url: '/settings', key: 'settings' },
 ];
 

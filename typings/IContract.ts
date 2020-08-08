@@ -1,3 +1,5 @@
+import { IClient } from "./IClient";
+
 export interface IContract {
     id: string;
 
@@ -11,6 +13,8 @@ export interface IContract {
 
     hasOriginal: boolean;
     attachment: string;
+
+    client: IClient;
 }
 
 export type ContractType = 'contract' | 'gov_contract';

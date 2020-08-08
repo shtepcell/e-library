@@ -24,9 +24,30 @@ export const ContractsList: FunctionComponent<IContractsListProps> = ({ contract
     return (
         <div className={cnContractsList()}>
             <div className={cnContractsList('Period')}>
-                Сегодня
+                Август 2020
+            </div>
+            <div className={cnContractsList('Grid')}>
+                {contracts.map((item, index) => {
+                    return (
+                        <ContractCard key={item.id} contract={item} />
+                    );
+                })}
             </div>
 
+            <div className={cnContractsList('Period')}>
+                Июль 2020
+            </div>
+            <div className={cnContractsList('Grid')}>
+                {contracts.map((item, index) => {
+                    return (
+                        <ContractCard key={item.id} contract={item} />
+                    );
+                })}
+            </div>
+
+            <div className={cnContractsList('Period')}>
+                Июнь 2020
+            </div>
             <div className={cnContractsList('Grid')}>
                 {contracts.map((item, index) => {
                     return (

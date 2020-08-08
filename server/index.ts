@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 
 import contracts from '../server/mocks/contracts.json';
+import contract from '../server/mocks/contract.json';
 
 const app = express();
 const SERVER_PORT = 8888;
@@ -15,6 +16,10 @@ app.use(express.static(path.resolve('static')));
 
 app.get('/api/contracts', (req, res) => {
     res.json(contracts);
+});
+
+app.get('/api/contract/:id', (req, res) => {
+    res.json(contract);
 });
 
 app.use('/api/*', (req, res) => {

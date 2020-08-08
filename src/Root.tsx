@@ -10,7 +10,8 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import { Page } from '@features/Page/Page';
-import { ContractsPage } from '@features/ContractsPage/ContractsPage';
+import { MainPage } from '@features/MainPage/MainPage';
+import { ContractPage } from '@features/ContractPage/ContractPage';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,10 +27,9 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
     return (
         <div className="Root">
             <Switch>
-
                 <Route path="/" exact>
-                    <Page type="contracts">
-                        <ContractsPage />
+                    <Page type="main">
+                        <MainPage />
                     </Page>
                 </Route>
                 <Route path="/settings">
@@ -37,8 +37,13 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                         Settings
                     </Page>
                 </Route>
+                <Route path="/contract/:id">
+                    <Page type="main">
+                        <ContractPage />
+                    </Page>
+                </Route>
                 <Route>
-                    <Page type="settings">
+                    <Page type="404">
                         Не найдено
                     </Page>
                 </Route>

@@ -6,25 +6,25 @@ import AddIcon from '@material-ui/icons/Add';
 import { Filters } from './components/Filters/Filters';
 import { ContractsList } from './components/ContractsList/ContractsList';
 
-import './ContractsPage.scss';
+import './MainPage.scss';
 
 import { IContract } from '@typings/IContract';
 
 import { request } from '@lib/request';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const cnContractsPage = cn('ContractsPage');
+const cnMainPage = cn('MainPage');
 
-interface IContractsPageProps {};
+interface IMainPageProps {};
 
-interface IContractsPageState {
+interface IMainPageState {
     allContracts: IContract[];
     disabledStatuses?: Record<IContract["status"], boolean> | {};
     loading: boolean;
 };
 
-export class ContractsPage extends PureComponent<IContractsPageProps, IContractsPageState> {
-    state: IContractsPageState = {
+export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
+    state: IMainPageState = {
         allContracts: [],
         disabledStatuses: {},
         loading: true,
@@ -63,16 +63,16 @@ export class ContractsPage extends PureComponent<IContractsPageProps, IContracts
         });
 
         return (
-            <div className={cnContractsPage()}>
+            <div className={cnMainPage()}>
                 <Filters onChange={this.onFiltersChange} disabledStatuses={disabledStatuses} />
                 {loading ? (
-                    <div className={cnContractsPage('Progress')}>
+                    <div className={cnMainPage('Progress')}>
                         <CircularProgress  color="primary" />
                     </div>
                 ) : (
                     <ContractsList contracts={filteredContracts} />
                 )}
-                <Fab className={cnContractsPage('Add')} color="primary" aria-label="add">
+                <Fab className={cnMainPage('Add')} color="primary" aria-label="add">
                     <AddIcon />
                 </Fab>
             </div>

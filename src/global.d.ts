@@ -1,1 +1,1 @@
-declare type PageType = 'contracts' | 'settings' | '404';
+declare type PageType = 'main' | 'contract' | 'settings' | '404';
