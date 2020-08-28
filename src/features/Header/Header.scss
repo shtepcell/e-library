@@ -13,6 +13,9 @@
     }
 
     &-Left {
+        display: flex;
+        align-items: center;
+
         flex: 1 1 auto;
     }
 
@@ -22,5 +25,28 @@
 
     &-Search {
         width: 260px;
+    }
+
+    &-ContractStatus {
+        margin-left: 16px;
+
+        color: #fff;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: 600;
+
+        background-color: #0183F6;
+        padding: 4px 12px;
+
+        border-radius: 12px;
+
+    }
+
+    &-Icon {
+        margin-right: 8px;
+    }
+
+    &-Tooltip {
+        font-size: 14px;
     }
 }

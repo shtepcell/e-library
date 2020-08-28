@@ -21,7 +21,7 @@ export const ContractCard: FunctionComponent<IContractCardProps> = ({ contract }
             <div className={cnContractCard('StatusLine')} />
             <div className={cnContractCard('Header')}>
                 <div className={cnContractCard('Id')}>#{id}</div>
-                <div className={cnContractCard('Status')}>{i18n('statuses', status)}</div>
+                <div className={cnContractCard('Status')}>{i18n(status)}</div>
             </div>
             <div className={cnContractCard('Client')}>{client.name}</div>
         </Link>

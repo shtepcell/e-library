@@ -18,7 +18,6 @@ export const Page: FunctionComponent<IPageProps> = ({ children, type }) => {
             <Navigation page={type} />
             <div className={cnPage()}>
                 <div className={cnPage('Content')}>
-                    <Header />
                     {children}
                 </div>
             </div>

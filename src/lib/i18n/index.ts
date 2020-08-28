@@ -1,11 +1,7 @@
-import statuses from './keysets/statuses';
-
-const KEYSETS = {
-    statuses
-};
+import keysets from './keysets';
 
 type Keysets = 'statuses';
 
-export const i18n = (keyset: Keysets, key: string) => {
-    return KEYSETS[keyset][key] || key;
+export const i18n = (key: string) => {
+    return keysets[key] || key;
 }

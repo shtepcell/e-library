@@ -28,7 +28,7 @@ export const Filters: FunctionComponent<IFiltersProps> = (props) => {
                     className={cnFilters('Link', { disabled: disabledStatuses[item] })}
                     onClick={() => onChange(item)}
                 >
-                    {i18n('statuses', item)}
+                    {i18n(item)}
                 </Link>
             ))}
         </div>

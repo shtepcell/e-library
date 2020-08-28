@@ -1,0 +1,60 @@
+.Contract {
+    display: flex;
+
+
+    &-RightColumn {
+        padding: 20px 0;
+
+        flex: 0 0 260px;
+    }
+
+    &-LeftColumn {
+        padding: 20px 24px 0 0;
+
+
+        flex: 1 1 auto;
+    }
+
+    &-Field {
+        max-width: 400px;
+
+        margin-bottom: 28px;
+    }
+
+    &-FieldName {
+        font-size: 12px;
+
+        margin-bottom: 2px;
+    }
+
+    &-FieldValue {
+        font-size: 16px;
+
+        line-height: 20px;
+
+        font-weight: bold;
+    }
+
+    &-Description {
+        max-width: 350px;
+
+        font-size: 16px;
+        line-height: 20px;
+
+        margin-bottom: 16px;
+    }
+
+
+    &-Upload:not(:last-child) {
+        margin-right: 16px;
+    }
+
+    &-Document {
+        margin: 50px 0 50px 50px;
+
+        height: 500px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url('../../assets/scan.jpg');
+    }
+}

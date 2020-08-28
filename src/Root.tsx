@@ -37,7 +37,12 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                         Settings
                     </Page>
                 </Route>
-                <Route path="/contract/:id">
+                <Route path="/sprav">
+                    <Page type="sprav">
+                        sprav
+                    </Page>
+                </Route>
+                <Route path="/contract/:id" component={ContractPage}>
                     <Page type="main">
                         <ContractPage />
                     </Page>

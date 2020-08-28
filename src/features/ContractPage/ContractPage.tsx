@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { cn } from '@bem-react/classname';
 import { request } from '@lib/request';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Contract } from './components/Contract/Contract';
+import { Header } from '@features/Header/Header';
 
 import { IContract } from '@typings/IContract';
 
@@ -19,7 +21,7 @@ interface IContractPageState {
 };
 
 export class ContractPage extends PureComponent<IContractPageProps, IContractPageState> {
-    state = {
+    state: IContractPageState = {
         loading: false,
     }
 
@@ -48,9 +50,12 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
         }
 
         return (
-            <div className={cnContractPage()}>
-                {JSON.stringify(contract)}
-            </div>
+            <>
+                <Header type="contract" />
+                <div className={cnContractPage()}>
+                    <Contract contract={contract} />
+                </div>
+            </>
         )
     }
 }

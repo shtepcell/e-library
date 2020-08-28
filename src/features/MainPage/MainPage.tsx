@@ -12,6 +12,7 @@ import { IContract } from '@typings/IContract';
 
 import { request } from '@lib/request';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Header } from '@features/Header/Header';
 
 const cnMainPage = cn('MainPage');
 
@@ -64,6 +65,7 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
 
         return (
             <div className={cnMainPage()}>
+                <Header type="main" />
                 <Filters onChange={this.onFiltersChange} disabledStatuses={disabledStatuses} />
                 {loading ? (
                     <div className={cnMainPage('Progress')}>
