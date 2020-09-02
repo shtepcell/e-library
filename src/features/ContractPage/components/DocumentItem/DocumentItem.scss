@@ -1,0 +1,33 @@
+.DocumentItem {
+    display: flex;
+    align-items: center;
+    margin: 0 -8px 4px -4px;
+
+    padding: 4px 8px 4px 4px;
+    border-radius: 4px;
+
+    cursor: pointer;
+    transition: all 0.1s;
+
+    &:hover {
+        background-color: #f3f3f3;
+    }
+
+    &-Name {
+        flex: 1 0 auto;
+
+        margin-left: 4px;
+
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    &-Date {
+        margin-left: 4px;
+
+        font-size: 14px;
+        line-height: 16px;
+        font-style: italic;
+        color: #999;
+    }
+}

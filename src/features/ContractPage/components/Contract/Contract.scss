@@ -16,45 +16,74 @@
     }
 
     &-Field {
-        max-width: 400px;
+        display: flex;
+        padding: 16px 0;
 
-        margin-bottom: 28px;
+        align-items: center;
+
+        border-bottom: 1px solid #e1e1e1;
     }
 
     &-FieldName {
-        font-size: 12px;
+        flex: 0 0 220px;
+        font-size: 14px;
 
         margin-bottom: 2px;
+        color: #0000008a;
+
     }
 
     &-FieldValue {
+        text-align:left;
+
+        flex: 1 1 auto;
+
         font-size: 16px;
 
         line-height: 20px;
-
-        font-weight: bold;
     }
 
-    &-Description {
-        max-width: 350px;
-
-        font-size: 16px;
-        line-height: 20px;
-
+    &-Title {
         margin-bottom: 16px;
+
+        font-size: 16px;
+        line-height: 30px;
+        font-weight: bold;
+
+        color: #0000008a;
     }
 
+    &-TitleButton.MuiButtonBase-root {
+        margin-left: 12px;
 
-    &-Upload:not(:last-child) {
-        margin-right: 16px;
+        min-width: 30px;
+        border-radius: 50%;
     }
 
-    &-Document {
-        margin: 50px 0 50px 50px;
+    &-DocumentDialog {
+        .MuiTextField-root {
+            flex: 0 0 auto;
 
-        height: 500px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-image: url('../../assets/scan.jpg');
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+
+        .Contract-DialogTypeOfDocument {
+            flex: 1 0 auto;
+        }
+
+        .Contract-DialogCheck {
+            display: flex;
+            margin: 12px 0;
+        }
+
+        .Contract-DialogButtons {
+            margin-left: -12px;
+        }
+
+        .Contract-UploadIcon {
+            margin-left: 2px;
+            margin-right: 10px;
+        }
     }
 }

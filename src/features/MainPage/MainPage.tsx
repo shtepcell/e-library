@@ -52,7 +52,7 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
                 setTimeout(() => this.setState({
                     allContracts: contracts,
                     loading: false,
-                }), 1000);
+                }), 100);
             })
     }
 
