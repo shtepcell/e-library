@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 const cnHeader = cn('Header');
 
 interface IHeaderProps {
-    type: 'main' | 'contract' | 'default';
+    type: 'main' | 'contract';
 
     params?: any;
 };
@@ -72,9 +72,6 @@ export class Header extends PureComponent<IHeaderProps> {
 
             case 'contract':
                 return this.renderContractHeader();
-
-            default:
-                return this.renderMainHeader();
         }
     }
 }

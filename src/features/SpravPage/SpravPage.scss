@@ -1,0 +1,16 @@
+.SpravPage {
+    &-Title {
+        display: inline-flex;
+
+        margin-right: 24px;
+        margin-bottom: 40px;
+
+        font-size: 28px;
+        line-height: 32px;
+        font-weight: bold;
+    }
+
+    &-Tabs.MuiTabs-root {
+        display: inline-flex;
+    }
+}

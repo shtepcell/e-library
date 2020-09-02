@@ -22,6 +22,7 @@ const theme = createMuiTheme({
 });
 
 import './Root.scss';
+import { SpravPage } from '@features/SpravPage/SpravPage';
 
 export const Root: FunctionComponent<{}> = ({ children }) => {
     return (
@@ -39,7 +40,7 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                 </Route>
                 <Route path="/sprav">
                     <Page type="sprav">
-                        sprav
+                        <SpravPage />
                     </Page>
                 </Route>
                 <Route path="/contract/:id" component={ContractPage}>
