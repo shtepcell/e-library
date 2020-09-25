@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { cn } from '@bem-react/classname';
 import Link from '@material-ui/core/Link';
-import statuses from '../../../../const/statuses';
+import { Statuses } from '../../../../const/statuses';
 import { i18n } from '@lib/i18n';
 import { IContract } from '@typings/IContract';
 
@@ -22,7 +22,7 @@ export const Filters: FunctionComponent<IFiltersProps> = (props) => {
     return (
         <div className={cnFilters()}>
             <div className={cnFilters('Name')}>Фильтры:</div>
-            {statuses.map((item, id) => (
+            {Statuses.map((item, id) => (
                 <Link
                     key={id}
                     className={cnFilters('Link', { disabled: disabledStatuses[item] })}

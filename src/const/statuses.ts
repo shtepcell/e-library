@@ -1,4 +1,4 @@
-export default [
+export const Statuses = [
     'active',
     'waiting',
     'deleted',

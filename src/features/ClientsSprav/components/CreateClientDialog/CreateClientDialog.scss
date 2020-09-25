@@ -1,0 +1,36 @@
+.CreateClientDialog {
+    &-Field {
+        &.MuiFormControl-root {
+            flex: 1 1 auto;
+
+            min-width: 200px;
+
+            &:not(:last-child) {
+                margin-right: 24px;
+            }
+        }
+
+        &_type {
+            &_type.MuiFormControl-root {
+                flex: 0 0 auto;
+            }
+
+            &_status.MuiFormControl-root {
+                flex: 0 0 auto;
+            }
+        }
+    }
+
+    &-Divider {
+        height: 1px;
+
+        background-color: #e1e1e1;
+    }
+
+    &-Row {
+        display: flex;
+        align-items: center;
+
+        margin-bottom: 24px;
+    }
+}

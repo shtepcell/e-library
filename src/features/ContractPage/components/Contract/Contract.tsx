@@ -20,6 +20,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 const cnContract = cn('Contract');
 
 interface IContractProps {
@@ -28,12 +29,16 @@ interface IContractProps {
 
 interface IOwnState {
     openDocumentDialog: boolean;
+    date: Date,
+    period: Date,
 }
 
 
 export class Contract extends PureComponent<IContractProps, IOwnState> {
     state = {
         openDocumentDialog: false,
+        date: new Date(),
+        period: new Date(),
     }
 
     handleAddDocumentClick = () => {
@@ -44,34 +49,73 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
         this.setState({ openDocumentDialog: false })
     }
 
-    renderDialog = () => {
+    handlePeriodChange = (date) => {
+        this.setState({ period: date })
+    }
+
+    handleDateChange = (date) => {
+        this.setState({ date })
+    }
+
+    renderDialog() {
         return (
             <Dialog className={cnContract('DocumentDialog')} fullWidth maxWidth="sm" onClose={this.handleCloseDialog} open={this.state.openDocumentDialog}>
                 <DialogTitle id="simple-dialog-title">Загрузка документа</DialogTitle>
                 <DialogContent>
-                    {/* <DialogContentText>
-                        Заполните данные о документе:
-                    </DialogContentText> */}
                     <form noValidate autoComplete="off">
-                        <TextField
-                            label="Номер документа"
-                            type="number"
-                        />
-                        <TextField
-                            className={cnContract('DialogTypeOfDocument')}
-                            select
-                            value={1}
-                            label="Тип документа"
-                            >
-                                <MenuItem value={1}>Акт оказанных услуг</MenuItem>
-                                <MenuItem value={2}>Акт свертки</MenuItem>
-                                <MenuItem value={3}>Бланк заказа</MenuItem>
-                                <MenuItem value={4}>Письмо</MenuItem>
-                                <MenuItem value={5}>Претензия</MenuItem>
-                        </TextField>
-                        <TextField label="Период" />
-                        <TextField label="Дата отправки" />
-                        <TextField label="Номер трека" />
+                        <div className={cnContract('Row')}>
+                            <TextField
+                                className={cnContract('DocumentField', { type: 'number' })}
+                                label="Номер документа"
+                                type="number"
+                                variant="outlined"
+                            />
+                            <TextField
+                                className={cnContract('DocumentField', { type: 'type' })}
+                                select
+                                value={1}
+                                variant="outlined"
+                                label="Тип документа"
+                                >
+                                    <MenuItem value={1}>Акт оказанных услуг</MenuItem>
+                                    <MenuItem value={2}>Акт свертки</MenuItem>
+                                    <MenuItem value={3}>Бланк заказа</MenuItem>
+                                    <MenuItem value={4}>Письмо</MenuItem>
+                                    <MenuItem value={5}>Претензия</MenuItem>
+                            </TextField>
+                        </div>
+                        <div className={cnContract('Row')}>
+                            <KeyboardDatePicker
+                                className={cnContract('DocumentField', { type: 'period' })}
+                                views={['year', 'month']}
+                                disableToolbar
+                                value={this.state.period}
+                                onChange={this.handlePeriodChange}
+                                format="MM.YYYY"
+                                id="date-picker-dialog"
+                                label="Период"
+                                inputVariant="outlined"
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                            <KeyboardDatePicker
+                                className={cnContract('DocumentField', { type: 'date' })}
+                                disableToolbar
+                                format="DD.MM.YYYY"
+                                id="date-picker-dialog"
+                                value={this.state.date}
+                                onChange={this.handleDateChange}
+                                label="Дата отправки"
+                                inputVariant="outlined"
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </div>
+                        <div className={cnContract('Row')}>
+                            <TextField className={cnContract('DocumentField', { type: 'track' })} variant="outlined" label="Номер трека" />
+                        </div>
                         <div className={cnContract('DialogButtons')}>
                             <FormControlLabel
                                 className={cnContract('DialogCheck')}

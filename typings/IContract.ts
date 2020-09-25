@@ -14,8 +14,14 @@ export interface IContract {
     hasOriginal: boolean;
     attachment: string;
 
+    department: string;
+
     client: IClient;
+
+    serviceManager: string;
+    personalManager: string;
 }
 
-export type ContractType = 'contract' | 'gov_contract';
-export type ContractStatus = 'active' | 'deleted' | 'waiting' | 'blocked';
+export enum ContractType { Contract, GovermentContract };
+
+export enum ContractStatus { 'active', 'deleted', 'waiting', 'blocked' };

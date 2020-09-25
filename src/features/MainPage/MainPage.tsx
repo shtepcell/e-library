@@ -13,6 +13,7 @@ import { IContract } from '@typings/IContract';
 import { request } from '@lib/request';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Header } from '@features/Header/Header';
+import { CreateContractDialog } from '@features/CreateContractDialog/CreateContractDialog';
 
 const cnMainPage = cn('MainPage');
 
@@ -22,6 +23,7 @@ interface IMainPageState {
     allContracts: IContract[];
     disabledStatuses?: Record<IContract["status"], boolean> | {};
     loading: boolean;
+    openCreateDialog: boolean;
 };
 
 export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
@@ -29,6 +31,7 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
         allContracts: [],
         disabledStatuses: {},
         loading: true,
+        openCreateDialog: false,
     }
 
     onFiltersChange = (status: IContract["status"]) => {
@@ -41,6 +44,14 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
                 [status]: newStatus
             }
         });
+    }
+
+    handlerCloseDialog = () => {
+        this.setState({ openCreateDialog: false });
+    }
+
+    handlerClickAddButton = () => {
+        this.setState({ openCreateDialog: true });
     }
 
     componentDidMount() {
@@ -74,9 +85,10 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
                 ) : (
                     <ContractsList contracts={filteredContracts} />
                 )}
-                <Fab className={cnMainPage('Add')} color="primary" aria-label="add">
+                <Fab onClick={this.handlerClickAddButton} className={cnMainPage('Add')} color="primary" aria-label="add">
                     <AddIcon />
                 </Fab>
+                <CreateContractDialog open={this.state.openCreateDialog} onClose={this.handlerCloseDialog} />
             </div>
         )
     }

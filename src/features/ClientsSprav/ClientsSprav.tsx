@@ -7,9 +7,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import './ClientsSprav.scss';
 import Paper from '@material-ui/core/Paper';
+import { request } from '@lib/request';
+import Button from '@material-ui/core/Button';
+import { CreateClientDialog } from './components/CreateClientDialog/CreateClientDialog';
 
 const cnClientsSprav = cn('ClientsSprav');
 
@@ -17,27 +22,68 @@ interface IOwnProps {
 };
 
 interface IOwnState {
+    adressSuggest: string[];
+    showCreateDialog: boolean;
 };
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+function createData(name, calories, fat, carbs) {
+    return { name, calories, fat, carbs };
   }
 
   const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
+    createData('ПАО "РНКБ"', 'Симферополь', 'Иванов П.П.', '20.10.2020'),
+    createData('ООО ГАЗПРОМ', 'Симферополь', 'Золотов И.А.','09.05.2017'),
+    createData('ИП Яблоко', 'Севастополь', 'Коричнева З.С.', '31.12.2018'),
+    createData('Меганом', 'Севастополь', 'Елка Х.В.', '03.01.2010'),
+    createData('Магазинчик', 'Ялта', 'Ранимова О.О.', '11.09.2019'),
   ];
 
-
 export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
-    render() {
+    state = {
+        adressSuggest: [],
+        showCreateDialog: false,
+    }
 
+    handleAdressChange = (event) => {
+        request
+            .post('/suggest/adress', { value: event.target.value })
+            .then(res => {
+                if (!res.data.result) this.setState({adressSuggest: [] });
+
+                this.setState({
+                    adressSuggest: res.data.result.map(item => item.fullName),
+                })
+            })
+    }
+
+    handlerCloseDialog = () => {
+        this.setState({ showCreateDialog: false });
+    }
+
+    handlerOpenDialog = () => {
+        this.setState({ showCreateDialog: true });
+    }
+
+    render() {
         return (
             <div className={cnClientsSprav()}>
-                <div className={cnClientsSprav()}>
+                {/* <div className={cnClientsSprav('Adress')}>
+                    <Autocomplete
+                        id="combo-box-demo"
+                        filterOptions={(x) => x}
+                        options={this.state.adressSuggest}
+                        getOptionLabel={(option) => option}
+                        renderInput={(params) => <TextField {...params} onChange={this.handleAdressChange} label="Адрес" variant="outlined" />}
+                    />
+                </div> */}
+                <div className={cnClientsSprav('Controls')}>
+                    <TextField className={cnClientsSprav('Search')} variant="outlined" size='small' label="Поиск" type="search" />
+                    <Button className={cnClientsSprav('AddButton')} variant="contained" color="primary" onClick={this.handlerOpenDialog}>
+                        Создать клиента
+                    </Button>
+                </div>
+
+                <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog}/>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -46,7 +92,6 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                                 <TableCell align="right">Департамент</TableCell>
                                 <TableCell align="right">Персональный менеджер</TableCell>
                                 <TableCell align="right">Дата регистрации</TableCell>
-                                <TableCell align="right">Protein&nbsp;(g)</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -58,13 +103,11 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                                     <TableCell align="right">{row.calories}</TableCell>
                                     <TableCell align="right">{row.fat}</TableCell>
                                     <TableCell align="right">{row.carbs}</TableCell>
-                                    <TableCell align="right">{row.protein}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                </div>
             </div>
         )
     }

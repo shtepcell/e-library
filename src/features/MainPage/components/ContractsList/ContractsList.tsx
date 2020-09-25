@@ -60,7 +60,7 @@ export class ContractsList extends PureComponent<IContractsListProps> {
                     <div className={cnContractsList('Date')}>{dateOfConclusion}</div>
                 </div>
                 <div className={cnContractsList('Column', { type: 'manager' })}>
-                    Писосий Андреевич Лукня
+                    Пупкин Андреевич Лукня
                 </div>
                 <div className={cnContractsList('Column', { type: 'status' })}>
                     {status}

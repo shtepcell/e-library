@@ -5,13 +5,16 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DayJsUtils from '@date-io/dayjs';
+import ru from 'dayjs/locale/ru';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import { Page } from '@features/Page/Page';
 import { MainPage } from '@features/MainPage/MainPage';
 import { ContractPage } from '@features/ContractPage/ContractPage';
+import { SpravPage } from '@features/SpravPage/SpravPage';
 
 const theme = createMuiTheme({
   palette: {
@@ -22,7 +25,6 @@ const theme = createMuiTheme({
 });
 
 import './Root.scss';
-import { SpravPage } from '@features/SpravPage/SpravPage';
 
 export const Root: FunctionComponent<{}> = ({ children }) => {
     return (
@@ -60,10 +62,11 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
 
 ReactDOM.render(
     <ThemeProvider theme={theme}>
-        <Router>
-            <Root />
-        </Router>
-
+        <MuiPickersUtilsProvider utils={DayJsUtils} locale={ru}>
+            <Router>
+                <Root />
+            </Router>
+        </MuiPickersUtilsProvider>
     </ThemeProvider>,
     document.getElementById('react-root'),
 );

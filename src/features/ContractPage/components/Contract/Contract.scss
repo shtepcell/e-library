@@ -61,15 +61,33 @@
     }
 
     &-DocumentDialog {
-        .MuiTextField-root {
-            flex: 0 0 auto;
 
-            margin-right: 12px;
-            margin-bottom: 12px;
+        .Contract-DocumentField {
+            &.MuiFormControl-root {
+                flex: 1 1 auto;
+
+                min-width: 200px;
+
+                &:not(:last-child) {
+                    margin-right: 24px;
+                }
+            }
+
+            &_type {
+                &_number.MuiFormControl-root {
+                    flex: 0 0 auto;
+                }
+
+                &_status.MuiFormControl-root {
+                    flex: 1 1 auto;
+                }
+            }
         }
 
-        .Contract-DialogTypeOfDocument {
-            flex: 1 0 auto;
+        .Contract-Row {
+            display: flex;
+
+            margin-bottom: 24px;
         }
 
         .Contract-DialogCheck {
