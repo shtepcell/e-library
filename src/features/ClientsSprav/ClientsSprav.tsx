@@ -30,13 +30,13 @@ function createData(name, calories, fat, carbs) {
     return { name, calories, fat, carbs };
   }
 
-  const rows = [
+const rows = [
     createData('ПАО "РНКБ"', 'Симферополь', 'Иванов П.П.', '20.10.2020'),
     createData('ООО ГАЗПРОМ', 'Симферополь', 'Золотов И.А.','09.05.2017'),
     createData('ИП Яблоко', 'Севастополь', 'Коричнева З.С.', '31.12.2018'),
     createData('Меганом', 'Севастополь', 'Елка Х.В.', '03.01.2010'),
     createData('Магазинчик', 'Ялта', 'Ранимова О.О.', '11.09.2019'),
-  ];
+];
 
 export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
     state = {

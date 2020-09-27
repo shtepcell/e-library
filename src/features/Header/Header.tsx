@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 const cnHeader = cn('Header');
 
 interface IHeaderProps {
-    type: 'main' | 'contract';
+    type: 'main' | 'contract' | 'documents';
 
     params?: any;
 };
@@ -42,22 +42,32 @@ export class Header extends PureComponent<IHeaderProps> {
         return (
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
-                    {/* <Tooltip className={cnHeader('Tooltip')} title="Нет оригинала" placement="bottom-start" arrow>
+                    <Tooltip className={cnHeader('Tooltip')} title="Нет оригинала" placement="bottom-start" arrow>
                         <ErrorIcon color="error" className={cnHeader('Icon')} />
                     </Tooltip>
                     <div className={cnHeader('Name')}>Контракт #321</div>
                     <div className={cnHeader('ContractStatus')}>
                         Активный
-                    </div> */}
-                    <Tooltip className={cnHeader('Tooltip')} title="В работе" placement="bottom-start" arrow>
+                    </div>
+                    {/* <Tooltip className={cnHeader('Tooltip')} title="В работе" placement="bottom-start" arrow>
                         <WorkIcon color="primary" className={cnHeader('Icon')} />
                     </Tooltip>
                     <div className={cnHeader('Name')}>Контракт #321</div>
                     <div className={cnHeader('ContractStatus')}>
                         Активный
-                    </div>
+                    </div> */}
                 </div>
                 <div className={cnHeader('Right')}>
+                </div>
+            </div>
+        );
+    }
+
+    renderDocumentsHeader() {
+        return (
+            <div className={cnHeader()}>
+                <div className={cnHeader('Left')}>
+                    <div className={cnHeader('Name')}>Документы</div>
                 </div>
             </div>
         );
@@ -72,6 +82,9 @@ export class Header extends PureComponent<IHeaderProps> {
 
             case 'contract':
                 return this.renderContractHeader();
+
+            case 'documents':
+                return this.renderDocumentsHeader();
         }
     }
 }

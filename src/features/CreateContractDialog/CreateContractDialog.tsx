@@ -8,6 +8,8 @@ import { IContract, ContractType, ContractStatus } from '@typings/IContract';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Departments } from '@const/departments';
 import { i18n } from '@lib/i18n';
+import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 
 const cnCreateContractDialog = cn('CreateContractDialog');
 
@@ -150,6 +152,16 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             }}
                         />
                     </div>
+                    <FormControlLabel
+                        className={cnCreateContractDialog('DialogCheck')}
+                        control={
+                            <Checkbox
+                                name="checkedB"
+                                color="primary"
+                            />
+                        }
+                        label="Оригинал в архиве"
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="primary">

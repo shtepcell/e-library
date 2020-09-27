@@ -9,7 +9,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { IContract } from '@typings/IContract';
 
@@ -21,6 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { Link } from '@material-ui/core';
 const cnContract = cn('Contract');
 
 interface IContractProps {
@@ -211,13 +211,21 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Андрей Картофанович Белиберда
                         </div>
                     </div>
+                    <div className={cnContract('Field', { type: 'original' })}>
+                        <div className={cnContract('FieldName')}>
+                            Оригинал в архиве
+                        </div>
+                        <div className={cnContract('FieldValue')}>
+                            Да
+                        </div>
+                    </div>
                 </div>
                 <div className={cnContract('RightColumn')}>
                     <div className={cnContract('Title')}>
-                        Документы контракта
-                        <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
+                        Последние документы
+                        {/* <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
                             <AddIcon />
-                        </IconButton>
+                        </IconButton> */}
                     </div>
                     {this.renderDialog()}
                     <div className={cnContract('Documents')}>
@@ -225,6 +233,9 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                         <DocumentItem />
                         <DocumentItem />
                         <DocumentItem />
+                    </div>
+                    <div className={cnContract('DocumentsLink')}>
+                        <Link href="/documents" target="_blank">Посмотреть все документы контракта</Link>
                     </div>
                 </div>
             </div>

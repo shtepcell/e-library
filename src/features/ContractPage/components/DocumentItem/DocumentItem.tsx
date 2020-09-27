@@ -16,7 +16,7 @@ export class DocumentItem extends PureComponent<IOwnProps> {
         return (
             <div className={cnDocumentItem()}>
                <DescriptionIcon color="primary" />
-               <div className={cnDocumentItem('Name')}>Файл.pdf</div>
+               <div className={cnDocumentItem('Name')}>Акт оказания услуг</div>
                <div className={cnDocumentItem('Date')}>04.2020</div>
             </div>
         )

@@ -15,6 +15,7 @@ import { Page } from '@features/Page/Page';
 import { MainPage } from '@features/MainPage/MainPage';
 import { ContractPage } from '@features/ContractPage/ContractPage';
 import { SpravPage } from '@features/SpravPage/SpravPage';
+import { DocumentsPage } from '@features/DocumentsPage/DocumentsPage';
 
 const theme = createMuiTheme({
   palette: {
@@ -43,6 +44,11 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                 <Route path="/sprav">
                     <Page type="sprav">
                         <SpravPage />
+                    </Page>
+                </Route>
+                <Route path="/documents">
+                    <Page type="documents">
+                        <DocumentsPage />
                     </Page>
                 </Route>
                 <Route path="/contract/:id" component={ContractPage}>

@@ -1,0 +1,44 @@
+.DocumentsPage {
+    padding-bottom: 40px;
+
+    &-Add {
+        position: fixed !important;
+
+        bottom: 40px;
+        right: 20px;
+    }
+
+    &-Progress {
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    &-Filters {
+        display: flex;
+        align-items: center;
+
+        padding: 32px 0;
+    }
+
+    &-Title {
+        font-size: 16px;
+
+        margin-right: 24px;
+    }
+
+    &-FiltersField {
+        flex: 1 1 auto;
+
+        &:not(:last-child) {
+            margin-right: 16px;
+        }
+
+        &_type_type.MuiFormControl-root{
+            min-width: 160px;
+        }
+
+        &_type_period.MuiFormControl-root{
+            max-width: 150px;
+        }
+    }
+}
