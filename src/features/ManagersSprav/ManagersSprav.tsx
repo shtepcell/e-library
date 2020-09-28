@@ -14,6 +14,8 @@ import Paper from '@material-ui/core/Paper';
 import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateManagerDialog } from './components/CreateClientDialog/CreateManagerDialog';
+import { IManager } from '@typings/IManager';
+import { i18n } from '@lib/i18n';
 
 const cnManagersSprav = cn('ManagersSprav');
 
@@ -22,24 +24,25 @@ interface IOwnProps {
 
 interface IOwnState {
     showCreateDialog: boolean;
+    managers: IManager[];
 };
-
-function createData(name, category) {
-    return { name, category };
-  }
-
-  const rows = [
-    createData('Иванов Сергей Иванович', 'Персональный менеджер'),
-    createData('Петров Валерий Крипс', 'Сервис-менеджер'),
-    createData('Анарич Светлана Пирова', 'Сервис-менеджер'),
-    createData('Катрин Ростислав Евгениевич', 'Персональный менеджер'),
-    createData('Алексеев Анатолий Григорьевич', 'Сервис-менеджер'),
-    createData('Вал Петр Константинович', 'Персональный менеджер'),
-  ];
 
 export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
     state = {
         showCreateDialog: false,
+        managers: [],
+    }
+
+    componentDidMount() {
+        request
+            .get('/managers')
+            .then(({ data }) => {
+                this.setState({ managers: data });
+            });
+    }
+
+    onCreateManager = (manager) => {
+        this.setState({ managers: [ manager, ...this.state.managers]} )
     }
 
     handlerCloseDialog = () => {
@@ -51,9 +54,10 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
     }
 
     render() {
+        const { managers } = this.state;
+
         return (
             <div className={cnManagersSprav()}>
-
                 <div className={cnManagersSprav('Controls')}>
                     <TextField className={cnManagersSprav('Search')} variant="outlined" size='small' label="Поиск" type="search" />
                     <Button className={cnManagersSprav('AddButton')} variant="contained" color="primary" onClick={this.handlerOpenDialog}>
@@ -61,22 +65,22 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
                     </Button>
                 </div>
 
-                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog}/>
-                <TableContainer component={Paper}>
+                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} onCreateManager={this.onCreateManager}/>
+                <TableContainer component={Paper} className={cnManagersSprav('Table')}>
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>ФИО</TableCell>
+                                <TableCell>Ф.И.О.</TableCell>
                                 <TableCell align="center">Категория</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
+                            {managers.map((manager) => (
+                                <TableRow key={manager._id} hover>
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        {`${manager.lastName} ${manager.firstName} ${manager.middleName}`}
                                     </TableCell>
-                                    <TableCell align="center">{row.category}</TableCell>
+                                    <TableCell align="center">{i18n(manager.category)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

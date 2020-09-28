@@ -223,9 +223,9 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                 <div className={cnContract('RightColumn')}>
                     <div className={cnContract('Title')}>
                         Последние документы
-                        {/* <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
+                        <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
                             <AddIcon />
-                        </IconButton> */}
+                        </IconButton>
                     </div>
                     {this.renderDialog()}
                     <div className={cnContract('Documents')}>

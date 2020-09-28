@@ -14,7 +14,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { Page } from '@features/Page/Page';
 import { MainPage } from '@features/MainPage/MainPage';
 import { ContractPage } from '@features/ContractPage/ContractPage';
-import { SpravPage } from '@features/SpravPage/SpravPage';
+import { SpravPage, SpravTabs } from '@features/SpravPage/SpravPage';
 import { DocumentsPage } from '@features/DocumentsPage/DocumentsPage';
 
 const theme = createMuiTheme({
@@ -41,9 +41,19 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                         Settings
                     </Page>
                 </Route>
+                <Route path="/sprav/clients">
+                    <Page type="sprav">
+                        <SpravPage tab={SpravTabs.Clients} />
+                    </Page>
+                </Route>
+                <Route path="/sprav/managers">
+                    <Page type="sprav">
+                        <SpravPage tab={SpravTabs.Managers} />
+                    </Page>
+                </Route>
                 <Route path="/sprav">
                     <Page type="sprav">
-                        <SpravPage />
+                        <SpravPage tab={SpravTabs.Clients} />
                     </Page>
                 </Route>
                 <Route path="/documents">

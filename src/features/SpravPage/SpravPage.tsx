@@ -7,15 +7,15 @@ import { ClientsSprav } from '@features/ClientsSprav/ClientsSprav';
 import { ManagersSprav } from '@features/ManagersSprav/ManagersSprav';
 
 import './SpravPage.scss';
-import TabContext from '@material-ui/lab/TabContext/TabContext';
 
 const cnSpravPage = cn('SpravPage');
 
 interface IOwnProps {
+    tab: string;
 };
 
 interface IOwnState {
-    tab?: number;
+    tab?: string;
 };
 
 interface TabPanelProps {
@@ -42,14 +42,16 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
+export enum SpravTabs { Clients = 'clients', Managers = 'managers' };
 
 export class SpravPage extends PureComponent<IOwnProps, IOwnState> {
     state = {
-        tab: 0,
+        tab: this.props.tab,
     }
 
     handleTabChange = (event, tab) => {
         this.setState({ tab });
+        window.history.replaceState(null, null, `/sprav/${tab}`);
     }
 
     render() {
@@ -65,13 +67,13 @@ export class SpravPage extends PureComponent<IOwnProps, IOwnState> {
                         indicatorColor="primary"
                         textColor="primary"
                     >
-                        <Tab label="Клиенты" />
-                        <Tab label="Менеджеры" />
+                        <Tab label="Клиенты" value={SpravTabs.Clients} />
+                        <Tab label="Менеджеры" value={SpravTabs.Managers} />
                     </Tabs>
-                    <TabPanel value={this.state.tab} index={0}>
+                    <TabPanel value={this.state.tab} index={SpravTabs.Clients}>
                         <ClientsSprav />
                     </TabPanel>
-                    <TabPanel value={this.state.tab} index={1}>
+                    <TabPanel value={this.state.tab} index={SpravTabs.Managers}>
                         <ManagersSprav />
                     </TabPanel>
                 </div>
