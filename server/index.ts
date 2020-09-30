@@ -9,9 +9,12 @@ import { apiRouter } from './api-router';
 const app = express();
 const SERVER_PORT = 8888;
 
-app.use(cors({
-    origin: true,
-}));
+app
+    .disable('x-powered-by')
+    .enable('trust proxy')
+    .use(cors({
+        origin: '*',
+    }));
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
