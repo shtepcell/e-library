@@ -75,7 +75,7 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
                             variant="outlined"
                             label="Отчество" />
 
-                        <TextField
+                        {/* <TextField
                             className={cnCreateManagerDialog('Field', { type: 'type' })}
                             select
                             value={category}
@@ -85,7 +85,7 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
                             >
                                 <MenuItem value={ManagerType.PersonalManager}>{i18n(ManagerType.PersonalManager)}</MenuItem>
                                 <MenuItem value={ManagerType.ServiceManager}>{i18n(ManagerType.ServiceManager)}</MenuItem>
-                        </TextField>
+                        </TextField> */}
 
                     </div>
                 </DialogContent>

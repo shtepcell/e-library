@@ -8,13 +8,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Pagination from '@material-ui/lab/Pagination';
 
 import './ClientsSprav.scss';
 import Paper from '@material-ui/core/Paper';
 import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateClientDialog } from './components/CreateClientDialog/CreateClientDialog';
+import { IClient } from '@typings/IClient';
 
 const cnClientsSprav = cn('ClientsSprav');
 
@@ -24,24 +25,20 @@ interface IOwnProps {
 interface IOwnState {
     adressSuggest: string[];
     showCreateDialog: boolean;
+    clients: IClient[];
 };
-
-function createData(name, calories, fat, carbs) {
-    return { name, calories, fat, carbs };
-  }
-
-const rows = [
-    createData('ПАО "РНКБ"', 'Симферополь', 'Иванов П.П.', '20.10.2020'),
-    createData('ООО ГАЗПРОМ', 'Симферополь', 'Золотов И.А.','09.05.2017'),
-    createData('ИП Яблоко', 'Севастополь', 'Коричнева З.С.', '31.12.2018'),
-    createData('Меганом', 'Севастополь', 'Елка Х.В.', '03.01.2010'),
-    createData('Магазинчик', 'Ялта', 'Ранимова О.О.', '11.09.2019'),
-];
 
 export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
     state = {
         adressSuggest: [],
         showCreateDialog: false,
+        clients: [],
+    }
+
+    componentDidMount() {
+        request.get('/clients').then(({ data }) => {
+            this.setState({ clients: data });
+        })
     }
 
     handleAdressChange = (event) => {
@@ -88,26 +85,24 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Наименования</TableCell>
-                                <TableCell align="right">Департамент</TableCell>
-                                <TableCell align="right">Персональный менеджер</TableCell>
-                                <TableCell align="right">Дата регистрации</TableCell>
+                                <TableCell className={cnClientsSprav('Column', { type: 'name'})} >Наименования</TableCell>
+                                <TableCell className={cnClientsSprav('Column', { type: 'department'})} align="center">Департамент</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
-                                    <TableCell component="th" scope="row">
-                                        {row.name}
+                            {this.state.clients.map(client => (
+                                <TableRow key={client.id}>
+                                    <TableCell className={cnClientsSprav('Column', { type: 'name'})} component="th" scope="row">
+                                        {client.name}
                                     </TableCell>
-                                    <TableCell align="right">{row.calories}</TableCell>
-                                    <TableCell align="right">{row.fat}</TableCell>
-                                    <TableCell align="right">{row.carbs}</TableCell>
+                                    <TableCell className={cnClientsSprav('Column', { type: 'department'})} align="center">{client.department}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <Pagination className={cnClientsSprav('Pagination')} count={10} size="large" />
             </div>
         )
     }

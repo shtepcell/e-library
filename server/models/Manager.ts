@@ -16,14 +16,8 @@ const managerSchema = new Schema({
     },
     lastName: {
         type: String,
-        required: [true, 'фамилия обязательно для заполнения'],
-    },
-    category: {
-        type: String,
-        enum: ['serviceManager', 'personalManager'],
-        required: true,
-        default: 'personalManager',
+        required: [true, 'Фамилия обязательна для заполнения'],
     }
 });
 
-export const Manager = mongoose.model('Manger', managerSchema);
+export const Manager = mongoose.model('Manager', managerSchema);

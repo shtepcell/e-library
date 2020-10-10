@@ -1,4 +1,5 @@
 import { createManager, getManagers } from "./controllers/manager";
+import { getClients, createClient } from "./controllers/clients";
 import contracts from '../server/mocks/contracts.json';
 import contract from '../server/mocks/contract.json';
 
@@ -8,8 +9,12 @@ const Kladr = new kladrApi();
 
 export const apiRouter = (app) => {
     app.get('/api/managers', getManagers);
-
+    // app.get('/api/managers/:id', getOneManagers);
     app.post('/api/manager', createManager);
+
+    app.get('/api/clients', getClients);
+    // app.get('/api/clients/:id', getOneClient);
+    app.post('/api/client', createClient);
 
 
 

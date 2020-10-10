@@ -15,7 +15,6 @@ import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateManagerDialog } from './components/CreateClientDialog/CreateManagerDialog';
 import { IManager } from '@typings/IManager';
-import { i18n } from '@lib/i18n';
 
 const cnManagersSprav = cn('ManagersSprav');
 
@@ -71,7 +70,6 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Ф.И.О.</TableCell>
-                                <TableCell align="center">Категория</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -80,7 +78,6 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
                                     <TableCell component="th" scope="row">
                                         {`${manager.lastName} ${manager.firstName} ${manager.middleName}`}
                                     </TableCell>
-                                    <TableCell align="center">{i18n(manager.category)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

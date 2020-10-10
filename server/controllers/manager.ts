@@ -5,9 +5,9 @@ import { Manager } from '../models/Manager';
 import { getId } from './counters';
 
 export const createManager = async (req, res)  => {
-    const { firstName, middleName, lastName, category } = req.body || {};
+    const { firstName, middleName, lastName } = req.body || {};
 
-    const manager = new Manager({ firstName, middleName, lastName, category });
+    const manager = new Manager({ firstName, middleName, lastName });
 
     const validateError = manager.validateSync();
 

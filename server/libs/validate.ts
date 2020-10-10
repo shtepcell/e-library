@@ -11,10 +11,9 @@ export const onValidateError = (req, res) => validationError => {
 }
 
 export const onError = (req, res) => error => {
-    const { message, status = 500, ...body } = error || {};
+    const { status = 500, ...body } = error || {};
 
-    // Console.log()
-
+    console.error(body.message);
     return res.status(status).send(body);
 }
 
