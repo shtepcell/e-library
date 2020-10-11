@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import { httpLogger } from './middlewares/logger';
+
 import './libs/connect';
 
 var bodyParser = require('body-parser')
@@ -21,6 +23,8 @@ app
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('static')));
+
+app.use(httpLogger);
 
 apiRouter(app);
 
