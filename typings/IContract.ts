@@ -6,7 +6,7 @@ export interface IContract {
     status: ContractStatus;
     type: ContractType;
 
-    dateOfConclusion: Date;
+    conclusionDate: Date;
     endDate: Date;
 
     amount: string;

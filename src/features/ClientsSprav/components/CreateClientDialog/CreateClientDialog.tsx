@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { cn } from '@bem-react/classname';
 import './CreateClientDialog.scss';
+import _debounce from 'lodash/debounce';
 import {
     Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem
 } from '@material-ui/core';
@@ -8,6 +9,9 @@ import { IClient } from '@typings/IClient';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Departments } from '@const/departments';
 import { request } from '@lib/request';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { getFullName } from '@lib/helper';
 
 const cnCreateClientDialog = cn('CreateClientDialog');
 
@@ -20,12 +24,20 @@ interface IOwnProps {
 interface IOwnState {
     client?: Partial<IClient>;
     adressSuggest?: string[];
+    managerSuggest: string[];
+    managerSuggestLoading?: boolean;
 };
 
 export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
     state: IOwnState = {
+        // @ts-ignore
         client: this.props.client || { regDate: new Date(), deliveryMethod: 'Почта', department: Departments[0] },
         adressSuggest: [],
+        managerSuggest: [],
+    }
+
+    componentDidMount() {
+        this.getSuggestedManager();
     }
 
     saveClickHandler = () => {
@@ -40,6 +52,37 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                 window.location.reload();
             });
         }
+    }
+
+    getSuggestedManager = _debounce(() => {
+        this.setState({ managerSuggestLoading: true, managerSuggest: [] });
+
+        request.get('/managers', {
+            params: {
+                search: this.state.client.personalManager,
+                limit: 5,
+            }
+        }).then(({ data }) => {
+
+            this.setState({ managerSuggest: data.map(getFullName), managerSuggestLoading: false  })
+        }).catch(() => {
+            this.setState({ managerSuggestLoading: false });
+        });
+    }, 500);
+
+    onManagerChange = (event) => {
+        this.handlerClientChange('personalManager')(event);
+
+        this.getSuggestedManager();
+    };
+
+    onManagerSelect = (event) => {
+        this.setState({
+            client: {
+                ...this.state.client,
+                personalManager: event.target.value,
+            }
+        })
     }
 
     handlerClientChange = (field: keyof IClient) => (event) => {
@@ -65,6 +108,8 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
             id, name, personalManager, deliveryMethod, regDate, department, externalId, inn, address,
             contactLastName, contactFirstName, contactMiddleName, contactEmail, contactPhone, contactPosition,
         } = this.state.client;
+
+        const { managerSuggest, managerSuggestLoading } = this.state;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateClientDialog()}>
@@ -114,12 +159,39 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                                 {Departments.map(item => (<MenuItem value={item}>{item}</MenuItem>))}
                         </TextField>
 
-                        <TextField
+                        <Autocomplete
+                            style={{ width: 450 }}
+                            options={managerSuggest}
+                            noOptionsText="Нет доступных вариантов"
+                            loading={managerSuggestLoading}
+                            filterOptions={(x) => x}
+                            value={personalManager}
+                            onSelect={this.onManagerSelect}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    onChange={this.onManagerChange}
+                                    className={cnCreateClientDialog('Field', { type: 'personalManager' })}
+                                    label="Персональный менеджер"
+                                    variant="outlined"
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                            <React.Fragment>
+                                                {managerSuggestLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                                                {params.InputProps.endAdornment}
+                                            </React.Fragment>
+                                        ),
+                                    }}
+                                />
+                            )}
+                        />
+                        {/* <TextField
                             className={cnCreateClientDialog('Field', { type: 'personalManager' })}
                             value={personalManager}
                             onChange={this.handlerClientChange('personalManager')}
                             variant="outlined"
-                            label="Персональный менеджер" />
+                            label="Персональный менеджер" /> */}
 
                     </div>
                     <div className={cnCreateClientDialog('Row')}>

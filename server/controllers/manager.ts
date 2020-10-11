@@ -44,13 +44,14 @@ export const saveManager = async (req, res)  => {
 }
 
 export const getManagers = async (req, res)  => {
-    const search = req.query.search;
-    const regex = { $regex: search, $options: 'i' };
+    const { search, limit } = req.query;
+    const regex = { $regex: (search || '').split(' ')[0], $options: 'i' };
+    const query = [  { 'firstName': regex }, { 'middleName': regex }, { 'lastName': regex }];
 
     try {
         const managers = await Manager.find(search ? {
-            $or:[ { 'firstName': regex }, { 'middleName': regex }, { 'lastName': regex } ],
-        } : {}).limit(25).sort({ id: -1 }).lean();
+            $or: query,
+        } : {}).limit(Number(limit) || 25).sort({ id: -1 }).lean();
 
         return res.send(managers);
     } catch (error) {

@@ -21,6 +21,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Link } from '@material-ui/core';
+import { getFullName } from '@lib/helper';
 const cnContract = cn('Contract');
 
 interface IContractProps {
@@ -163,6 +164,14 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             <CreateIcon />
                         </IconButton>
                     </div>
+                    <div className={cnContract('Field', { type: 'status' })}>
+                        <div className={cnContract('FieldName')}>
+                            Статус
+                        </div>
+                        <div className={cnContract('FieldValue')}>
+                            {contract.status}
+                        </div>
+                    </div>
                     <div className={cnContract('Field', { type: 'client' })}>
                         <div className={cnContract('FieldName')}>
                             Клиент
@@ -176,7 +185,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Департамент
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            Симферополь
+                            {contract.department}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'service-manager' })}>
@@ -184,7 +193,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Дата заключения
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            12.08.2020
+                            {contract.conclusionDate}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'service-manager' })}>
@@ -192,7 +201,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Дата завершения действия
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            12.09.2020
+                            {contract.endDate}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'service-manager' })}>
@@ -200,7 +209,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Сервис-менеджер
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            Зульфия Андатра Прокофьевна
+                            {getFullName(contract.serviceManager)}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'personal-manager' })}>
@@ -208,7 +217,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Персональный менеджер
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            Андрей Картофанович Белиберда
+                            {getFullName(contract.personalManager)}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'original' })}>
@@ -216,7 +225,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Оригинал в архиве
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            Да
+                            {contract.orig ? 'Да' : 'Нет'}
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Pagination from '@material-ui/lab/Pagination';
 
 import './ClientsSprav.scss';
 import Paper from '@material-ui/core/Paper';

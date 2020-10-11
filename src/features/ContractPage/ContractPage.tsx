@@ -27,7 +27,7 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
 
     componentDidMount() {
         request
-            .get(`contract/1`)
+            .get(`contract/${window.location.pathname.split('/')[2]}`)
             .then(res => {
                 this.setState({
                     contract: res.data,

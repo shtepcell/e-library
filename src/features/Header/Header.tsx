@@ -42,13 +42,7 @@ export class Header extends PureComponent<IHeaderProps> {
         return (
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
-                    <Tooltip className={cnHeader('Tooltip')} title="Нет оригинала" placement="bottom-start" arrow>
-                        <ErrorIcon color="error" className={cnHeader('Icon')} />
-                    </Tooltip>
-                    <div className={cnHeader('Name')}>Контракт #321</div>
-                    <div className={cnHeader('ContractStatus')}>
-                        Активный
-                    </div>
+                    <div className={cnHeader('Name')}>Контракт #{window.location.pathname.split('/')[2]}</div>
                     {/* <Tooltip className={cnHeader('Tooltip')} title="В работе" placement="bottom-start" arrow>
                         <WorkIcon color="primary" className={cnHeader('Icon')} />
                     </Tooltip>
