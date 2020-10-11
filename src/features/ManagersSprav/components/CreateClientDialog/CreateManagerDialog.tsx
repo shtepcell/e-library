@@ -4,7 +4,7 @@ import './CreateManagerDialog.scss';
 import {
     Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem
 } from '@material-ui/core';
-import { ManagerType, IManager } from '@typings/IManager';
+import { IManager } from '@typings/IManager';
 import { request } from '@lib/request';
 import { i18n } from '@lib/i18n';
 
@@ -12,6 +12,7 @@ const cnCreateManagerDialog = cn('CreateManagerDialog');
 
 interface IOwnProps {
     open?: boolean;
+    manager?: IManager;
     onClose?: () => void;
     onCreateManager(manager: IManager): void;
 };
@@ -25,6 +26,12 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
         manager: {},
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.manager !== prevProps.manager) {
+            this.setState({ manager: this.props.manager || {} });
+        }
+    }
+
     handlerManagerChange = (field: keyof IManager) => (event) => {
         const newManager = { ...this.state.manager };
 
@@ -35,19 +42,33 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
     }
 
     createManagerHandler = () => {
-        request.post('/manager', { ...this.state.manager }).then(() => {
-            this.props.onCreateManager(this.state.manager as IManager);
-            this.props.onClose()
+        const { id } = this.state.manager;
 
-            this.setState({ manager: {} });
-        });
+        if (id) {
+            request.patch(`/manager/${id}`, { ...this.state.manager }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            request.post('/manager', { ...this.state.manager }).then(({ data }) => {
+                this.props.onCreateManager(data as IManager);
+                this.props.onClose()
+
+                this.setState({ manager: {} });
+            });
+        }
     }
+
+    // deleteManagerHandler = () => {
+    //     request.delete(`/manager/${this.state.manager.id}`).then(() => {
+    //         window.location.reload();
+    //     });
+    // }
 
     render() {
         const { open, onClose } = this.props;
-        const { firstName, middleName, lastName, category } = this.state.manager;
+        const { firstName, middleName, lastName, id } = this.state.manager;
 
-        const canCreate = firstName && middleName && lastName && category;
+        const canCreate = firstName && middleName && lastName;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateManagerDialog()}>
@@ -74,28 +95,15 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
                             onChange={this.handlerManagerChange('middleName')}
                             variant="outlined"
                             label="Отчество" />
-
-                        {/* <TextField
-                            className={cnCreateManagerDialog('Field', { type: 'type' })}
-                            select
-                            value={category}
-                            onChange={this.handlerManagerChange('category')}
-                            variant="outlined"
-                            label="Категория"
-                            >
-                                <MenuItem value={ManagerType.PersonalManager}>{i18n(ManagerType.PersonalManager)}</MenuItem>
-                                <MenuItem value={ManagerType.ServiceManager}>{i18n(ManagerType.ServiceManager)}</MenuItem>
-                        </TextField> */}
-
                     </div>
                 </DialogContent>
 
-                <DialogActions>
+                <DialogActions className={cnCreateManagerDialog('Actions')}>
                     <Button onClick={onClose} color="primary">
                         Отменить
                     </Button>
                     <Button onClick={this.createManagerHandler} color="primary" variant="contained" disabled={!canCreate}>
-                        Добавить
+                        {id ? 'Сохранить' : 'Добавить'}
                     </Button>
                 </DialogActions>
             </Dialog>

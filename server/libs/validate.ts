@@ -4,7 +4,9 @@ export const onValidateError = (req, res) => validationError => {
     const errors = {};
 
     Object.keys(validationError.errors).forEach(error => {
-        errors[error] = validationError.errors[error].properties.message;
+        console.log(error);
+
+        errors[error] = validationError?.errors[error]?.properties?.message;
     });
 
     return onError(req, res)(createHttpError(422, validationError.message, errors));
@@ -13,7 +15,7 @@ export const onValidateError = (req, res) => validationError => {
 export const onError = (req, res) => error => {
     const { status = 500, ...body } = error || {};
 
-    console.error(body.message);
+    console.error(body.message || error);
     return res.status(status).send(body);
 }
 

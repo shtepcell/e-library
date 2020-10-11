@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+export interface IManger extends mongoose.Document {
+    id: number;
+    firstName: string;
+    lastName: string;
+    middleName: string;
+};
+
 const managerSchema = new Schema({
     id: {
         type: Number,
@@ -20,4 +27,4 @@ const managerSchema = new Schema({
     }
 });
 
-export const Manager = mongoose.model('Manager', managerSchema);
+export const Manager = mongoose.model<IManger>('Manager', managerSchema);

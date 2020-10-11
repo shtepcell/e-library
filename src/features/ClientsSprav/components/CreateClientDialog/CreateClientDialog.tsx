@@ -4,38 +4,46 @@ import './CreateClientDialog.scss';
 import {
     Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem
 } from '@material-ui/core';
-import { DeliveryType, IClient } from '@typings/IClient';
+import { IClient } from '@typings/IClient';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Departments } from '@const/departments';
+import { request } from '@lib/request';
 
 const cnCreateClientDialog = cn('CreateClientDialog');
 
 interface IOwnProps {
     open?: boolean;
+    client?: IClient;
     onClose?: () => void;
 };
 
 interface IOwnState {
     client?: Partial<IClient>;
-    contactFace?: Partial<IClient['contactFace']>;
+    adressSuggest?: string[];
 };
 
 export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
     state: IOwnState = {
-        client: {},
-        contactFace: {}
+        client: this.props.client || { regDate: new Date(), deliveryMethod: 'Почта', department: Departments[0] },
+        adressSuggest: [],
     }
 
-    handlerClientChange = (field: keyof IClient, addition?: keyof IClient['contactFace']) => (event) => {
-        const newClient = { ...this.state.client };
+    saveClickHandler = () => {
+        const { client } = this.state;
 
-        if (field == 'contactFace') {
-            const newContactFace = { ...this.state.contactFace };
-
-            newContactFace[addition] = event.target.value;
-
-            return this.setState({ contactFace: newContactFace });
+        if (client.id) {
+            request.patch(`/client/${client.id}`, client).then(() => {
+                window.location.reload();
+            });
+        } else {
+            request.post('/client', client).then(() => {
+                window.location.reload();
+            });
         }
+    }
+
+    handlerClientChange = (field: keyof IClient) => (event) => {
+        const newClient = { ...this.state.client };
 
         // @ts-ignore
         newClient[field] = event.target.value;
@@ -53,8 +61,10 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
 
     render() {
         const { open, onClose } = this.props;
-        const { name, personalManager, deliveryMethod, regDate, department, externalId, inn } = this.state.client;
-        const contactFace = this.state.contactFace;
+        const {
+            id, name, personalManager, deliveryMethod, regDate, department, externalId, inn, address,
+            contactLastName, contactFirstName, contactMiddleName, contactEmail, contactPhone, contactPosition,
+        } = this.state.client;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateClientDialog()}>
@@ -67,7 +77,9 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                             onChange={this.handlerClientChange('name')}
                             variant="outlined"
                             label="Наименование" />
+                    </div>
 
+                    <div className={cnCreateClientDialog('Row')}>
                         <KeyboardDatePicker
                             className={cnCreateClientDialog('Field', { type: 'regDate' })}
                             disableToolbar
@@ -88,8 +100,8 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                             onChange={this.handlerClientChange('externalId')}
                             variant="outlined"
                             label="Внешний ID" />
-
                     </div>
+
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'department' })}
@@ -126,10 +138,10 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                             variant="outlined"
                             label="Способ доставки документов"
                             >
-                                <MenuItem value={DeliveryType.inOffice}>В офисе</MenuItem>
-                                <MenuItem value={DeliveryType.SimplePost}>Почта (простое письмо)</MenuItem>
-                                <MenuItem value={DeliveryType.PostWithNotify}>Почта (заказное письмо с уведомлнием)</MenuItem>
-                                <MenuItem value={DeliveryType.Courier}>Курьер</MenuItem>
+                                <MenuItem value="В офисе">В офисе</MenuItem>
+                                <MenuItem value="Почта">Почта (простое письмо)</MenuItem>
+                                <MenuItem value="Почта (заказное письмо с уведомлнием)">Почта (заказное письмо с уведомлнием)</MenuItem>
+                                <MenuItem value="Курьер">Курьер</MenuItem>
                         </TextField>
                     </div>
                 </DialogContent>
@@ -138,84 +150,55 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={contactFace.name}
-                            // onChange={this.handlerClientChange('contactFace', 'name')}
+                            value={contactLastName}
+                            onChange={this.handlerClientChange('contactLastName')}
                             variant="outlined"
                             label="Фамилия" />
 
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
-                            value={contactFace.name}
-                            onChange={this.handlerClientChange('contactFace', 'name')}
+                            value={contactFirstName}
+                            onChange={this.handlerClientChange('contactFirstName')}
                             variant="outlined"
                             label="Имя" />
 
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={contactFace.name}
-                            // onChange={this.handlerClientChange('contactFace', 'name')}
+                            value={contactMiddleName}
+                            onChange={this.handlerClientChange('contactMiddleName')}
                             variant="outlined"
                             label="Отчество" />
                     </div>
 
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
-                            className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={contactFace.name}
-                            // onChange={this.handlerClientChange('name')}
+                            className={cnCreateClientDialog('Field', { type: 'adress' })}
+                            value={address}
+                            onChange={this.handlerClientChange('address')}
                             variant="outlined"
-                            label="Город" />
-
-                        <TextField
-                            className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={name}
-                            // onChange={this.handlerClientChange('name')}
-                            variant="outlined"
-                            label="Улица" />
-
-                        <TextField
-                            className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={name}
-                            // onChange={this.handlerClientChange('name')}
-                            variant="outlined"
-                            label="Дом" />
+                            label="Aдpec" />
                     </div>
+
 
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={name}
-                            // onChange={this.handlerClientChange('name')}
-                            variant="outlined"
-                            label="Индекс" />
-
-                        <TextField
-                            className={cnCreateClientDialog('Field', { type: 'name' })}
-                            // value={name}
-                            // onChange={this.handlerClientChange('')}
-                            variant="outlined"
-                            label="Офис" />
-                    </div>
-
-                    <div className={cnCreateClientDialog('Row')}>
-                        <TextField
-                            className={cnCreateClientDialog('Field', { type: 'name' })}
-                            value={contactFace.position}
-                            onChange={this.handlerClientChange('contactFace', 'position')}
+                            value={contactPosition}
+                            onChange={this.handlerClientChange('contactPosition')}
                             variant="outlined"
                             label="Должность" />
 
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
-                            value={contactFace.email}
-                            onChange={this.handlerClientChange('contactFace', 'email')}
+                            value={contactEmail}
+                            onChange={this.handlerClientChange('contactEmail')}
                             variant="outlined"
                             label="E-mail" />
 
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
-                            value={contactFace.phone}
-                            onChange={this.handlerClientChange('contactFace', 'phone')}
+                            value={contactPhone}
+                            onChange={this.handlerClientChange('contactPhone')}
                             variant="outlined"
                             label="Телефон" />
                     </div>
@@ -225,8 +208,8 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                     <Button onClick={onClose} color="primary">
                         Отменить
                     </Button>
-                    <Button onClick={onClose} color="primary" variant="contained">
-                        Создать
+                    <Button onClick={this.saveClickHandler} color="primary" variant="contained">
+                        {id ? 'Сохранить' : 'Создать'}
                     </Button>
                 </DialogActions>
             </Dialog>

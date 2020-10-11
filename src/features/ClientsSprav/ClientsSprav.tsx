@@ -19,17 +19,18 @@ import { IClient } from '@typings/IClient';
 
 const cnClientsSprav = cn('ClientsSprav');
 
-interface IOwnProps {
-};
+interface IOwnProps {};
 
 interface IOwnState {
     adressSuggest: string[];
     showCreateDialog: boolean;
     clients: IClient[];
+    selectedClient?: IClient;
+    search?: string;
 };
 
 export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
-    state = {
+    state: IOwnState = {
         adressSuggest: [],
         showCreateDialog: false,
         clients: [],
@@ -41,46 +42,47 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
         })
     }
 
-    handleAdressChange = (event) => {
-        request
-            .post('/suggest/adress', { value: event.target.value })
-            .then(res => {
-                if (!res.data.result) this.setState({adressSuggest: [] });
-
-                this.setState({
-                    adressSuggest: res.data.result.map(item => item.fullName),
-                })
-            })
-    }
-
     handlerCloseDialog = () => {
-        this.setState({ showCreateDialog: false });
+        this.setState({ showCreateDialog: false, selectedClient: undefined });
     }
 
     handlerOpenDialog = () => {
-        this.setState({ showCreateDialog: true });
+        this.setState({ showCreateDialog: true, selectedClient: undefined });
+    }
+
+    selectManagerHandler = (id: string) => () => {
+        request
+            .get(`/client/${id}`)
+            .then(({ data }) => {
+                this.setState({ selectedClient: data, showCreateDialog: true });
+            })
+    }
+
+    onSearchChange = (event) => {
+        this.setState({ search:  event.target.value });
+
+        request.get('/clients', {
+            params: {
+                search: event.target.value,
+            }
+        }).then(({ data }) => {
+            this.setState({ clients: data });
+        })
     }
 
     render() {
+        const { selectedClient, clients, showCreateDialog, search } = this.state;
+
         return (
             <div className={cnClientsSprav()}>
-                {/* <div className={cnClientsSprav('Adress')}>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        filterOptions={(x) => x}
-                        options={this.state.adressSuggest}
-                        getOptionLabel={(option) => option}
-                        renderInput={(params) => <TextField {...params} onChange={this.handleAdressChange} label="Адрес" variant="outlined" />}
-                    />
-                </div> */}
                 <div className={cnClientsSprav('Controls')}>
-                    <TextField className={cnClientsSprav('Search')} variant="outlined" size='small' label="Поиск" type="search" />
+                    <TextField className={cnClientsSprav('Search')} onChange={this.onSearchChange} variant="outlined" size='small' label="Поиск" type="search" value={search} />
                     <Button className={cnClientsSprav('AddButton')} variant="contained" color="primary" onClick={this.handlerOpenDialog}>
                         Создать клиента
                     </Button>
                 </div>
 
-                <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog}/>
+                {showCreateDialog && <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} client={selectedClient}/>}
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -90,8 +92,8 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.clients.map(client => (
-                                <TableRow key={client.id}>
+                            {clients.map(client => (
+                                <TableRow className={cnClientsSprav('Row')} key={client.id} onClick={this.selectManagerHandler(String(client.id))} hover>
                                     <TableCell className={cnClientsSprav('Column', { type: 'name'})} component="th" scope="row">
                                         {client.name}
                                     </TableCell>
@@ -102,7 +104,7 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                     </Table>
                 </TableContainer>
 
-                <Pagination className={cnClientsSprav('Pagination')} count={10} size="large" />
+                {/* <Pagination className={cnClientsSprav('Pagination')} count={10} size="large" /> */}
             </div>
         )
     }

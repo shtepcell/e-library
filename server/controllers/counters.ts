@@ -1,6 +1,6 @@
 import { Counter } from "../models/Counters"
 
-export const getId = async (id: string) => {
+export const getId = async (id: string): Promise<number> => {
     const counter = await Counter.findOneAndUpdate({ id }, { $inc: { value: 1 } });
 
     return counter.value;

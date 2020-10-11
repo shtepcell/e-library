@@ -1,6 +1,26 @@
 import mongoose from 'mongoose';
+import { DeliveryType } from '@typings/IClient';
+import { IManger } from './Manager';
 
 const { Schema } = mongoose;
+
+export interface IClient extends mongoose.Document {
+    id: number;
+    name: string;
+    externalId: string;
+    inn: string;
+    department: string;
+    personalManager: IManger;
+    regDate: Date;
+    deliveryMethod: DeliveryType;
+    address: string;
+    contactFirstName: string;
+    contactMiddleName: string;
+    contactLastName: string;
+    contactEmail: string;
+    contactPhone: string;
+    contactPosition: string;
+}
 
 const clientSchema = new Schema({
     id: {
@@ -42,4 +62,4 @@ const clientSchema = new Schema({
     contactPhone: String,
 });
 
-export const Client = mongoose.model('Client', clientSchema);
+export const Client = mongoose.model<IClient>('Client', clientSchema);

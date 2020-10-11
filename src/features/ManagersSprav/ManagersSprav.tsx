@@ -24,10 +24,12 @@ interface IOwnProps {
 interface IOwnState {
     showCreateDialog: boolean;
     managers: IManager[];
+    selectedManager?: IManager;
+    search?: string;
 };
 
 export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
-    state = {
+    state: IOwnState = {
         showCreateDialog: false,
         managers: [],
     }
@@ -38,6 +40,20 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
             .then(({ data }) => {
                 this.setState({ managers: data });
             });
+    }
+
+    onSelectManager = (id: number) => () => {
+        request
+            .get(`/manager/${id}`)
+            .then(({ data }) => {
+                this.setState({ selectedManager: data });
+                this.handlerOpenDialog();
+            });
+    }
+
+    onCreateClick = () => {
+        this.setState({ selectedManager: null });
+        this.handlerOpenDialog();
     }
 
     onCreateManager = (manager) => {
@@ -52,19 +68,32 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
         this.setState({ showCreateDialog: true });
     }
 
+
+    onSearchChange = (event) => {
+        this.setState({ search:  event.target.value });
+
+        request.get('/managers', {
+            params: {
+                search: event.target.value,
+            }
+        }).then(({ data }) => {
+            this.setState({ managers: data });
+        })
+    }
+
     render() {
-        const { managers } = this.state;
+        const { managers, selectedManager, search } = this.state;
 
         return (
             <div className={cnManagersSprav()}>
                 <div className={cnManagersSprav('Controls')}>
-                    <TextField className={cnManagersSprav('Search')} variant="outlined" size='small' label="Поиск" type="search" />
-                    <Button className={cnManagersSprav('AddButton')} variant="contained" color="primary" onClick={this.handlerOpenDialog}>
+                    <TextField className={cnManagersSprav('Search')} onChange={this.onSearchChange} variant="outlined" size='small' label="Поиск" type="search" value={search} />
+                    <Button className={cnManagersSprav('AddButton')} variant="contained" color="primary" onClick={this.onCreateClick}>
                         Добавить менеджера
                     </Button>
                 </div>
 
-                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} onCreateManager={this.onCreateManager}/>
+                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} onCreateManager={this.onCreateManager} manager={selectedManager} />
                 <TableContainer component={Paper} className={cnManagersSprav('Table')}>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -73,8 +102,15 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
+                            {managers.length === 0 && (
+                                <TableRow>
+                                    <TableCell component="th" scope="row">
+                                        Ничего не найдено
+                                    </TableCell>
+                                </TableRow>
+                            )}
                             {managers.map((manager) => (
-                                <TableRow key={manager._id} hover>
+                                <TableRow className={cnManagersSprav('Row')} key={String(manager.id)} hover onClick={this.onSelectManager(manager.id)}>
                                     <TableCell component="th" scope="row">
                                         {`${manager.lastName} ${manager.firstName} ${manager.middleName}`}
                                     </TableCell>

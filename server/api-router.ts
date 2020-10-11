@@ -1,5 +1,5 @@
-import { createManager, getManagers } from "./controllers/manager";
-import { getClients, createClient } from "./controllers/clients";
+import { createManager, getManagers, getOneManager, saveManager, deleteManager } from "./controllers/manager";
+import { getClients, createClient, getOneClient, saveClient } from "./controllers/clients";
 import contracts from '../server/mocks/contracts.json';
 import contract from '../server/mocks/contract.json';
 
@@ -9,14 +9,15 @@ const Kladr = new kladrApi();
 
 export const apiRouter = (app) => {
     app.get('/api/managers', getManagers);
-    // app.get('/api/managers/:id', getOneManagers);
+    app.get('/api/manager/:id', getOneManager);
     app.post('/api/manager', createManager);
+    app.patch('/api/manager/:id', saveManager);
+    app.delete('/api/manager/:id', deleteManager);
 
     app.get('/api/clients', getClients);
-    // app.get('/api/clients/:id', getOneClient);
+    app.get('/api/client/:id', getOneClient);
     app.post('/api/client', createClient);
-
-
+    app.patch('/api/client/:id', saveClient);
 
     // #########################################
 
