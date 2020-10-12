@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { DeliveryType } from '@typings/IClient';
-import { IManger } from './Manager';
+import { IManager } from './Manager';
 
 const { Schema } = mongoose;
 
@@ -10,7 +10,7 @@ export interface IClient extends mongoose.Document {
     externalId: string;
     inn: string;
     department: string;
-    personalManager: IManger;
+    personalManager: IManager;
     regDate: Date;
     deliveryMethod: DeliveryType;
     address: string;

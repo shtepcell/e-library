@@ -19,6 +19,7 @@ interface IContractPageProps {
 
 interface IContractPageState {
     contract?: IContract;
+    documents?: any[];
     loading: boolean;
     openDialog?: boolean;
 };
@@ -31,9 +32,12 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
     componentDidMount() {
         request
             .get(`contract/${window.location.pathname.split('/')[2]}`)
-            .then(res => {
+            .then(({ data }) => {
+                const { contract, documents } = data;
+
                 this.setState({
-                    contract: res.data,
+                    contract,
+                    documents,
                     loading: false,
                 })
             });
@@ -44,7 +48,7 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
     }
 
     render() {
-        const { loading, contract, openDialog } = this.state;
+        const { loading, contract, openDialog, documents } = this.state;
 
         if (loading) {
             return (
@@ -60,7 +64,7 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
             <>
                 <Header type="contract" />
                 <div className={cnContractPage()}>
-                    <Contract contract={contract} onEditClick={this.handlerDialog(true)} />
+                    <Contract contract={contract} onEditClick={this.handlerDialog(true)} documents={documents} />
                     <CreateContractDialog open={openDialog} onClose={this.handlerDialog(false)} contract={{
                         ...contract,
                         client: contract?.client?.name,

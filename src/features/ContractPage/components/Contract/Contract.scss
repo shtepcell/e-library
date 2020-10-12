@@ -60,50 +60,6 @@
         border-radius: 50%;
     }
 
-    &-DocumentDialog {
-        .Contract-DocumentField {
-            &.MuiFormControl-root {
-                flex: 1 1 auto;
-
-                min-width: 200px;
-
-                &:not(:last-child) {
-                    margin-right: 24px;
-                }
-            }
-
-            &_type {
-                &_number.MuiFormControl-root {
-                    flex: 0 0 auto;
-                }
-
-                &_status.MuiFormControl-root {
-                    flex: 1 1 auto;
-                }
-            }
-        }
-
-        .Contract-Row {
-            display: flex;
-
-            margin-bottom: 24px;
-        }
-
-        .Contract-DialogCheck {
-            display: flex;
-            margin: 12px 0;
-        }
-
-        .Contract-DialogButtons {
-            margin-left: -12px;
-        }
-
-        .Contract-UploadIcon {
-            margin-left: 2px;
-            margin-right: 10px;
-        }
-    }
-
     &-DocumentsLink {
         margin-top: 16px;
         font-size: 14px;

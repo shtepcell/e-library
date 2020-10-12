@@ -8,11 +8,12 @@ const cnLink = cn('Link');
 
 interface ILinkProps extends IClassNameProps {
     href?: string;
+    target?: string;
 }
 
-export const Link: FunctionComponent<ILinkProps> = ({ href, className, children }) => {
+export const Link: FunctionComponent<ILinkProps> = ({ href, className, children, target }) => {
     return (
-        <a href={href} className={cnLink(null, [className])}>
+        <a href={href} className={cnLink(null, [className])} target={target}>
             {children}
         </a>
     )

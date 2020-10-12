@@ -1,5 +1,20 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+import { IManager } from './Manager';
+
+export interface IContract extends mongoose.Document {
+    id: number;
+    department: string;
+    type: string;
+    status: string;
+    conclusionDate: Date;
+    endDate: Date;
+    amount?: string;
+    serviceManager?: IManager;
+    personalManager?: IManager;
+    document?: string;
+    orig: boolean;
+};
 
 const contractSchema = new Schema({
     id: {
@@ -37,4 +52,4 @@ const contractSchema = new Schema({
     orig: Boolean,
 });
 
-export const Contract = mongoose.model('Contract', contractSchema);
+export const Contract = mongoose.model<IContract>('Contract', contractSchema);

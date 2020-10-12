@@ -4,6 +4,7 @@ import { onValidateError, onError } from '../libs/validate';
 import { Contract } from '../models/Contract';
 import { Manager } from '../models/Manager';
 import { Client } from '../models/Client';
+import { Document } from '../models/Document';
 import { getId } from './counters';
 
 const fields = ['client', 'personalManager', 'serviceManager', 'orig', 'status', 'conclusionDate', 'endDate', 'department', 'type', 'amount'];
@@ -86,8 +87,9 @@ export const getContracts = async (req, res)  => {
 export const getOneContract = async (req, res)  => {
     try {
         const contract = await Contract.findOne({ id: req.params.id }).populate('client serviceManager personalManager').lean();
+        const documents = await Document.find({ contract: contract._id }).limit(5).sort({ id: -1 }).lean();
 
-        return res.send(contract);
+        return res.send({ contract, documents });
     } catch (error) {
         return onError(req, res)(error);
     }

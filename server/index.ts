@@ -4,6 +4,7 @@ import path from 'path';
 import { httpLogger } from './middlewares/logger';
 
 import './libs/connect';
+import './controllers/documents';
 
 var bodyParser = require('body-parser')
 require('dotenv').config()

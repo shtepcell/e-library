@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-export interface IManger extends mongoose.Document {
+export interface IManager extends mongoose.Document {
     id: number;
     firstName: string;
     lastName: string;
@@ -27,4 +27,4 @@ const managerSchema = new Schema({
     }
 });
 
-export const Manager = mongoose.model<IManger>('Manager', managerSchema);
+export const Manager = mongoose.model<IManager>('Manager', managerSchema);
