@@ -6,12 +6,10 @@ import { Manager } from '../models/Manager';
 import { Client } from '../models/Client';
 import { getId } from './counters';
 
-const fields = ['client', 'personalManager', 'serviceManager', 'orig', 'status', 'conclusionDate', 'endDate', 'department', 'type'];
+const fields = ['client', 'personalManager', 'serviceManager', 'orig', 'status', 'conclusionDate', 'endDate', 'department', 'type', 'amount'];
 
 export const createContract = async (req, res)  => {
     const data = _.pick(req.body, fields);
-
-    const cloe = data.client;
 
     if (data.personalManager) {
         const [lastName, firstName, middleName] = data.personalManager.split(' ');
@@ -40,26 +38,39 @@ export const createContract = async (req, res)  => {
     return res.status(200).send(_.pick(contract, fields));
 }
 
-// export const saveContract = async (req, res)  => {
-//     const id = req.params.id;
-//     const { firstName, middleName, lastName } = req.body || {};
+export const saveContract = async (req, res)  => {
+    const data = _.pick(req.body, fields);
 
-//     const Contract = await contract.findOne({ id });
+    const contract = await Contract.findOne({ id: req.params.id });
 
-//     Contract.firstName = firstName;
-//     Contract.middleName = middleName;
-//     Contract.lastName = lastName;
+    fields.forEach(field => {
+        contract[field] = data[field];
+    });
 
-//     const validateError = Contract.validateSync();
+    if (data.personalManager) {
+        const [lastName, firstName, middleName] = data.personalManager.split(' ');
+        // @ts-ignore
+        contract.personalManager = await Manager.findOne({lastName, firstName, middleName});
+    }
 
-//     if (validateError) {
-//         return onValidateError(req, res)(validateError);
-//     }
+    if (data.serviceManager) {
+        const [lastName, firstName, middleName] = data.serviceManager.split(' ');
+        // @ts-ignore
+        contract.serviceManager = await Manager.findOne({lastName, firstName, middleName});
+    }
 
-//     await Contract.save();
+    // @ts-ignore
+    contract.client = await Client.findOne({ name: data.client });
+    const validateError = contract.validateSync();
 
-//     return res.sendStatus(200);
-// }
+    if (validateError) {
+        return onValidateError(req, res)(validateError);
+    }
+
+    await contract.save();
+
+    return res.status(200).send(_.pick(contract, fields));
+}
 
 export const getContracts = async (req, res)  => {
     try {

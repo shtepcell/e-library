@@ -4,7 +4,7 @@ import contracts from '../server/mocks/contracts.json';
 import contract from '../server/mocks/contract.json';
 
 import kladrApi from 'kladrapi-for-node';
-import { createContract, getContracts, getOneContract } from "./controllers/contracts";
+import { createContract, getContracts, getOneContract, saveContract } from "./controllers/contracts";
 
 const Kladr = new kladrApi();
 
@@ -24,6 +24,7 @@ export const apiRouter = (app) => {
     app.get('/api/contracts', getContracts);
     app.get('/api/contract/:id', getOneContract);
     app.post('/api/contract', createContract);
+    app.patch('/api/contract/:id', saveContract);
 
     // #########################################
 

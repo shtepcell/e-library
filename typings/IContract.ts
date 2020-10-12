@@ -1,22 +1,21 @@
-import { IClient } from "./IClient";
 
 export interface IContract {
     id: string;
 
-    status: ContractStatus;
-    type: ContractType;
+    status: string;
+    type: string;
 
     conclusionDate: Date;
     endDate: Date;
 
     amount: string;
 
-    hasOriginal: boolean;
+    orig: boolean;
     attachment: string;
 
     department: string;
 
-    client: IClient;
+    client: string;
 
     serviceManager: string;
     personalManager: string;

@@ -62,12 +62,12 @@ export const createClient = async (req, res)  => {
 
 export const getClients = async (req, res)  => {
     try {
-        const search = req.query.search;
+        const { limit, search } = req.query;
         const regex = { $regex: search, $options: 'i' };
 
         const clients = await Client.find(search ? {
             $or:[ { 'name': regex }, { 'inn': regex }, { 'address': regex } ],
-        } : {}).limit(25).sort({ id: -1 }).lean();
+        } : {}).limit(Number(limit) || 25).sort({ id: -1 }).lean();
 
         return res.send(clients);
     } catch (error) {

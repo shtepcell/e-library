@@ -8,6 +8,8 @@ import { Header } from '@features/Header/Header';
 import { IContract } from '@typings/IContract';
 
 import './ContractPage.scss';
+import { CreateContractDialog } from '@features/CreateContractDialog/CreateContractDialog';
+import { getFullName } from '@lib/helper';
 
 const cnContractPage = cn('ContractPage');
 
@@ -18,6 +20,7 @@ interface IContractPageProps {
 interface IContractPageState {
     contract?: IContract;
     loading: boolean;
+    openDialog?: boolean;
 };
 
 export class ContractPage extends PureComponent<IContractPageProps, IContractPageState> {
@@ -36,8 +39,12 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
             });
     }
 
+    handlerDialog = (value: boolean) => () => {
+        this.setState({ openDialog: value });
+    }
+
     render() {
-        const { loading, contract } = this.state;
+        const { loading, contract, openDialog } = this.state;
 
         if (loading) {
             return (
@@ -53,7 +60,13 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
             <>
                 <Header type="contract" />
                 <div className={cnContractPage()}>
-                    <Contract contract={contract} />
+                    <Contract contract={contract} onEditClick={this.handlerDialog(true)} />
+                    <CreateContractDialog open={openDialog} onClose={this.handlerDialog(false)} contract={{
+                        ...contract,
+                        client: contract?.client?.name,
+                        personalManager: contract && getFullName(contract?.personalManager),
+                        serviceManager: contract && getFullName(contract.serviceManager),
+                    }} />
                 </div>
             </>
         )

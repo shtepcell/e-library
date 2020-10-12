@@ -77,7 +77,7 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
         return (
             <div className={cnMainPage()}>
                 <Header type="main" />
-                <Filters onChange={this.onFiltersChange} disabledStatuses={disabledStatuses} />
+                {/* <Filters onChange={this.onFiltersChange} disabledStatuses={disabledStatuses} /> */}
                 {loading ? (
                     <div className={cnMainPage('Progress')}>
                         <CircularProgress  color="primary" />

@@ -24,7 +24,7 @@ const contractSchema = new Schema({
     },
     conclusionDate: Date,
     endDate: Date,
-    summary: String,
+    amount: String,
     serviceManager: {
         type:  Schema.Types.ObjectId,
         ref: 'Manager',

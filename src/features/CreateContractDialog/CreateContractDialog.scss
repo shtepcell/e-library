@@ -1,6 +1,7 @@
 .CreateContractDialog {
     &-Field {
-        &.MuiFormControl-root {
+        &.MuiFormControl-root,
+        &.MuiAutocomplete-root {
             flex: 1 1 auto;
 
             min-width: 200px;

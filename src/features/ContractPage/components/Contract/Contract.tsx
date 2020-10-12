@@ -26,6 +26,7 @@ const cnContract = cn('Contract');
 
 interface IContractProps {
     contract?: IContract;
+    onEditClick?: () => void;
 };
 
 interface IOwnState {
@@ -149,7 +150,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
     }
 
     render() {
-        const { contract } = this.props;
+        const { contract, onEditClick } = this.props;
 
         if (!contract) {
             return null;
@@ -160,7 +161,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                 <div className={cnContract('LeftColumn')}>
                     <div className={cnContract('Title')}>
                         Информация по контракту
-                        <IconButton className={cnContract('TitleButton')} size="small" >
+                        <IconButton className={cnContract('TitleButton')} size="small" onClick={onEditClick}>
                             <CreateIcon />
                         </IconButton>
                     </div>
