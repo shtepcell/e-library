@@ -30,7 +30,7 @@ export class Header extends PureComponent<IHeaderProps> {
                     <div className={cnHeader('Name')}>Контракты</div>
                 </div>
                 <div className={cnHeader('Right')}>
-                    <TextField className={cnHeader('Search')} variant="outlined" size='small' label="Поиск" type="search" />
+                    {/* <TextField className={cnHeader('Search')} variant="outlined" size='small' label="Поиск" type="search" /> */}
                 </div>
             </div>
         );

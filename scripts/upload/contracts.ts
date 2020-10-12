@@ -1,8 +1,11 @@
 import axios from 'axios';
 import contractsData from './data/contracts.json';
+import _ from 'lodash';
 
 (async () => {
-    contractsData.forEach(contract => {
+    for (let index = 0; index < contractsData.length; index++) {
+        const contract = contractsData[index];
+
         const newContract = {
             department: contract.ДЕПАРТАМЕНТ,
             client: contract.НАИМЕНОВАНИЕ_КЛИЕНТА,
@@ -18,6 +21,10 @@ import contractsData from './data/contracts.json';
             newContract.type = contract.ТИП_ДОКУМЕНТА;
         }
 
-        axios.post('http://127.0.0.1:8888/api/contract', newContract);
-    });
+        try {
+            await axios.post('http://127.0.0.1:8888/api/contract', newContract);
+        } catch (error) {
+            console.log('Error', contract)
+        }
+    }
 })();

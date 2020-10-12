@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
-mongoose.connect('mongodb://localhost/test', {
+const { DATABASE_NAME } = process.env;
+
+mongoose.connect(`mongodb://localhost/${DATABASE_NAME}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -12,5 +14,5 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function() {
-    console.log('DB connected!');
+    console.log(`DB ${DATABASE_NAME} connected!`);
 });

@@ -20,7 +20,7 @@ export const httpLogger: RequestHandler = (req, res, next) => {
     res.on('finish', () => {
         const message = `←  ${res.statusCode} ${req.method} ${req.url}`;
 
-        console.log(moment().format('DD.MM.YY HH:MM:SS:ss'), chalk[codeCollor(res.statusCode)](message), `${Date.now() - startTime}ms`);
+        console.log(moment().format('DD.MM.YY HH:MM:ss:SS'), chalk[codeCollor(res.statusCode)](message), `${Date.now() - startTime}ms`);
     });
 
     console.log(`${moment().format('DD.MM.YY HH:MM:SS:ss')}  →  ${req.method} ${req.url}`);

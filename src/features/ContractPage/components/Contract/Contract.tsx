@@ -131,7 +131,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                 </div>
                 <div className={cnContract('RightColumn')}>
                     <div className={cnContract('Title')}>
-                        Последние документы
+                        Документы
                         <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
                             <AddIcon />
                         </IconButton>
@@ -142,9 +142,9 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             <DocumentItem type={type} period={period} file={file} onEditClick={() => {}} />
                         ))}
                     </div>
-                    <div className={cnContract('DocumentsLink')}>
+                    {/* <div className={cnContract('DocumentsLink')}>
                         <Link href="/documents" target="_blank">Посмотреть все документы контракта</Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )

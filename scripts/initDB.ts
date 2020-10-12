@@ -1,3 +1,4 @@
+require('dotenv').config();
 import '../server/libs/connect';
 import { createCounter } from '../server/controllers/counters';
 

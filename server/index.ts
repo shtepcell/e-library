@@ -1,13 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+require('dotenv').config();
+
 import { httpLogger } from './middlewares/logger';
 
 import './libs/connect';
 import './controllers/documents';
 
 var bodyParser = require('body-parser')
-require('dotenv').config()
 
 import { apiRouter } from './api-router';
 
