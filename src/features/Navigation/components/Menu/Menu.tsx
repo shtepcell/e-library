@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { cn } from '@bem-react/classname';
 import { IClassNameProps } from '@bem-react/core';
-
 import { Card } from '../Card';
 import { Link } from '@components/Link';
 

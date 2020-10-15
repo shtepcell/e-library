@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { cn } from '@bem-react/classname';
 import { IClassNameProps } from '@bem-react/core';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 import './Link.scss';
 
@@ -13,8 +14,8 @@ interface ILinkProps extends IClassNameProps {
 
 export const Link: FunctionComponent<ILinkProps> = ({ href, className, children, target }) => {
     return (
-        <a href={href} className={cnLink(null, [className])} target={target}>
+        <ReactRouterLink to={href} className={cnLink(null, [className])}>
             {children}
-        </a>
+        </ReactRouterLink>
     )
 }
