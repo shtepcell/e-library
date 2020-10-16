@@ -46,4 +46,22 @@ export const createDocument = (req, res) => uploadToS3(req.file, async (fileUrl)
     } catch (err) {
         return onError(req, res)(err);
     }
-})
+});
+
+export const getOneDocument = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const document = await Document.findOne({ id }).populate('contract', 'id').lean();
+
+        // @ts-ignore
+        document.contract = document.contract.id;
+
+        console.log(document);
+
+        return res.status(200).send(document);
+    } catch (err) {
+        return onError(req, res)(err);
+    }
+};
+

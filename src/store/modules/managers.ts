@@ -3,8 +3,8 @@ import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { IManager } from '@typings/IManager';
 import { IAppState } from '..';
 
-export const changePage = createAction<number>('changePage');
-export const onSearch = createAction<string>('onSearch');
+export const changePage = createAction<number>('changeManagersPage');
+export const onSearch = createAction<string>('onSearchManagers');
 
 // @ts-ignore
 export const getManagers = createAsyncThunk<any, any | undefined>('getManagers', ({ page, search } = {}, { getState }) => {

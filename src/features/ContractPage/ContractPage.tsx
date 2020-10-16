@@ -10,12 +10,9 @@ import { IContract } from '@typings/IContract';
 import './ContractPage.scss';
 import { CreateContractDialog } from '@features/CreateContractDialog/CreateContractDialog';
 import { getFullName } from '@lib/helper';
+import { IContractPageProps } from '.';
 
 const cnContractPage = cn('ContractPage');
-
-interface IContractPageProps {
-    contractId?: string;
-};
 
 interface IContractPageState {
     contract?: IContract;
@@ -24,7 +21,7 @@ interface IContractPageState {
     openDialog?: boolean;
 };
 
-export class ContractPage extends PureComponent<IContractPageProps, IContractPageState> {
+export class ContractPageBase extends PureComponent<IContractPageProps, IContractPageState> {
     state: IContractPageState = {
         loading: false,
     }
@@ -48,6 +45,7 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
     }
 
     render() {
+        const { draftDocument, getDocument, onSwitchDocumentDialog, openDocumentDialog } = this.props;
         const { loading, contract, openDialog, documents } = this.state;
 
         if (loading) {
@@ -64,7 +62,14 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
             <>
                 <Header type="contract" />
                 <div className={cnContractPage()}>
-                    <Contract contract={contract} onEditClick={this.handlerDialog(true)} documents={documents} />
+                    <Contract
+                        contract={contract}
+                        onEditClick={this.handlerDialog(true)}
+                        documents={documents}
+                        draftDocument={draftDocument}
+                        onSwitchDocumentDialog={onSwitchDocumentDialog}
+                        openDocumentDialog={openDocumentDialog}
+                        onEditDocument={getDocument} />
                     <CreateContractDialog open={openDialog} onClose={this.handlerDialog(false)} contract={{
                         ...contract,
                         client: contract?.client?.name,

@@ -20,7 +20,6 @@ interface IOwnProps {
 export class DocumentItem extends PureComponent<IOwnProps> {
     onEditClick = (event) => {
         event.preventDefault();
-
         this.props.onEditClick();
     }
 
@@ -28,11 +27,11 @@ export class DocumentItem extends PureComponent<IOwnProps> {
         const { type, period, file, } = this.props;
 
         return (
-            <LinkSimple className={cnDocumentItem()} href={file} target="_blank">
+            <LinkSimple normal className={cnDocumentItem()} href={file} target="_blank">
                <DescriptionIcon color="primary" />
                <div className={cnDocumentItem('Name')}>{type}</div>
                <div className={cnDocumentItem('Date')}>{moment(period).format('MM.YYYY')}</div>
-               <Link className={cnDocumentItem('Edit')} onClick={this.onEditClick}>Править</Link>
+               <Link component="span" className={cnDocumentItem('Edit')} onClick={this.onEditClick}>Править</Link>
             </LinkSimple>
         )
     }

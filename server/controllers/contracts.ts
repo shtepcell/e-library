@@ -75,9 +75,13 @@ export const saveContract = async (req, res)  => {
 
 export const getContracts = async (req, res)  => {
     try {
-        const contracts = await Contract.find({}).populate('client serviceManager').limit(25).sort({ id: -1 }).lean();
+        const query = {};
+        const limit = 25;
 
-        return res.send(contracts);
+        const total = await Contract.count(query);
+        const contracts = await Contract.find(query).populate('client serviceManager').skip(req.query.page * (limit - 1)).limit(limit).sort({ id: -1 }).lean();
+
+        return res.send({ items: contracts, total });
     } catch (error) {
         return onError(req, res)(error);
     }

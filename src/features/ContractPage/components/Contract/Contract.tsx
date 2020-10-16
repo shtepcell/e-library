@@ -11,16 +11,21 @@ import { Link } from '@material-ui/core';
 import { getFullName } from '@lib/helper';
 import { DocumentUpload } from '@features/DocumentUpload/DocumentUpload';
 import { DocumentItem } from '../DocumentItem/DocumentItem';
+import { IDocument } from '@typings/IDocument';
 const cnContract = cn('Contract');
 
 interface IContractProps {
     contract?: IContract;
+    draftDocument?: Partial<IDocument>;
     documents?: any[];
+    openDocumentDialog?: boolean;
+
     onEditClick?: () => void;
+    onEditDocument?: (id: number) => void;
+    onSwitchDocumentDialog?: (value: boolean) => void;
 };
 
 interface IOwnState {
-    openDocumentDialog: boolean;
     date: Date,
     period: Date,
     document?: any;
@@ -35,21 +40,25 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
     }
 
     handleAddDocumentClick = () => {
-        this.setState({ openDocumentDialog: true })
+        this.props.onSwitchDocumentDialog(true);
     }
 
     handleCloseDialog = () => {
-        this.setState({ openDocumentDialog: false })
+        this.props.onSwitchDocumentDialog(false);
     }
 
     renderDialog() {
         return (
-            <DocumentUpload onClose={this.handleCloseDialog} open={this.state.openDocumentDialog} contractId={this.props.contract.id} />
+            <DocumentUpload
+                onClose={this.handleCloseDialog}
+                open={this.props.openDocumentDialog}
+                contractId={this.props.contract.id}
+            />
         )
     }
 
     render() {
-        const { contract, onEditClick, documents } = this.props;
+        const { contract, onEditClick, documents, onEditDocument } = this.props;
 
         if (!contract) {
             return null;
@@ -138,8 +147,8 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                     </div>
                     {this.renderDialog()}
                     <div className={cnContract('Documents')}>
-                        {(documents || []).map(({ type, period, file }) => (
-                            <DocumentItem type={type} period={period} file={file} onEditClick={() => {}} />
+                        {(documents || []).map(({ type, period, file, id }) => (
+                            <DocumentItem type={type} period={period} file={file} onEditClick={() => onEditDocument(id)} />
                         ))}
                     </div>
                     {/* <div className={cnContract('DocumentsLink')}>

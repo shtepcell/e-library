@@ -8,12 +8,14 @@ import { DOCUMENT_TYPES } from '@const/documents';
 
 import './DocumentUpload.scss';
 import { request } from '@lib/request';
+import { IDocument } from '@typings/IDocument';
 
 const cnDocumentUpload = cn('DocumentUpload');
 interface IOwnProps {
     onClose: VoidFunction;
     open: boolean;
     contractId: string;
+    draftDocument?: Partial<IDocument>;
 }
 
 interface IOwnState {
@@ -40,7 +42,7 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
     }
 
     onSelectFile: ChangeEventHandler<HTMLInputElement> = (event) => {
-        this.setState({ file: event.target.files[0]})
+        this.setState({ file: event.target.files[0] })
     }
 
     handlePeriodChange = (date) => {

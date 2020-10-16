@@ -10,14 +10,13 @@ import './MainPage.scss';
 
 import { IContract } from '@typings/IContract';
 
-import { request } from '@lib/request';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Header } from '@features/Header/Header';
 import { CreateContractDialog } from '@features/CreateContractDialog/CreateContractDialog';
+import { Pagination } from '@material-ui/lab';
+import { IContractsSpravProps } from '.';
 
 const cnMainPage = cn('MainPage');
-
-interface IMainPageProps {};
 
 interface IMainPageState {
     allContracts: IContract[];
@@ -26,7 +25,7 @@ interface IMainPageState {
     openCreateDialog: boolean;
 };
 
-export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
+export class MainPageBase extends PureComponent<IContractsSpravProps, IMainPageState> {
     state: IMainPageState = {
         allContracts: [],
         disabledStatuses: {},
@@ -55,24 +54,11 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
     }
 
     componentDidMount() {
-        request
-            .get('/contracts')
-            .then(response => {
-                const contracts = response.data as IContract[];
-
-                setTimeout(() => this.setState({
-                    allContracts: contracts,
-                    loading: false,
-                }), 100);
-            })
+        this.props.getContracts({});
     }
 
     render() {
-        const { allContracts, disabledStatuses, loading } = this.state;
-
-        const filteredContracts = allContracts.filter(({ status }) => {
-            return !disabledStatuses[status];
-        });
+        const { page, total, items, changePage, loading } = this.props;
 
         return (
             <div className={cnMainPage()}>
@@ -83,7 +69,12 @@ export class MainPage extends PureComponent<IMainPageProps, IMainPageState> {
                         <CircularProgress  color="primary" />
                     </div>
                 ) : (
-                    <ContractsList contracts={filteredContracts} />
+                    <>
+                        <ContractsList contracts={items} />
+                        <div className="Pagination">
+                            <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
+                        </div>
+                    </>
                 )}
                 <Fab onClick={this.handlerClickAddButton} className={cnMainPage('Add')} color="primary" aria-label="add">
                     <AddIcon />

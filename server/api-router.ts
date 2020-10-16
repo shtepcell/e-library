@@ -1,6 +1,6 @@
 import { createManager, getManagers, getOneManager, saveManager, deleteManager } from "./controllers/manager";
 import { getClients, createClient, getOneClient, saveClient } from "./controllers/clients";
-import { createDocument } from "./controllers/documents";
+import { createDocument, getOneDocument } from "./controllers/documents";
 import multer from 'multer';
 
 const upload = multer();
@@ -29,9 +29,9 @@ export const apiRouter = (app) => {
     app.patch('/api/contract/:id', saveContract);
 
     app.post('/api/document', upload.single('file'), createDocument);
+    app.get('/api/document/:id', getOneDocument);
 
     // #########################################
-
 
     app.post('/api/suggest/adress', (req, res) => {
         Kladr.getData({ query: req.body.value, oneString: 1, contentType: 'building', limit: 5, withParent: 1 }, (err, result) => {
