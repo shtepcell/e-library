@@ -62,9 +62,8 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                 search: this.state.client.personalManager,
                 limit: 5,
             }
-        }).then(({ data }) => {
-
-            this.setState({ managerSuggest: data.map(getFullName), managerSuggestLoading: false  })
+        }).then(({ data: { items } }) => {
+            this.setState({ managerSuggest: items.map(getFullName), managerSuggestLoading: false  })
         }).catch(() => {
             this.setState({ managerSuggestLoading: false });
         });

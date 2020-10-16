@@ -3,8 +3,8 @@ import { cn } from '@bem-react/classname';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { ClientsSprav } from '@features/ClientsSprav/ClientsSprav';
-import { ManagersSprav } from '@features/ManagersSprav/ManagersSprav';
+import { ClientsSprav } from '@features/ClientsSprav';
+import { ManagersSprav } from '@features/ManagersSprav';
 
 import './SpravPage.scss';
 

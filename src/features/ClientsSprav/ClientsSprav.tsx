@@ -15,30 +15,25 @@ import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateClientDialog } from './components/CreateClientDialog/CreateClientDialog';
 import { IClient } from '@typings/IClient';
+import { IClientsSpravProps } from '.';
+import { Pagination } from '@material-ui/lab';
 
 const cnClientsSprav = cn('ClientsSprav');
-
-interface IOwnProps {};
 
 interface IOwnState {
     adressSuggest: string[];
     showCreateDialog: boolean;
-    clients: IClient[];
     selectedClient?: IClient;
-    search?: string;
 };
 
-export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
+export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnState> {
     state: IOwnState = {
         adressSuggest: [],
         showCreateDialog: false,
-        clients: [],
     }
 
     componentDidMount() {
-        request.get('/clients').then(({ data }) => {
-            this.setState({ clients: data });
-        })
+        this.props.getClients({});
     }
 
     handlerCloseDialog = () => {
@@ -58,19 +53,12 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
     }
 
     onSearchChange = (event) => {
-        this.setState({ search:  event.target.value });
-
-        request.get('/clients', {
-            params: {
-                search: event.target.value,
-            }
-        }).then(({ data }) => {
-            this.setState({ clients: data });
-        })
+        this.props.onSearch(event.target.value);
     }
 
     render() {
-        const { selectedClient, clients, showCreateDialog, search } = this.state;
+        const { items, total, page, search, changePage } = this.props;
+        const { selectedClient, showCreateDialog } = this.state;
 
         return (
             <div className={cnClientsSprav()}>
@@ -91,7 +79,7 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {clients.map(client => (
+                            {items.map(client => (
                                 <TableRow className={cnClientsSprav('Row')} key={client.id} onClick={this.selectManagerHandler(String(client.id))} hover>
                                     <TableCell className={cnClientsSprav('Column', { type: 'name'})} component="th" scope="row">
                                         {client.name}
@@ -103,7 +91,9 @@ export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
                     </Table>
                 </TableContainer>
 
-                {/* <Pagination className={cnClientsSprav('Pagination')} count={10} size="large" /> */}
+                <div className="Pagination">
+                    <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
+                </div>
             </div>
         )
     }

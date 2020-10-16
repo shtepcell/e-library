@@ -44,16 +44,20 @@ export const saveManager = async (req, res)  => {
 }
 
 export const getManagers = async (req, res)  => {
-    const { search, limit } = req.query;
+    const { search, page } = req.query;
     const regex = { $regex: (search || '').split(' ')[0], $options: 'i' };
     const query = [  { 'firstName': regex }, { 'middleName': regex }, { 'lastName': regex }];
+    const sQ = search ? { $or: query } : {};
+    const limit = Number(req.query.limit) || 25;
 
     try {
+        const total = await Manager.count(sQ);
+
         const managers = await Manager.find(search ? {
             $or: query,
-        } : {}).limit(Number(limit) || 25).sort({ id: -1 }).lean();
+        } : {}).skip((page * limit) - limit).limit(limit).sort({ id: -1 }).lean();
 
-        return res.send(managers);
+        return res.send({ items: managers, total, });
     } catch (error) {
         return onError(req, res)(error);
     }

@@ -17,7 +17,6 @@ import { getFullName } from '@lib/helper';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const cnCreateContractDialog = cn('CreateContractDialog');
-
 interface IOwnProps {
     contract?: IContract;
     open?: boolean;
@@ -88,8 +87,8 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                 search: this.state.contract.personalManager,
                 limit: 5,
             }
-        }).then(({ data }) => {
-            this.setState({ personalSuggest: data.map(getFullName) })
+        }).then(({ data : { items }}) => {
+            this.setState({ personalSuggest: items.map(getFullName) })
         });
     }, 500);
 
@@ -102,8 +101,8 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                 search: this.state.contract.serviceManager,
                 limit: 5,
             }
-        }).then(({ data }) => {
-            this.setState({ serviceSuggest: data.map(getFullName) })
+        }).then(({ data: { items } }) => {
+            this.setState({ serviceSuggest: items.map(getFullName) })
         });
     }, 500);
 
@@ -117,7 +116,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                 limit: 5,
             }
         }).then(({ data }) => {
-            this.setState({ clientSuggest: data.map(({ name }) => name) })
+            this.setState({ clientSuggest: data.items.map(({ name }) => name) })
         });
     }, 500);
 

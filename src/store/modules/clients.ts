@@ -1,45 +1,42 @@
 import { request } from '@lib/request';
 import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { IManager } from '@typings/IManager';
+import { IClient } from '@typings/IClient';
 import { IAppState } from '..';
 
 export const changePage = createAction<number>('changePage');
 export const onSearch = createAction<string>('onSearch');
 
 // @ts-ignore
-export const getManagers = createAsyncThunk<any, any | undefined>('getManagers', ({ page, search } = {}, { getState }) => {
-    const { managers } = getState() as IAppState;
+export const getClients = createAsyncThunk<any, any | undefined>('getClients', ({ page, search } = {}, { getState }) => {
+    const { clients } = getState() as IAppState;
 
     return request
-        .get('/managers', {
+        .get('/clients', {
             params: {
                 limit: 25,
-                page: page || managers.page,
-                search: search || search === '' ? search : managers.search,
+                page: page || clients.page,
+                search: search || search === '' ? search : clients.search,
             }
         })
         .then(({ data }) => data);
 })
 
-export interface IManagersState {
-    items: IManager[];
+export interface IClientsState {
+    items: IClient[];
     total: number;
     page: number;
     search?: string;
-    selectedManager?: IManager;
-    showCreateDialog?: boolean;
-    loading?: boolean;
 }
 
-const initialState: IManagersState = {
+const initialState: IClientsState = {
     items: [],
     total: 0,
     page: 1,
 };
 
-export const managersReducer = createReducer(initialState, (builder) => {
+export const clientsReducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(getManagers.fulfilled, (state, action) => {
+        .addCase(getClients.fulfilled, (state, action) => {
             state.items = action.payload.items;
             state.total = action.payload.total;
         })
@@ -55,14 +52,14 @@ export const managersReducer = createReducer(initialState, (builder) => {
 });
 
 
-export const managersMiddleware = store => next => action => {
+export const clientsMiddleware = store => next => action => {
     switch (action.type) {
         case changePage.type:
-            store.dispatch(getManagers({ page: action.payload }));
+            store.dispatch(getClients({ page: action.payload }));
             break;
 
         case onSearch.type:
-            store.dispatch(getManagers({ search: action.payload, page: 1 }));
+            store.dispatch(getClients({ search: action.payload, page: 1 }));
             break;
     }
 

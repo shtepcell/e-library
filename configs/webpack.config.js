@@ -20,6 +20,7 @@ module.exports = {
             '@lib': path.resolve('src/lib'),
             '@const': path.resolve('src/const'),
             '@typings': path.resolve('typings'),
+            '@store': path.resolve('src/store'),
         }
     },
 

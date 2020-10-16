@@ -19,6 +19,12 @@
             ],
             "@typings/*": [
                 "typings/*"
+            ],
+            "@store/*": [
+                "src/store/*",
+            ],
+            "@store": [
+                "src/store/index.ts"
             ]
         }
     }

@@ -15,31 +15,23 @@ import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateManagerDialog } from './components/CreateClientDialog/CreateManagerDialog';
 import { IManager } from '@typings/IManager';
+import { Pagination } from '@material-ui/lab';
+import { IManagersSpravProps } from '.';
 
 const cnManagersSprav = cn('ManagersSprav');
 
-interface IOwnProps {
-};
-
 interface IOwnState {
     showCreateDialog: boolean;
-    managers: IManager[];
     selectedManager?: IManager;
-    search?: string;
 };
 
-export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
+export class ManagersSpravBase extends PureComponent<IManagersSpravProps, IOwnState> {
     state: IOwnState = {
         showCreateDialog: false,
-        managers: [],
     }
 
     componentDidMount() {
-        request
-            .get('/managers')
-            .then(({ data }) => {
-                this.setState({ managers: data });
-            });
+        this.props.getManagers({});
     }
 
     onSelectManager = (id: number) => () => {
@@ -57,7 +49,7 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
     }
 
     onCreateManager = (manager) => {
-        this.setState({ managers: [ manager, ...this.state.managers]} )
+        window.location.reload();
     }
 
     handlerCloseDialog = () => {
@@ -68,21 +60,13 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
         this.setState({ showCreateDialog: true });
     }
 
-
     onSearchChange = (event) => {
-        this.setState({ search:  event.target.value });
-
-        request.get('/managers', {
-            params: {
-                search: event.target.value,
-            }
-        }).then(({ data }) => {
-            this.setState({ managers: data });
-        })
+        this.props.onSearch(event.target.value);
     }
 
     render() {
-        const { managers, selectedManager, search } = this.state;
+        const { search, items, page, total, changePage } = this.props;
+        const { selectedManager } = this.state;
 
         return (
             <div className={cnManagersSprav()}>
@@ -102,14 +86,14 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {managers.length === 0 && (
+                            {total === 0 && (
                                 <TableRow>
                                     <TableCell component="th" scope="row">
                                         Ничего не найдено
                                     </TableCell>
                                 </TableRow>
                             )}
-                            {managers.map((manager) => (
+                            {items.map((manager) => (
                                 <TableRow className={cnManagersSprav('Row')} key={String(manager.id)} hover onClick={this.onSelectManager(manager.id)}>
                                     <TableCell component="th" scope="row">
                                         {`${manager.lastName} ${manager.firstName} ${manager.middleName}`}
@@ -119,6 +103,9 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <div className="Pagination">
+                    <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
+                </div>
             </div>
         )
     }
