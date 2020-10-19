@@ -15,7 +15,7 @@ export interface IContract {
 
     department: string;
 
-    client: string;
+    client: any;
 
     serviceManager: string;
     personalManager: string;

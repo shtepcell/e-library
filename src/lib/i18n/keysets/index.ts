@@ -1,5 +1,5 @@
 export default {
-    "active": "Активный",
+    "active": "Активен",
     "waiting": "Ожидает подключения",
     "deleted": "Удалён",
     "blocked": "Блокирован",

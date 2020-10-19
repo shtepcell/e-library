@@ -12,6 +12,7 @@ import { getFullName } from '@lib/helper';
 import { DocumentUpload } from '@features/DocumentUpload';
 import { DocumentItem } from '../DocumentItem/DocumentItem';
 import { IDocument } from '@typings/IDocument';
+import moment from 'moment';
 const cnContract = cn('Contract');
 
 interface IContractProps {
@@ -86,7 +87,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Клиент
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            {contract.client.name}
+                            <Link href={`/sprav/clients/${contract.client.id}`} target="_blank">{contract.client.name}</Link>
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'department' })}>
@@ -102,7 +103,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Дата заключения
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            {contract.conclusionDate}
+                            {moment(contract.conclusionDate).format('DD.MM.YYYY')}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'service-manager' })}>
@@ -110,7 +111,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             Дата завершения действия
                         </div>
                         <div className={cnContract('FieldValue')}>
-                            {contract.endDate}
+                            {moment(contract.endDate).format('DD.MM.YYYY')}
                         </div>
                     </div>
                     <div className={cnContract('Field', { type: 'service-manager' })}>
@@ -129,6 +130,16 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             {getFullName(contract.personalManager)}
                         </div>
                     </div>
+                    {contract.amount && (
+                        <div className={cnContract('Field', { type: 'personal-manager' })}>
+                            <div className={cnContract('FieldName')}>
+                                Сумма контракта
+                            </div>
+                            <div className={cnContract('FieldValue')}>
+                                {contract.amount}
+                            </div>
+                        </div>
+                    )}
                     <div className={cnContract('Field', { type: 'original' })}>
                         <div className={cnContract('FieldName')}>
                             Оригинал в архиве

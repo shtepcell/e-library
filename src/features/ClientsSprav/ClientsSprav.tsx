@@ -34,6 +34,14 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
 
     componentDidMount() {
         this.props.getClients({});
+        const pathParts = window.location.pathname.split('/');
+
+        if (pathParts.length === 4 && !isNaN(pathParts[3])) {
+            console.log(pathParts);
+
+            this.selectManagerHandler(pathParts[3])();
+        }
+
     }
 
     handlerCloseDialog = () => {
@@ -45,6 +53,8 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
     }
 
     selectManagerHandler = (id: string) => () => {
+        console.log('sadasd', id);
+
         request
             .get(`/client/${id}`)
             .then(({ data }) => {

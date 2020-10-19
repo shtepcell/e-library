@@ -34,7 +34,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
     state: IOwnState = {
         contract: {
             type: 'Договор',
-            status: 'Активный',
+            status: 'Активен',
             conclusionDate: new Date(),
             endDate: new Date(),
         },
@@ -47,7 +47,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         if (this.props.contract !== prevProps.contract) {
             this.setState({ contract: this.props.contract || {
                 type: 'Договор',
-                status: 'Активный',
+                status: 'Активен',
                 conclusionDate: new Date(),
                 endDate: new Date(),
             } });
