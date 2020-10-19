@@ -14,6 +14,8 @@ export interface IContract extends mongoose.Document {
     personalManager?: IManager;
     document?: string;
     orig: boolean;
+    fileName?: string;
+    file?: string;
 };
 
 const contractSchema = new Schema({
@@ -48,6 +50,8 @@ const contractSchema = new Schema({
         type:  Schema.Types.ObjectId,
         ref: 'Manager',
     },
+    fileName: String,
+    file: String,
     document: String,
     orig: Boolean,
 });

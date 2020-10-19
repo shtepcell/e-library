@@ -22,11 +22,15 @@
         }
     }
 
-
     &-Row {
         display: flex;
         align-items: center;
 
         margin-bottom: 24px;
+    }
+
+    &-UploadIcon {
+        margin-left: 2px;
+        margin-right: 10px;
     }
 }

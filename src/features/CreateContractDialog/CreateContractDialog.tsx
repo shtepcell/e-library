@@ -4,7 +4,7 @@ import _debounce from 'lodash/debounce';
 
 import './CreateContractDialog.scss';
 import {
-    Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem
+    Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Chip, CircularProgress
 } from '@material-ui/core';
 import { IContract, ContractType, ContractStatus } from '@typings/IContract';
 import { KeyboardDatePicker } from '@material-ui/pickers';
@@ -15,6 +15,8 @@ import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import { request } from '@lib/request';
 import { getFullName } from '@lib/helper';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import DescriptionIcon from '@material-ui/icons/Description';
 
 const cnCreateContractDialog = cn('CreateContractDialog');
 interface IOwnProps {
@@ -28,6 +30,7 @@ interface IOwnState {
     personalSuggest: string[];
     serviceSuggest: string[];
     clientSuggest: string[];
+    loading?: boolean;
 };
 
 export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
@@ -167,24 +170,56 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         this.getSuggestClient();
     };
 
+
+    onSelectFile = (event) => {
+        const file = event.target.files[0];
+        this.setState({ contract: { ...this.state.contract, fileName: file.name, file } });
+    }
+
+    onRemoveFile = () => {
+        const contract = { ...this.state.contract };
+
+        delete contract.file;
+        delete contract.fileName;
+
+        this.setState({ contract });
+    }
+
+    uploadFile = (id: string) => {
+        const { file, fileName } = this.state.contract;
+
+        const formData = new FormData();
+
+        file && formData.append('file', file);
+        fileName && formData.append('fileName', fileName);
+
+        return request.post(`/contract/${id}/file`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        });
+    }
+
     createHandler = () => {
+        this.setState({ loading: true });
+
         if (this.state.contract.id) {
             request.patch(`/contract/${this.state.contract.id}`, this.state.contract)
-                .then(() => {
-                    window.location.reload();
-                });
+                .then(() => this.uploadFile(this.state.contract.id))
+                .then(() => window.location.reload())
+                .catch(() => this.setState({ loading: true }));
         } else {
             request.post('/contract', this.state.contract)
-                .then(() => {
-                    window.location.reload();
-                });
+                .then(({ data: { id } }) => this.uploadFile(id))
+                .then(() => window.location.reload())
+                .catch(() => this.setState({ loading: true }));
         }
     }
 
 
     render() {
         const { open, onClose } = this.props;
-        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig } = this.state.contract;
+        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName } = this.state.contract;
         const { serviceSuggest, personalSuggest, clientSuggest } = this.state;
 
         return (
@@ -350,13 +385,31 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                         }
                         label="Оригинал в архиве"
                     />
+                    <>
+                    <input type="file" id="contract-file" style={{ display: 'none' }} onChange={this.onSelectFile}/>
+                    {fileName ? (
+                        <Chip
+                            icon={<DescriptionIcon />}
+                            label={fileName}
+                            onDelete={this.onRemoveFile}
+                        />
+                    ) : (
+                        <label htmlFor="contract-file">
+                            <Button color="primary" component="span">
+                                <CloudUploadIcon className={cnCreateContractDialog('UploadIcon')} />
+                                Выбрать файл
+                            </Button>
+                        </label>
+                    )}
+                </>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="primary">
                         Отменить
                     </Button>
-                    <Button onClick={this.createHandler} color="primary" variant="contained" >
+                    <Button onClick={this.createHandler} color="primary" variant="contained" disabled={this.state.loading}>
                         {this.state.contract.id ? 'Сохранить' : 'Создать'}
+                        {this.state.loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
                     </Button>
                 </DialogActions>
             </Dialog>

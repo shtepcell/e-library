@@ -6,6 +6,7 @@ import { Manager } from '../models/Manager';
 import { Client } from '../models/Client';
 import { Document } from '../models/Document';
 import { getId } from './counters';
+import { uploadToS3 } from './documents';
 
 const fields = ['client', 'personalManager', 'serviceManager', 'orig', 'status', 'conclusionDate', 'endDate', 'department', 'type', 'amount'];
 
@@ -36,7 +37,7 @@ export const createContract = async (req, res)  => {
 
     await contract.save();
 
-    return res.status(200).send(_.pick(contract, fields));
+    return res.status(200).send(_.pick(contract, [...fields, 'id']));
 }
 
 export const saveContract = async (req, res)  => {
@@ -70,8 +71,26 @@ export const saveContract = async (req, res)  => {
 
     await contract.save();
 
-    return res.status(200).send(_.pick(contract, fields));
+    return res.status(200).send(_.pick(contract, [...fields, 'id']));
 }
+
+export const uploadContractDocument = (req, res) => uploadToS3(req.file, async (fileUrl) => {
+    const fileName = req.body.fileName;
+    const contract = await Contract.findOne({ id: req.params.id });
+
+    contract.fileName = fileName;
+    contract.file = fileUrl;
+
+    const validateError = contract.validateSync();
+
+    if (validateError) {
+        return onValidateError(req, res)(validateError);
+    }
+
+    await contract.save();
+
+    return res.status(200).send(_.pick(contract, [...fields, 'id']));
+})
 
 export const getContracts = async (req, res)  => {
     try {
@@ -79,7 +98,7 @@ export const getContracts = async (req, res)  => {
         const limit = 25;
 
         const total = await Contract.count(query);
-        const contracts = await Contract.find(query).populate('client serviceManager').skip(req.query.page * (limit - 1)).limit(limit).sort({ id: -1 }).lean();
+        const contracts = await Contract.find(query).populate('client serviceManager').skip(req.query.page * limit - limit).limit(limit).sort({ id: -1 }).lean();
 
         return res.send({ items: contracts, total });
     } catch (error) {

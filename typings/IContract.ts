@@ -19,6 +19,9 @@ export interface IContract {
 
     serviceManager: string;
     personalManager: string;
+
+    fileName?: string;
+    file?: any;
 }
 
 export enum ContractType { Contract, GovermentContract };

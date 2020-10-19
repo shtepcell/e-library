@@ -1,12 +1,12 @@
 import { createManager, getManagers, getOneManager, saveManager, deleteManager } from "./controllers/manager";
 import { getClients, createClient, getOneClient, saveClient } from "./controllers/clients";
 import { createDocument, getOneDocument, saveDocument } from "./controllers/documents";
+import { createContract, getContracts, getOneContract, saveContract, uploadContractDocument } from "./controllers/contracts";
 import multer from 'multer';
 
 const upload = multer();
 
 import kladrApi from 'kladrapi-for-node';
-import { createContract, getContracts, getOneContract, saveContract } from "./controllers/contracts";
 
 const Kladr = new kladrApi();
 
@@ -22,10 +22,10 @@ export const apiRouter = (app) => {
     app.post('/api/client', createClient);
     app.patch('/api/client/:id', saveClient);
 
-
     app.get('/api/contracts', getContracts);
     app.get('/api/contract/:id', getOneContract);
     app.post('/api/contract', createContract);
+    app.post('/api/contract/:id/file', upload.single('file'), uploadContractDocument);
     app.patch('/api/contract/:id', saveContract);
 
     app.post('/api/document', upload.single('file'), createDocument);
