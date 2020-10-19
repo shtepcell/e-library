@@ -8,91 +8,64 @@ import { DOCUMENT_TYPES } from '@const/documents';
 
 import './DocumentUpload.scss';
 import { request } from '@lib/request';
-import { IDocument } from '@typings/IDocument';
+import { IDocumentUploadProps } from '.';
 
 const cnDocumentUpload = cn('DocumentUpload');
-interface IOwnProps {
-    onClose: VoidFunction;
-    open: boolean;
-    contractId: string;
-    draftDocument?: Partial<IDocument>;
-}
 
 interface IOwnState {
-    number?: number;
-    type?: string;
-    period?: Date;
-    date?: Date;
-    trackNumber?: string;
-    orig?: boolean;
     file?: File;
-    loading?: boolean;
 }
 
-
-export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
-    state: IOwnState = {
-        type: DOCUMENT_TYPES[0],
-        period: new Date(),
-        date: new Date(),
-    };
-
-    onDocumentChange = (field: string) => (event) => {
-        this.setState({ [field]: event.target.value || event.target.checked });
-    }
+export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IOwnState> {
+    state: IOwnState = {}
 
     onSelectFile: ChangeEventHandler<HTMLInputElement> = (event) => {
-        this.setState({ file: event.target.files[0] })
+        const file = event.target.files[0];
+
+        this.setState({ file })
+
+        this.props.onSelectFile(file.name);
     }
 
-    handlePeriodChange = (date) => {
-        this.setState({ period: date })
+    onRemoveFile = () => {
+        this.setState({ file: undefined })
+
+        this.props.onRemoveFile();
     }
 
-    handleDateChange = (date) => {
-        this.setState({ date })
+    onCloseDialog = () => {
+        this.props.onClose();
+        setTimeout(this.props.onCloseDialog, 300);
     }
 
     onSaveClick = () => {
-        this.setState({ loading: true });
-
-        const {
-            number,
-            type,
-            period,
-            date,
-            trackNumber,
-            orig,
-            file,
-        } = this.state;
+        const { id, number, type, period, date, trackNumber, orig, fileName } = this.props.draftDocument;
 
         const formData = new FormData();
         formData.append('number', String(number));
         formData.append('type', type);
-        formData.append('period', String(period.valueOf()));
-        formData.append('date', String(date.valueOf()));
+        formData.append('period', String(period));
+        formData.append('date', String(date));
         formData.append('trackNumber', trackNumber);
         formData.append('orig', String(orig));
-        formData.append('file', file);
+        formData.append('file', this.state.file);
+        formData.append('fileName', fileName);
         formData.append('contract', String(this.props.contractId));
 
-        request.post('/document', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(() => {
-            window.location.reload();
-        }).catch(() => {
-            this.setState({ loading: false });
-        });
+        if (id) {
+            formData.append('id', String(id));
+            this.props.saveDocument(formData);
+        } else {
+            this.props.createDocument(formData);
+        }
     }
 
     render() {
-        const { onClose, open } = this.props;
-        const { number, type, period, date, trackNumber, orig, file, loading } = this.state;
+        const { onClose, open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeOrig } = this.props;
+        const { number, type, period, date, trackNumber, orig, fileName } = draftDocument;
 
         return (
-            <Dialog className={cnDocumentUpload()} fullWidth maxWidth="sm" onClose={onClose} open={open}>
+            <Dialog className={cnDocumentUpload()} fullWidth maxWidth="sm" onClose={this.onCloseDialog} open={open}>
                 <DialogTitle id="simple-dialog-title">Загрузка документа</DialogTitle>
                 <DialogContent>
                     <form noValidate autoComplete="off">
@@ -101,14 +74,14 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 className={cnDocumentUpload('DocumentField', { type: 'number' })}
                                 label="Номер документа"
                                 type="number"
-                                onChange={this.onDocumentChange('number')}
+                                onChange={(event) => onChangeNumber(event.target.value)}
                                 variant="outlined"
                                 value={number}
                             />
                             <TextField
                                 className={cnDocumentUpload('DocumentField', { type: 'type' })}
                                 select
-                                onChange={this.onDocumentChange('type')}
+                                onChange={(event) => onChangeType(event.target.value)}
                                 value={type}
                                 variant="outlined"
                                 label="Тип документа"
@@ -124,7 +97,7 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 views={['year', 'month']}
                                 disableToolbar
                                 value={period}
-                                onChange={this.handlePeriodChange}
+                                onChange={(d) => onChangePeriod(d.valueOf())}
                                 format="MM.YYYY"
                                 id="date-picker-dialog"
                                 label="Период"
@@ -139,7 +112,7 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 format="DD.MM.YYYY"
                                 id="date-picker-dialog"
                                 value={date}
-                                onChange={this.handleDateChange}
+                                onChange={(d) => onChangeDate(d.valueOf())}
                                 label="Дата отправки"
                                 inputVariant="outlined"
                                 KeyboardButtonProps={{
@@ -152,7 +125,7 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 className={cnDocumentUpload('DocumentField', { type: 'track' })}
                                 variant="outlined"
                                 label="Номер трека"
-                                onChange={this.onDocumentChange('trackNumber')}
+                                onChange={(event) => onChangeTrack(event.target.value)}
                                 value={trackNumber || ''} />
                         </div>
                         <div className={cnDocumentUpload('DialogButtons')}>
@@ -160,7 +133,7 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 className={cnDocumentUpload('DialogCheck')}
                                 control={
                                     <Checkbox
-                                        onChange={this.onDocumentChange('orig')}
+                                        onChange={(e, value) => onChangeOrig(value)}
                                         value={orig}
                                         name="checkedB"
                                         color="primary"
@@ -168,7 +141,7 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 }
                                 label="Оригинал в архиве"
                             />
-                            {!file && (
+                            {!fileName && (
                                 <>
                                     <input type="file" id="file" style={{ display: 'none' }} onChange={this.onSelectFile}/>
                                     <label htmlFor="file">
@@ -180,22 +153,24 @@ export class DocumentUpload extends React.PureComponent<IOwnProps, IOwnState> {
                                 </>
                             )}
                         </div>
-                        {file && (
+                        {fileName && (
                             <div className={cnDocumentUpload('Row')}>
                                 <Chip
                                     icon={<DescriptionIcon />}
-                                    label={file.name}
-                                    onDelete={() => this.setState({ file: undefined })}
+                                    label={fileName}
+                                    onDelete={this.onRemoveFile}
                                 />
                             </div>
                         )}
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="primary">
+                    <Button onClick={this.onCloseDialog} color="primary">
                         Отменить
                     </Button>
-                    <Button onClick={this.onSaveClick} color="primary" variant="contained" disabled={!file || !period || !date || !number || loading}>
+                    <Button onClick={this.onSaveClick} color="primary" variant="contained"
+                    disabled={!fileName || !period || !date || !number || loading}
+                    >
                         {loading ? 'Загрузка' : 'Загрузить'}
                         {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
                     </Button>

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "@reduxjs/toolkit";
 
-import { getDocument, onSwitchDocumentDialog } from "@store/modules/contractPage";
+import { getDocument, onSwitchDocumentDialog, onSelectFile } from "@store/modules/contractPage";
 import { IAppState } from "@store";
 
 import { ContractPageBase } from "./ContractPage";

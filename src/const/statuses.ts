@@ -3,4 +3,5 @@ export const Statuses = [
     'waiting',
     'deleted',
     'blocked',
+    'canceled'
 ];

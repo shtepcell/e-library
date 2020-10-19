@@ -3,8 +3,10 @@ export interface IDocument {
     number: number;
     type: string;
     trackNumber?: string;
-    date: Date;
-    period: Date;
+    date: number;
+    period: number;
     contract: number;
     orig: boolean;
+    file: string;
+    fileName: string;
 };

@@ -5,4 +5,5 @@ export default {
     "blocked": "Блокирован",
     "personalManager": "Персональный менеджер",
     "serviceManager": "Сервисный менеджер",
+    "canceled": 'Расторгнут'
 }

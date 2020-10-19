@@ -9,7 +9,7 @@ import { IContract } from '@typings/IContract';
 import './Contract.scss';
 import { Link } from '@material-ui/core';
 import { getFullName } from '@lib/helper';
-import { DocumentUpload } from '@features/DocumentUpload/DocumentUpload';
+import { DocumentUpload } from '@features/DocumentUpload';
 import { DocumentItem } from '../DocumentItem/DocumentItem';
 import { IDocument } from '@typings/IDocument';
 const cnContract = cn('Contract');

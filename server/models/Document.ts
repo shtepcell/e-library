@@ -12,6 +12,8 @@ export interface IDocument extends mongoose.Document {
     period: Date;
     contract: IContract;
     orig: boolean;
+    file: string;
+    fileName: string;
 };
 
 const documentSchema = new Schema({
@@ -33,6 +35,10 @@ const documentSchema = new Schema({
         required: true,
     },
     file: {
+        type: String,
+        required: true,
+    },
+    fileName: {
         type: String,
         required: true,
     },

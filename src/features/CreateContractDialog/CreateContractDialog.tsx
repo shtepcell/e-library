@@ -225,6 +225,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                                 <MenuItem value={i18n('blocked')}>{i18n('blocked')}</MenuItem>
                                 <MenuItem value={i18n('waiting')}>{i18n('waiting')}</MenuItem>
                                 <MenuItem value={i18n('deleted')}>{i18n('deleted')}</MenuItem>
+                                <MenuItem value={i18n('canceled')}>{i18n('canceled')}</MenuItem>
                         </TextField>
                     </div>
                     <div className={cnCreateContractDialog('Row')}>
