@@ -219,8 +219,10 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
 
     render() {
         const { open, onClose } = this.props;
-        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName } = this.state.contract;
-        const { serviceSuggest, personalSuggest, clientSuggest } = this.state;
+        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName, id } = this.state.contract;
+        const { serviceSuggest, personalSuggest, clientSuggest, loading } = this.state;
+
+        const disabledCreate = loading || !type || !department || !status || !serviceManager || !personalManager || !conclusionDate || !endDate || !client;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateContractDialog()}>
@@ -407,9 +409,9 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                     <Button onClick={onClose} color="primary">
                         Отменить
                     </Button>
-                    <Button onClick={this.createHandler} color="primary" variant="contained" disabled={this.state.loading}>
-                        {this.state.contract.id ? 'Сохранить' : 'Создать'}
-                        {this.state.loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
+                    <Button onClick={this.createHandler} color="primary" variant="contained" disabled={disabledCreate}>
+                        {id ? 'Сохранить' : 'Создать'}
+                        {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
                     </Button>
                 </DialogActions>
             </Dialog>
