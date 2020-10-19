@@ -5,18 +5,19 @@ import { IDocument } from '@typings/IDocument';
 import { IAppState } from '..';
 
 export const changePage = createAction<number>('changePageContracts');
-export const onSearch = createAction<string>('onSearchContracts');
+export const onFiltersChange = createAction<any>('onFiltersChange');
 
 // @ts-ignore
-export const getContracts = createAsyncThunk<any, any | undefined>('getContracts', ({ page, search } = {}, { getState }) => {
+export const getContracts = createAsyncThunk<any, any | undefined>('getContracts', ({ page, filters } = {}, { getState }) => {
     const { contracts } = getState() as IAppState;
+    const { id, type, status, client, manager, orig } = filters || contracts.filters || {};
 
     return request
         .get('/contracts', {
             params: {
                 limit: 25,
                 page: page || contracts.page,
-                search: search || search === '' ? search : contracts.search,
+                id, type, status, client, serviceManager: manager, orig
             }
         })
         .then(({ data }) => data);
@@ -27,14 +28,22 @@ export interface IContractsState {
     items: IContract[];
     total: number;
     page: number;
-    search?: string;
     loading?: boolean;
+    filters: {
+        id?: string;
+        status?: string;
+        type?: string;
+        client?: string;
+        serviceManager?: string;
+        orig?: string;
+    }
 }
 
 const initialState: IContractsState = {
     items: [],
     total: 0,
     page: 1,
+    filters: {},
 };
 
 export const contractsReducer = createReducer(initialState, (builder) => {
@@ -48,9 +57,9 @@ export const contractsReducer = createReducer(initialState, (builder) => {
             state.page = action.payload;
         })
 
-        .addCase(onSearch, (state, action) => {
+        .addCase(onFiltersChange, (state, action) => {
+            state.filters = action.payload;
             state.page = 1;
-            state.search = action.payload;
         })
 });
 
@@ -61,8 +70,12 @@ export const contractsMiddleware = store => next => action => {
             store.dispatch(getContracts({ page: action.payload }));
             break;
 
-        case onSearch.type:
-            store.dispatch(getContracts({ search: action.payload, page: 1 }));
+        case onFiltersChange.type:
+            store.dispatch(getContracts({ page: 1, filters: action.payload }));
+            break;
+
+        case getContracts.rejected.type:
+            console.error('Error', action.payload);
             break;
     }
 

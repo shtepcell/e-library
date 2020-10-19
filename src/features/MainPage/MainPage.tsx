@@ -3,7 +3,7 @@ import { cn } from '@bem-react/classname';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import { Filters } from './components/Filters/Filters';
+import { Filters } from './components/Filters';
 import { ContractsList } from './components/ContractsList/ContractsList';
 
 import './MainPage.scss';
@@ -33,16 +33,10 @@ export class MainPageBase extends PureComponent<IContractsSpravProps, IMainPageS
         openCreateDialog: false,
     }
 
-    onFiltersChange = (status: IContract["status"]) => {
-        const { disabledStatuses } = this.state;
-        const newStatus = !disabledStatuses[status];
+    onFiltersChange = (field: string, value: string) => {
+        const { filters, onFiltersChange } = this.props;
 
-        this.setState({
-            disabledStatuses: {
-                ...disabledStatuses,
-                [status]: newStatus
-            }
-        });
+        onFiltersChange({ ...filters, [field]: value });
     }
 
     handlerCloseDialog = () => {
@@ -58,12 +52,12 @@ export class MainPageBase extends PureComponent<IContractsSpravProps, IMainPageS
     }
 
     render() {
-        const { page, total, items, changePage, loading } = this.props;
+        const { page, total, items, changePage, loading, filters } = this.props;
 
         return (
             <div className={cnMainPage()}>
                 <Header type="main" />
-                {/* <Filters onChange={this.onFiltersChange} disabledStatuses={disabledStatuses} /> */}
+                <Filters filters={filters} onChange={this.onFiltersChange} />
                 {loading ? (
                     <div className={cnMainPage('Progress')}>
                         <CircularProgress  color="primary" />

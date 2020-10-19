@@ -94,10 +94,38 @@ export const uploadContractDocument = (req, res) => uploadToS3(req.file, async (
 
 export const getContracts = async (req, res)  => {
     try {
-        const query = {};
+        const query = _.pick(req.query, ['id', 'type', 'status', 'orig', 'client', 'serviceManager']);
+        if (query.orig === '' || !query.orig) {
+            delete query.orig;
+        } else {
+            query.orig = Boolean(Number(query.orig));
+        }
+
+        if (query.client) {
+            const client = await Client.findOne({ name: query.client });
+
+            if (client) {
+                query.client = client;
+            } else {
+                delete query.client;
+            }
+        }
+
+        if (query.serviceManager) {
+            const [lastName, firstName, middleName] = query.serviceManager.split(' ');
+            // @ts-ignore
+            const manager = await Manager.findOne({lastName, firstName, middleName});
+
+            if (manager) {
+                query.serviceManager = manager;
+            } else {
+                delete query.serviceManager;
+            }
+        }
+
         const limit = 25;
 
-        const total = await Contract.count(query);
+        const total = await Contract.countDocuments(query);
         const contracts = await Contract.find(query).populate('client serviceManager').skip(req.query.page * limit - limit).limit(limit).sort({ id: -1 }).lean();
 
         return res.send({ items: contracts, total });

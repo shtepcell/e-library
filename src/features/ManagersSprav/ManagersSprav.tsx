@@ -103,9 +103,11 @@ export class ManagersSpravBase extends PureComponent<IManagersSpravProps, IOwnSt
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <div className="Pagination">
-                    <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
-                </div>
+                {Boolean(total) && (
+                    <div className="Pagination">
+                        <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
+                    </div>
+                )}
             </div>
         )
     }

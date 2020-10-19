@@ -4,6 +4,7 @@ import { contractPageMiddleware, contractPageReducer, IContractPageState } from 
 import { contractsMiddleware, contractsReducer, IContractsState } from "./modules/contracts";
 import { IManagersState, managersMiddleware, managersReducer } from "./modules/managers";
 import { INavigationState, navigationReducer } from "./modules/navigation";
+import { ISuggestState, suggestMiddleware, suggestReducer } from "./modules/suggest";
 
 export interface IAppState {
     user: {},
@@ -12,6 +13,7 @@ export interface IAppState {
     navigation: INavigationState;
     contracts?: IContractsState;
     contractPage?: IContractPageState;
+    suggest?: ISuggestState;
 }
 
 const rootReducer = combineReducers<IAppState>({
@@ -21,6 +23,7 @@ const rootReducer = combineReducers<IAppState>({
     contracts: contractsReducer,
     navigation: navigationReducer,
     contractPage: contractPageReducer,
+    suggest: suggestReducer,
 });
 
 export const store = configureStore({
@@ -30,6 +33,7 @@ export const store = configureStore({
         clientsMiddleware,
         contractsMiddleware,
         contractPageMiddleware,
+        suggestMiddleware,
     ]),
     devTools: process.env.NODE_ENV !== 'production',
 })

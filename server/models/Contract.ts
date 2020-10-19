@@ -53,7 +53,10 @@ const contractSchema = new Schema({
     fileName: String,
     file: String,
     document: String,
-    orig: Boolean,
+    orig: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 export const Contract = mongoose.model<IContract>('Contract', contractSchema);
