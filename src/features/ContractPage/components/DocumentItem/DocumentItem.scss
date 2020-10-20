@@ -1,4 +1,5 @@
 .DocumentItem {
+    position: relative;
     display: flex;
     align-items: center;
     margin: 0 -8px 4px -4px;
@@ -11,6 +12,14 @@
 
     &:hover {
         background-color: #f3f3f3;
+
+        .DocumentItem-Edit {
+            opacity: 1;
+        }
+
+        .DocumentItem-Date {
+            visibility: hidden;
+        }
     }
 
     &-Name {
@@ -29,5 +38,11 @@
         line-height: 16px;
         font-style: italic;
         color: #999;
+    }
+
+    &-Edit {
+        position: absolute;
+        opacity: 0;
+        right: 8px;
     }
 }

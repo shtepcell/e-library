@@ -8,36 +8,45 @@ import { Header } from '@features/Header/Header';
 import { IContract } from '@typings/IContract';
 
 import './ContractPage.scss';
+import { CreateContractDialog } from '@features/CreateContractDialog/CreateContractDialog';
+import { getFullName } from '@lib/helper';
+import { IContractPageProps } from '.';
 
 const cnContractPage = cn('ContractPage');
 
-interface IContractPageProps {
-    contractId?: string;
-};
-
 interface IContractPageState {
     contract?: IContract;
+    documents?: any[];
     loading: boolean;
+    openDialog?: boolean;
 };
 
-export class ContractPage extends PureComponent<IContractPageProps, IContractPageState> {
+export class ContractPageBase extends PureComponent<IContractPageProps, IContractPageState> {
     state: IContractPageState = {
         loading: false,
     }
 
     componentDidMount() {
         request
-            .get(`contract/1`)
-            .then(res => {
+            .get(`contract/${window.location.pathname.split('/')[2]}`)
+            .then(({ data }) => {
+                const { contract, documents } = data;
+
                 this.setState({
-                    contract: res.data,
+                    contract,
+                    documents,
                     loading: false,
                 })
             });
     }
 
+    handlerDialog = (value: boolean) => () => {
+        this.setState({ openDialog: value });
+    }
+
     render() {
-        const { loading, contract } = this.state;
+        const { draftDocument, getDocument, onSwitchDocumentDialog, openDocumentDialog } = this.props;
+        const { loading, contract, openDialog, documents } = this.state;
 
         if (loading) {
             return (
@@ -53,7 +62,20 @@ export class ContractPage extends PureComponent<IContractPageProps, IContractPag
             <>
                 <Header type="contract" />
                 <div className={cnContractPage()}>
-                    <Contract contract={contract} />
+                    <Contract
+                        contract={contract}
+                        onEditClick={this.handlerDialog(true)}
+                        documents={documents}
+                        draftDocument={draftDocument}
+                        onSwitchDocumentDialog={onSwitchDocumentDialog}
+                        openDocumentDialog={openDocumentDialog}
+                        onEditDocument={getDocument} />
+                    <CreateContractDialog open={openDialog} onClose={this.handlerDialog(false)} contract={{
+                        ...contract,
+                        client: contract?.client?.name,
+                        personalManager: contract && getFullName(contract?.personalManager),
+                        serviceManager: contract && getFullName(contract.serviceManager),
+                    }} />
                 </div>
             </>
         )

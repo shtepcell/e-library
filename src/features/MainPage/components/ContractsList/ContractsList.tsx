@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { cn } from '@bem-react/classname';
 import { IContract } from '@typings/IContract';
+import moment from 'moment';
 
 import './ContractsList.scss';
 import { Link } from '@components/Link/Link';
+import { getFullName } from '@lib/helper';
 
 const cnContractsList = cn('ContractsList');
 
@@ -34,7 +36,7 @@ export class ContractsList extends PureComponent<IContractsListProps> {
                         <div className={cnContractsList('Date')}>Дата заключения</div>
                     </div>
                     <div className={cnContractsList('Column', { type: 'manager' })}>
-                        Менеджер
+                        Сервис-менеджер
                     </div>
                     <div className={cnContractsList('Column', { type: 'status' })}>
                         Статус
@@ -48,7 +50,7 @@ export class ContractsList extends PureComponent<IContractsListProps> {
     }
 
     renderContract(contract: IContract) {
-        const { client, id, status, dateOfConclusion = '01.01.1996' } = contract;
+        const { client, id, status, conclusionDate } = contract;
 
         return (
             <Link className={cnContractsList('Row')} href={`/contract/${id}`} key={id}>
@@ -57,10 +59,10 @@ export class ContractsList extends PureComponent<IContractsListProps> {
                 </div>
                 <div className={cnContractsList('Column', { type: 'client' })}>
                     <div className={cnContractsList('Client')}>{client.name}</div>
-                    <div className={cnContractsList('Date')}>{dateOfConclusion}</div>
+                    <div className={cnContractsList('Date')}>{moment(conclusionDate).format('DD.MM.YYYY')}</div>
                 </div>
                 <div className={cnContractsList('Column', { type: 'manager' })}>
-                    Пупкин Андреевич Лукня
+                    {getFullName(contract.serviceManager)}
                 </div>
                 <div className={cnContractsList('Column', { type: 'status' })}>
                     {status}

@@ -1,6 +1,6 @@
 export interface IManager {
-    name: string;
-    type: ManagerType;
+    id: number;
+    firstName: string;
+    middleName: string;
+    lastName: string;
 }
-
-export enum ManagerType { ServiceManager, PersonalManager }''

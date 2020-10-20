@@ -1,47 +1,39 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import kladrApi from 'kladrapi-for-node';
+require('dotenv').config();
 
-import contracts from '../server/mocks/contracts.json';
-import contract from '../server/mocks/contract.json';
+import { httpLogger } from './middlewares/logger';
+
+import './libs/connect';
+import './controllers/documents';
+
+var bodyParser = require('body-parser')
+
+import { apiRouter } from './api-router';
 
 const app = express();
 const SERVER_PORT = 8888;
 
-// для бесплатной версии
-const Kladr = new kladrApi();
-
-app.use(cors({
-    origin: true,
-}));
+app
+    .disable('x-powered-by')
+    .enable('trust proxy')
+    .use(cors({
+        origin: '*',
+    }));
 
 app.use(express.json());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('static')));
 
-app.post('/api/suggest/adress', (req, res) => {
-    Kladr.getData({ query: req.body.value, oneString: 1, contentType: 'building', limit: 5, withParent: 1 }, (err, result) => {
-        res.json(result);
-    });
-});
+app.use(httpLogger);
 
-app.get('/api/contracts', (req, res) => {
-    res.json(contracts);
-});
-
-app.get('/api/contract/:id', (req, res) => {
-    res.json(contract);
-});
-
-app.use('/api/*', (req, res) => {
-    res.sendStatus(404);
-});
+apiRouter(app);
 
 app.get('*', (req, res) => {
     res.sendFile(path.resolve('static/index.html'));
 })
 
 app.listen(SERVER_PORT, function () {
-    console.log(`Server started on ${SERVER_PORT} port!`);
+    console.log(`Server started: http://127.0.0.1:${SERVER_PORT}`);
 });

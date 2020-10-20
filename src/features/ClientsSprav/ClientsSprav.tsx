@@ -8,106 +8,102 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import './ClientsSprav.scss';
 import Paper from '@material-ui/core/Paper';
 import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateClientDialog } from './components/CreateClientDialog/CreateClientDialog';
+import { IClient } from '@typings/IClient';
+import { IClientsSpravProps } from '.';
+import { Pagination } from '@material-ui/lab';
 
 const cnClientsSprav = cn('ClientsSprav');
-
-interface IOwnProps {
-};
 
 interface IOwnState {
     adressSuggest: string[];
     showCreateDialog: boolean;
+    selectedClient?: IClient;
 };
 
-function createData(name, calories, fat, carbs) {
-    return { name, calories, fat, carbs };
-  }
-
-const rows = [
-    createData('ПАО "РНКБ"', 'Симферополь', 'Иванов П.П.', '20.10.2020'),
-    createData('ООО ГАЗПРОМ', 'Симферополь', 'Золотов И.А.','09.05.2017'),
-    createData('ИП Яблоко', 'Севастополь', 'Коричнева З.С.', '31.12.2018'),
-    createData('Меганом', 'Севастополь', 'Елка Х.В.', '03.01.2010'),
-    createData('Магазинчик', 'Ялта', 'Ранимова О.О.', '11.09.2019'),
-];
-
-export class ClientsSprav extends PureComponent<IOwnProps, IOwnState> {
-    state = {
+export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnState> {
+    state: IOwnState = {
         adressSuggest: [],
         showCreateDialog: false,
     }
 
-    handleAdressChange = (event) => {
-        request
-            .post('/suggest/adress', { value: event.target.value })
-            .then(res => {
-                if (!res.data.result) this.setState({adressSuggest: [] });
+    componentDidMount() {
+        this.props.getClients({});
+        const pathParts = window.location.pathname.split('/');
 
-                this.setState({
-                    adressSuggest: res.data.result.map(item => item.fullName),
-                })
-            })
+        if (pathParts.length === 4 && !isNaN(pathParts[3])) {
+            console.log(pathParts);
+
+            this.selectManagerHandler(pathParts[3])();
+        }
+
     }
 
     handlerCloseDialog = () => {
-        this.setState({ showCreateDialog: false });
+        this.setState({ showCreateDialog: false, selectedClient: undefined });
     }
 
     handlerOpenDialog = () => {
-        this.setState({ showCreateDialog: true });
+        this.setState({ showCreateDialog: true, selectedClient: undefined });
+    }
+
+    selectManagerHandler = (id: string) => () => {
+        console.log('sadasd', id);
+
+        request
+            .get(`/client/${id}`)
+            .then(({ data }) => {
+                this.setState({ selectedClient: data, showCreateDialog: true });
+            })
+    }
+
+    onSearchChange = (event) => {
+        this.props.onSearch(event.target.value);
     }
 
     render() {
+        const { items, total, page, search, changePage } = this.props;
+        const { selectedClient, showCreateDialog } = this.state;
+
         return (
             <div className={cnClientsSprav()}>
-                {/* <div className={cnClientsSprav('Adress')}>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        filterOptions={(x) => x}
-                        options={this.state.adressSuggest}
-                        getOptionLabel={(option) => option}
-                        renderInput={(params) => <TextField {...params} onChange={this.handleAdressChange} label="Адрес" variant="outlined" />}
-                    />
-                </div> */}
                 <div className={cnClientsSprav('Controls')}>
-                    <TextField className={cnClientsSprav('Search')} variant="outlined" size='small' label="Поиск" type="search" />
+                    <TextField className={cnClientsSprav('Search')} onChange={this.onSearchChange} variant="outlined" size='small' label="Поиск" type="search" value={search} />
                     <Button className={cnClientsSprav('AddButton')} variant="contained" color="primary" onClick={this.handlerOpenDialog}>
                         Создать клиента
                     </Button>
                 </div>
 
-                <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog}/>
+                {showCreateDialog && <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} client={selectedClient}/>}
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Наименования</TableCell>
-                                <TableCell align="right">Департамент</TableCell>
-                                <TableCell align="right">Персональный менеджер</TableCell>
-                                <TableCell align="right">Дата регистрации</TableCell>
+                                <TableCell className={cnClientsSprav('Column', { type: 'name'})} >Наименования</TableCell>
+                                <TableCell className={cnClientsSprav('Column', { type: 'department'})} align="center">Департамент</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
-                                    <TableCell component="th" scope="row">
-                                        {row.name}
+                            {items.map(client => (
+                                <TableRow className={cnClientsSprav('Row')} key={client.id} onClick={this.selectManagerHandler(String(client.id))} hover>
+                                    <TableCell className={cnClientsSprav('Column', { type: 'name'})} component="th" scope="row">
+                                        {client.name}
                                     </TableCell>
-                                    <TableCell align="right">{row.calories}</TableCell>
-                                    <TableCell align="right">{row.fat}</TableCell>
-                                    <TableCell align="right">{row.carbs}</TableCell>
+                                    <TableCell className={cnClientsSprav('Column', { type: 'department'})} align="center">{client.department}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <div className="Pagination">
+                    <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
+                </div>
             </div>
         )
     }

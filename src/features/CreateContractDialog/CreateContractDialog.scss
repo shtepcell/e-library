@@ -1,6 +1,7 @@
 .CreateContractDialog {
     &-Field {
-        &.MuiFormControl-root {
+        &.MuiFormControl-root,
+        &.MuiAutocomplete-root {
             flex: 1 1 auto;
 
             min-width: 200px;
@@ -21,11 +22,15 @@
         }
     }
 
-
     &-Row {
         display: flex;
         align-items: center;
 
         margin-bottom: 24px;
+    }
+
+    &-UploadIcon {
+        margin-left: 2px;
+        margin-right: 10px;
     }
 }

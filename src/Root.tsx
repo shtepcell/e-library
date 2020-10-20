@@ -6,16 +6,18 @@ import {
     Route,
 } from "react-router-dom";
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Provider } from 'react-redux'
 import DayJsUtils from '@date-io/dayjs';
 import ru from 'dayjs/locale/ru';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import { Page } from '@features/Page/Page';
-import { MainPage } from '@features/MainPage/MainPage';
-import { ContractPage } from '@features/ContractPage/ContractPage';
-import { SpravPage } from '@features/SpravPage/SpravPage';
-import { DocumentsPage } from '@features/DocumentsPage/DocumentsPage';
+import { MainPage } from '@features/MainPage';
+import { ContractPage } from '@features/ContractPage';
+import { SpravPage, SpravTabs } from '@features/SpravPage/SpravPage';
+import { DocumentsPage } from '@features/DocumentsPage';
+import { store } from './store';
 
 const theme = createMuiTheme({
   palette: {
@@ -41,9 +43,19 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                         Settings
                     </Page>
                 </Route>
+                <Route path="/sprav/clients">
+                    <Page type="sprav">
+                        <SpravPage tab={SpravTabs.Clients} />
+                    </Page>
+                </Route>
+                <Route path="/sprav/managers">
+                    <Page type="sprav">
+                        <SpravPage tab={SpravTabs.Managers} />
+                    </Page>
+                </Route>
                 <Route path="/sprav">
                     <Page type="sprav">
-                        <SpravPage />
+                        <SpravPage tab={SpravTabs.Clients} />
                     </Page>
                 </Route>
                 <Route path="/documents">
@@ -67,12 +79,14 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
 }
 
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={DayJsUtils} locale={ru}>
-            <Router>
-                <Root />
-            </Router>
-        </MuiPickersUtilsProvider>
-    </ThemeProvider>,
+    <Provider store={store}>
+        <ThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider utils={DayJsUtils} locale={ru}>
+                <Router>
+                    <Root />
+                </Router>
+            </MuiPickersUtilsProvider>
+        </ThemeProvider>
+    </Provider>,
     document.getElementById('react-root'),
 );

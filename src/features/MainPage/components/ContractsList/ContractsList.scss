@@ -37,7 +37,7 @@
 
         &_type {
             &_id {
-                flex: 0 0 60px;
+                flex: 0 0 80px;
 
                 text-align: center;
             }
@@ -45,15 +45,15 @@
             &_client {
                 text-align: left;
 
-                flex: 0 1 440px;
+                flex: 0 1 740px;
             }
 
             &_manager {
-                flex: 0 1 240px;
+                flex: 0 1 300px;
             }
 
             &_status {
-                flex: 0 0 60px;
+                flex: 0 0 80px;
             }
         }
     }

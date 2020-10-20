@@ -4,13 +4,17 @@ import './CreateManagerDialog.scss';
 import {
     Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem
 } from '@material-ui/core';
-import { ManagerType, IManager } from '@typings/IManager';
+import { IManager } from '@typings/IManager';
+import { request } from '@lib/request';
+import { i18n } from '@lib/i18n';
 
 const cnCreateManagerDialog = cn('CreateManagerDialog');
 
 interface IOwnProps {
     open?: boolean;
+    manager?: IManager;
     onClose?: () => void;
+    onCreateManager(manager: IManager): void;
 };
 
 interface IOwnState {
@@ -22,6 +26,12 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
         manager: {},
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.manager !== prevProps.manager) {
+            this.setState({ manager: this.props.manager || {} });
+        }
+    }
+
     handlerManagerChange = (field: keyof IManager) => (event) => {
         const newManager = { ...this.state.manager };
 
@@ -31,9 +41,34 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
         this.setState({ manager: newManager });
     }
 
+    createManagerHandler = () => {
+        const { id } = this.state.manager;
+
+        if (id) {
+            request.patch(`/manager/${id}`, { ...this.state.manager }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            request.post('/manager', { ...this.state.manager }).then(({ data }) => {
+                this.props.onCreateManager(data as IManager);
+                this.props.onClose()
+
+                this.setState({ manager: {} });
+            });
+        }
+    }
+
+    // deleteManagerHandler = () => {
+    //     request.delete(`/manager/${this.state.manager.id}`).then(() => {
+    //         window.location.reload();
+    //     });
+    // }
+
     render() {
         const { open, onClose } = this.props;
-        const { name, type } = this.state.manager;
+        const { firstName, middleName, lastName, id } = this.state.manager;
+
+        const canCreate = firstName && middleName && lastName;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateManagerDialog()}>
@@ -42,32 +77,33 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
                     <div className={cnCreateManagerDialog('Row')}>
                         <TextField
                             className={cnCreateManagerDialog('Field', { type: 'name' })}
-                            value={name}
-                            onChange={this.handlerManagerChange('name')}
+                            value={lastName}
+                            onChange={this.handlerManagerChange('lastName')}
                             variant="outlined"
-                            label="ФИО" />
+                            label="Фамилия" />
 
                         <TextField
-                            className={cnCreateManagerDialog('Field', { type: 'type' })}
-                            select
-                            value={type}
-                            onChange={this.handlerManagerChange('type')}
+                            className={cnCreateManagerDialog('Field', { type: 'name' })}
+                            value={firstName}
+                            onChange={this.handlerManagerChange('firstName')}
                             variant="outlined"
-                            label="Категория"
-                            >
-                                <MenuItem value={ManagerType.PersonalManager}>Пероснальный менеджер</MenuItem>
-                                <MenuItem value={ManagerType.ServiceManager}>Сервис-менеджер</MenuItem>
-                        </TextField>
+                            label="Имя" />
 
+                        <TextField
+                            className={cnCreateManagerDialog('Field', { type: 'name' })}
+                            value={middleName}
+                            onChange={this.handlerManagerChange('middleName')}
+                            variant="outlined"
+                            label="Отчество" />
                     </div>
                 </DialogContent>
 
-                <DialogActions>
+                <DialogActions className={cnCreateManagerDialog('Actions')}>
                     <Button onClick={onClose} color="primary">
                         Отменить
                     </Button>
-                    <Button onClick={onClose} color="primary" variant="contained">
-                        Добавить
+                    <Button onClick={this.createManagerHandler} color="primary" variant="contained" disabled={!canCreate}>
+                        {id ? 'Сохранить' : 'Добавить'}
                     </Button>
                 </DialogActions>
             </Dialog>

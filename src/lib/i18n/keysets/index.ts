@@ -1,6 +1,9 @@
 export default {
-    "active": "Активный",
+    "active": "Активен",
     "waiting": "Ожидает подключения",
     "deleted": "Удалён",
-    "blocked": "Блокирован"
+    "blocked": "Блокирован",
+    "personalManager": "Персональный менеджер",
+    "serviceManager": "Сервисный менеджер",
+    "canceled": 'Расторгнут'
 }

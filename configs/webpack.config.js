@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+require('dotenv').config();
 
 module.exports = {
     entry: './src/Root.tsx',
@@ -18,6 +20,7 @@ module.exports = {
             '@lib': path.resolve('src/lib'),
             '@const': path.resolve('src/const'),
             '@typings': path.resolve('typings'),
+            '@store': path.resolve('src/store'),
         }
     },
 
@@ -63,4 +66,13 @@ module.exports = {
             },
         ],
     },
+
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+              'SERVER_PORT': JSON.stringify(process.env.SERVER_PORT),
+              'SERVER_HOST': JSON.stringify(process.env.SERVER_HOST),
+            }
+        })
+    ]
 };

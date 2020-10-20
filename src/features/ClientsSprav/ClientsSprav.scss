@@ -17,4 +17,24 @@
 
         margin-bottom: 24px;
     }
+
+    &-Column {
+        flex: 1 1 auto;
+
+        &_type {
+            &_department {
+                width: 35%;
+            }
+        }
+    }
+
+    &-Pagination {
+        display: flex;
+        padding: 24px 0;
+        justify-content: center;
+    }
+
+    &-Row {
+        cursor: pointer;
+    }
 }

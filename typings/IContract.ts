@@ -1,25 +1,27 @@
-import { IClient } from "./IClient";
 
 export interface IContract {
     id: string;
 
-    status: ContractStatus;
-    type: ContractType;
+    status: string;
+    type: string;
 
-    dateOfConclusion: Date;
+    conclusionDate: Date;
     endDate: Date;
 
     amount: string;
 
-    hasOriginal: boolean;
+    orig: boolean;
     attachment: string;
 
     department: string;
 
-    client: IClient;
+    client: any;
 
     serviceManager: string;
     personalManager: string;
+
+    fileName?: string;
+    file?: any;
 }
 
 export enum ContractType { Contract, GovermentContract };

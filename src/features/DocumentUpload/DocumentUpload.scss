@@ -1,0 +1,44 @@
+
+.DocumentUpload {
+    &-DocumentField {
+        &.MuiFormControl-root {
+            flex: 1 1 auto;
+
+            min-width: 200px;
+
+            &:not(:last-child) {
+                margin-right: 24px;
+            }
+        }
+
+        &_type {
+            &_number.MuiFormControl-root {
+                flex: 0 0 auto;
+            }
+
+            &_status.MuiFormControl-root {
+                flex: 1 1 auto;
+            }
+        }
+    }
+
+    &-Row {
+        display: flex;
+
+        margin-bottom: 24px;
+    }
+
+    &-DialogCheck.MuiFormControlLabel-root {
+        display: flex;
+        margin: 12px 0;
+    }
+
+    &-DialogButtons {
+        margin-left: -12px;
+    }
+
+    &-UploadIcon {
+        margin-left: 2px;
+        margin-right: 10px;
+    }
+}

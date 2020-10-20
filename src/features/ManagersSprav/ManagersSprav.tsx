@@ -14,32 +14,42 @@ import Paper from '@material-ui/core/Paper';
 import { request } from '@lib/request';
 import Button from '@material-ui/core/Button';
 import { CreateManagerDialog } from './components/CreateClientDialog/CreateManagerDialog';
+import { IManager } from '@typings/IManager';
+import { Pagination } from '@material-ui/lab';
+import { IManagersSpravProps } from '.';
 
 const cnManagersSprav = cn('ManagersSprav');
 
-interface IOwnProps {
-};
-
 interface IOwnState {
     showCreateDialog: boolean;
+    selectedManager?: IManager;
 };
 
-function createData(name, category) {
-    return { name, category };
-  }
-
-  const rows = [
-    createData('Иванов Сергей Иванович', 'Персональный менеджер'),
-    createData('Петров Валерий Крипс', 'Сервис-менеджер'),
-    createData('Анарич Светлана Пирова', 'Сервис-менеджер'),
-    createData('Катрин Ростислав Евгениевич', 'Персональный менеджер'),
-    createData('Алексеев Анатолий Григорьевич', 'Сервис-менеджер'),
-    createData('Вал Петр Константинович', 'Персональный менеджер'),
-  ];
-
-export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
-    state = {
+export class ManagersSpravBase extends PureComponent<IManagersSpravProps, IOwnState> {
+    state: IOwnState = {
         showCreateDialog: false,
+    }
+
+    componentDidMount() {
+        this.props.getManagers({});
+    }
+
+    onSelectManager = (id: number) => () => {
+        request
+            .get(`/manager/${id}`)
+            .then(({ data }) => {
+                this.setState({ selectedManager: data });
+                this.handlerOpenDialog();
+            });
+    }
+
+    onCreateClick = () => {
+        this.setState({ selectedManager: null });
+        this.handlerOpenDialog();
+    }
+
+    onCreateManager = (manager) => {
+        window.location.reload();
     }
 
     handlerCloseDialog = () => {
@@ -50,38 +60,54 @@ export class ManagersSprav extends PureComponent<IOwnProps, IOwnState> {
         this.setState({ showCreateDialog: true });
     }
 
+    onSearchChange = (event) => {
+        this.props.onSearch(event.target.value);
+    }
+
     render() {
+        const { search, items, page, total, changePage } = this.props;
+        const { selectedManager } = this.state;
+
         return (
             <div className={cnManagersSprav()}>
-
                 <div className={cnManagersSprav('Controls')}>
-                    <TextField className={cnManagersSprav('Search')} variant="outlined" size='small' label="Поиск" type="search" />
-                    <Button className={cnManagersSprav('AddButton')} variant="contained" color="primary" onClick={this.handlerOpenDialog}>
+                    <TextField className={cnManagersSprav('Search')} onChange={this.onSearchChange} variant="outlined" size='small' label="Поиск" type="search" value={search} />
+                    <Button className={cnManagersSprav('AddButton')} variant="contained" color="primary" onClick={this.onCreateClick}>
                         Добавить менеджера
                     </Button>
                 </div>
 
-                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog}/>
-                <TableContainer component={Paper}>
+                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} onCreateManager={this.onCreateManager} manager={selectedManager} />
+                <TableContainer component={Paper} className={cnManagersSprav('Table')}>
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>ФИО</TableCell>
-                                <TableCell align="center">Категория</TableCell>
+                                <TableCell>Ф.И.О.</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
+                            {total === 0 && (
+                                <TableRow>
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        Ничего не найдено
                                     </TableCell>
-                                    <TableCell align="center">{row.category}</TableCell>
+                                </TableRow>
+                            )}
+                            {items.map((manager) => (
+                                <TableRow className={cnManagersSprav('Row')} key={String(manager.id)} hover onClick={this.onSelectManager(manager.id)}>
+                                    <TableCell component="th" scope="row">
+                                        {`${manager.lastName} ${manager.firstName} ${manager.middleName}`}
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                {Boolean(total) && (
+                    <div className="Pagination">
+                        <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />
+                    </div>
+                )}
             </div>
         )
     }
