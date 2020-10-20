@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { clientsReducer, IClientsState, clientsMiddleware } from "./modules/clients";
 import { contractPageMiddleware, contractPageReducer, IContractPageState } from "./modules/contractPage";
 import { contractsMiddleware, contractsReducer, IContractsState } from "./modules/contracts";
+import { documentssReducer, IDocumentsState, documentsMiddleware } from "./modules/documents";
 import { IManagersState, managersMiddleware, managersReducer } from "./modules/managers";
 import { INavigationState, navigationReducer } from "./modules/navigation";
 import { ISuggestState, suggestMiddleware, suggestReducer } from "./modules/suggest";
@@ -14,6 +15,7 @@ export interface IAppState {
     contracts?: IContractsState;
     contractPage?: IContractPageState;
     suggest?: ISuggestState;
+    documents: IDocumentsState;
 }
 
 const rootReducer = combineReducers<IAppState>({
@@ -24,6 +26,7 @@ const rootReducer = combineReducers<IAppState>({
     navigation: navigationReducer,
     contractPage: contractPageReducer,
     suggest: suggestReducer,
+    documents: documentssReducer,
 });
 
 export const store = configureStore({
@@ -34,6 +37,7 @@ export const store = configureStore({
         contractsMiddleware,
         contractPageMiddleware,
         suggestMiddleware,
+        documentsMiddleware,
     ]),
     devTools: process.env.NODE_ENV !== 'production',
 })

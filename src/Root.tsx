@@ -16,7 +16,7 @@ import { Page } from '@features/Page/Page';
 import { MainPage } from '@features/MainPage';
 import { ContractPage } from '@features/ContractPage';
 import { SpravPage, SpravTabs } from '@features/SpravPage/SpravPage';
-import { DocumentsPage } from '@features/DocumentsPage/DocumentsPage';
+import { DocumentsPage } from '@features/DocumentsPage';
 import { store } from './store';
 
 const theme = createMuiTheme({

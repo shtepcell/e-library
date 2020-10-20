@@ -100,3 +100,46 @@ export const getOneDocument = async (req, res) => {
     }
 };
 
+
+
+export const getDocuments = async (req, res) => {
+    try {
+        const { page = 1, limit = 25, type, contract: contractId, period } = req.query;
+        const query: any = {};
+
+        type && (query.type = type);
+
+        if (contractId) {
+            const contract = await Contract.findOne({ id: contractId });
+
+            contract && (query.contract = contract);
+        }
+
+        if (period) {
+            const date = new Date(Number(period));
+            const startDate = new Date(date.getFullYear(), date.getMonth(), 0);
+            const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+            query.period = { $gte: startDate, $lt: endDate };
+        }
+
+        const total = await Document.countDocuments(query);
+
+        let documents = await Document.find(query)
+            .skip(limit * page - limit)
+            .limit(Number(limit))
+            .populate('contract', 'id')
+            .lean();
+
+        documents = documents.map(item => {
+            // @ts-ignore
+            item.contract = item.contract.id;
+
+            return item;
+        });
+
+        return res.status(200).send({ items: documents, total });
+    } catch (err) {
+        return onError(req, res)(err);
+    }
+};

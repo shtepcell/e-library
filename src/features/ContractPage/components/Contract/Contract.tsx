@@ -173,7 +173,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                         ))}
                     </div>
                     {/* <div className={cnContract('DocumentsLink')}>
-                        <Link href="/documents" target="_blank">Посмотреть все документы контракта</Link>
+                        <Link href={`/documents?contarct=${contract.id}`} target="_blank">Посмотреть все документы контракта</Link>
                     </div> */}
                 </div>
             </div>

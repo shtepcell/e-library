@@ -138,7 +138,7 @@ export const getContracts = async (req, res)  => {
 export const getOneContract = async (req, res)  => {
     try {
         const contract = await Contract.findOne({ id: req.params.id }).populate('client serviceManager personalManager').lean();
-        const documents = await Document.find({ contract: contract._id }).limit(5).sort({ id: -1 }).lean();
+        const documents = await Document.find({ contract: contract._id }).limit(50).sort({ id: -1 }).lean();
 
         return res.send({ contract, documents });
     } catch (error) {
