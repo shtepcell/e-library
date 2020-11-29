@@ -17,6 +17,7 @@ import { MainPage } from '@features/MainPage';
 import { ContractPage } from '@features/ContractPage';
 import { SpravPage, SpravTabs } from '@features/SpravPage/SpravPage';
 import { DocumentsPage } from '@features/DocumentsPage';
+import { AuthPage } from '@features/AuthPage/AuthPage';
 import { store } from './store';
 
 const theme = createMuiTheme({
@@ -37,6 +38,9 @@ export const Root: FunctionComponent<{}> = ({ children }) => {
                     <Page type="main">
                         <MainPage />
                     </Page>
+                </Route>
+                <Route path="/auth" exact>
+                    <AuthPage />
                 </Route>
                 <Route path="/settings">
                     <Page type="settings">
