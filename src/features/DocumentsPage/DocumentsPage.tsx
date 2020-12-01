@@ -23,6 +23,11 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
         this.props.onFiltersChange({ ...this.props.filters, type: value ? value : undefined });
     }
 
+    onChangeOrig = (event) => {
+        const value = event.target.value;
+        this.props.onFiltersChange({ ...this.props.filters, orig: value ? value : undefined });
+    }
+
     onChangeContract = (event) => {
         const value = event.target.value;
         this.props.onFiltersChange({ ...this.props.filters, contract: value ? value : undefined });
@@ -34,7 +39,6 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
 
     onChangeTrackNumber = (event) => {
         const value = event.target.value;
-
         this.props.onFiltersChange({ ...this.props.filters, trackNumber: value ? value : undefined });
     }
 
@@ -77,6 +81,18 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                     />
                     <TextField className={cnDocumentsPage('FiltersField', { type: 'trackNumber' })} variant="outlined" size="small" label="Номер трека" onChange={this.onChangeTrackNumber} />
                     <TextField className={cnDocumentsPage('FiltersField', { type: 'contract' })} variant="outlined" size="small" label="Контракт" onChange={this.onChangeContract} />
+                    <TextField
+                        className={cnDocumentsPage('FiltersField', { type: 'orig' })}
+                        select
+                        size="small"
+                        variant="outlined"
+                        label="Оригинал"
+                        onChange={this.onChangeOrig}
+                    >
+                        <MenuItem value=""><em>Не важно</em></MenuItem>
+                        <MenuItem value={'has_orig'}>Оригинал есть</MenuItem>
+                        <MenuItem value={'no_orig'}>Нет оригинала</MenuItem>
+                    </TextField>
                 </div>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">

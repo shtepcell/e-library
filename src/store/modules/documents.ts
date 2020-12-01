@@ -12,6 +12,7 @@ export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, 
                 limit: 25,
                 page: page,
                 type: filters.type,
+                orig: filters.orig,
                 contract: filters.contract,
                 period: filters.period,
                 trackNumber: filters.trackNumber,
@@ -30,6 +31,7 @@ export interface IDocumentsState {
         contract?: string;
         period?: number;
         type?: string;
+        orig?: string;
         trackNumber?: string;
     };
 }

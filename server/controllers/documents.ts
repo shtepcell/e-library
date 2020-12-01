@@ -107,7 +107,7 @@ export const getOneDocument = async (req, res) => {
 
 export const getDocuments = async (req, res) => {
     try {
-        const { page = 1, limit = 25, type, contract: contractId, period, trackNumber } = req.query;
+        const { page = 1, limit = 25, type, contract: contractId, period, trackNumber, orig } = req.query;
         const query: any = {};
 
         type && (query.type = type);
@@ -124,6 +124,10 @@ export const getDocuments = async (req, res) => {
             const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
             query.period = { $gte: startDate, $lt: endDate };
+        }
+
+        if (orig) {
+            query.fileName = { '$exists': orig === 'has_orig'}
         }
 
         trackNumber && (query.trackNumber = { $regex: trackNumber });
