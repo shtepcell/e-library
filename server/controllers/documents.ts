@@ -107,7 +107,7 @@ export const getOneDocument = async (req, res) => {
 
 export const getDocuments = async (req, res) => {
     try {
-        const { page = 1, limit = 25, type, contract: contractId, period } = req.query;
+        const { page = 1, limit = 25, type, contract: contractId, period, trackNumber } = req.query;
         const query: any = {};
 
         type && (query.type = type);
@@ -125,6 +125,8 @@ export const getDocuments = async (req, res) => {
 
             query.period = { $gte: startDate, $lt: endDate };
         }
+
+        trackNumber && (query.trackNumber = { $regex: trackNumber });
 
         const total = await Document.countDocuments(query);
 

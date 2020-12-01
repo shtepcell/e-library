@@ -14,6 +14,7 @@ export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, 
                 type: filters.type,
                 contract: filters.contract,
                 period: filters.period,
+                trackNumber: filters.trackNumber,
             }
         })
         .then(({ data }) => data);

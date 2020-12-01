@@ -32,6 +32,12 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
         this.props.onFiltersChange({ ...this.props.filters, period: value ? value.valueOf() : undefined });
     }
 
+    onChangeTrackNumber = (event) => {
+        const value = event.target.value;
+
+        this.props.onFiltersChange({ ...this.props.filters, trackNumber: value ? value : undefined });
+    }
+
     render() {
         const { items, total, page, changePage, filters } = this.props;
 
@@ -69,6 +75,7 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                         inputVariant="outlined"
                         clearable
                     />
+                    <TextField className={cnDocumentsPage('FiltersField', { type: 'trackNumber' })} variant="outlined" size="small" label="Номер трека" onChange={this.onChangeTrackNumber} />
                     <TextField className={cnDocumentsPage('FiltersField', { type: 'contract' })} variant="outlined" size="small" label="Контракт" onChange={this.onChangeContract} />
                 </div>
                 <TableContainer component={Paper}>
