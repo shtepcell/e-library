@@ -73,6 +73,7 @@ export class AuthPage extends PureComponent<{}, IAuthPageState> {
                     label="Логин"
                 />
                 <TextField
+                    type="password"
                     fullWidth
                     value={password}
                     onChange={this.onPasswordChange}
