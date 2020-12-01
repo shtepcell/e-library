@@ -8,6 +8,7 @@ export interface IClient {
     regDate: Date;
     deliveryMethod: DeliveryType;
     address: string;
+    legalAddress?: string;
     contactFirstName: string;
     contactMiddleName: string;
     contactLastName: string;

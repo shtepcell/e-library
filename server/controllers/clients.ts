@@ -22,6 +22,7 @@ const clientFields =  [
     'contactPosition',
     'contactEmail',
     'contactPhone',
+    'legalAddress',
 ];
 
 export const createClient = async (req, res)  => {
