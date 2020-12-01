@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from "@reduxjs/toolkit";
 
 import {
     onSelectFile, createDocument, onChangeDate, onChangeNumber, onChangePeriod, onChangeTrack,
-    onChangeType, onChangeOrig, onRemoveFile, saveDocument, onCloseDialog,
+    onChangeType, onChangeOrig, onRemoveFile, saveDocument, onCloseDialog, onChangeComment,
  } from "@store/modules/contractPage";
 
 import { IAppState } from "@store";
@@ -24,6 +24,7 @@ interface IDispatchToProps {
     onChangePeriod: typeof onChangePeriod;
     onChangeDate: typeof onChangeDate;
     onChangeOrig: typeof onChangeOrig;
+    onChangeComment: typeof onChangeComment;
     onRemoveFile: typeof onRemoveFile;
     saveDocument: typeof saveDocument;
     onCloseDialog: typeof onCloseDialog;
@@ -46,6 +47,7 @@ export function dispatchToProps(dispatch: Dispatch): IDispatchToProps {
     return bindActionCreators({
         onSelectFile, createDocument, onChangeDate, onChangeNumber, onChangePeriod,
         onChangeTrack, onChangeType, onChangeOrig, onRemoveFile, saveDocument, onCloseDialog,
+        onChangeComment,
     }, dispatch);
 }
 

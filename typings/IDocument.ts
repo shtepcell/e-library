@@ -9,4 +9,5 @@ export interface IDocument {
     orig: boolean;
     file: string;
     fileName: string;
+    comment?: string;
 };

@@ -14,6 +14,7 @@ export interface IDocument extends mongoose.Document {
     orig: boolean;
     file: string;
     fileName: string;
+    comment?: string;
 };
 
 const documentSchema = new Schema({
@@ -50,7 +51,11 @@ const documentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Contract',
         required: true,
-    }
+    },
+    comment: {
+        type: String,
+        default: '',
+    },
 });
 
 export const Document = mongoose.model<IDocument>('Document', documentSchema);

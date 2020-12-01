@@ -6,7 +6,7 @@ import { getId } from './counters';
 import _ from 'lodash';
 
 const editableFields = [
-    'type', 'number', 'trackNumber', 'period', 'date', 'orig', 'fileName'
+    'type', 'number', 'trackNumber', 'period', 'date', 'orig', 'fileName', 'comment'
 ]
 
 const S3Client = new S3({ endpoint: 'https://storage.yandexcloud.net', secretAccessKey: 'D4Ps5tVVrdvpOJJ1EEv9ntwO-T0JNXRpl28sQTmc', accessKeyId: 'HuuomsMnTqbVH5KSrUBT' });
@@ -34,9 +34,9 @@ export const uploadToS3 = (file: any, cb) => {
 
 export const createDocument = (req, res) => uploadToS3(req.file, async (fileUrl) => {
     try {
-        const { type, number, trackNumber, period, date, orig, contract: contractId, fileName } = req.body;
+        const { type, number, trackNumber, period, date, orig, contract: contractId, fileName, comment } = req.body;
 
-        const document: IDocument = new Document({ type, number, trackNumber, period: new Date(Number(period)), date: new Date(Number(date)), orig, file: fileUrl, fileName });
+        const document: IDocument = new Document({ type, number, trackNumber, period: new Date(Number(period)), date: new Date(Number(date)), orig, file: fileUrl, fileName, comment });
 
         document.contract = await Contract.findOne({ id: contractId });
 

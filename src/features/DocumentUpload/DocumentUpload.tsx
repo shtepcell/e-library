@@ -39,7 +39,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     onSaveClick = () => {
-        const { id, number, type, period, date, trackNumber, orig, fileName } = this.props.draftDocument;
+        const { id, number, type, period, date, trackNumber, orig, fileName, comment } = this.props.draftDocument;
 
         const formData = new FormData();
         formData.append('number', String(number));
@@ -51,6 +51,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
         formData.append('file', this.state.file);
         formData.append('fileName', fileName);
         formData.append('contract', String(this.props.contractId));
+        formData.append('comment', comment);
 
         if (id) {
             formData.append('id', String(id));
@@ -61,8 +62,8 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     render() {
-        const { onClose, open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeOrig } = this.props;
-        const { number, type, period, date, trackNumber, orig, fileName } = draftDocument;
+        const { onClose, open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeOrig, onChangeComment } = this.props;
+        const { number, type, period, date, trackNumber, orig, fileName, comment } = draftDocument;
 
         return (
             <Dialog className={cnDocumentUpload()} fullWidth maxWidth="sm" onClose={this.onCloseDialog} open={open}>
@@ -127,6 +128,17 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                                 label="Номер трека"
                                 onChange={(event) => onChangeTrack(event.target.value)}
                                 value={trackNumber || ''} />
+
+                        </div>
+                        <div className={cnDocumentUpload('Row')}>
+                            <TextField
+                                className={cnDocumentUpload('DocumentField', { type: 'comment' })}
+                                variant="outlined"
+                                label="Комментарий"
+                                multiline
+                                rowsMax={5}
+                                onChange={(event) => onChangeComment(event.target.value)}
+                                value={comment || ''} />
                         </div>
                         <div className={cnDocumentUpload('DialogButtons')}>
                             <FormControlLabel
