@@ -1,5 +1,6 @@
 import S3 from 'aws-sdk/clients/s3';
 import { Contract } from '../models/Contract';
+import { Client } from '../models/Client';
 import { onError, onValidateError } from '../libs/validate';
 import { Document, IDocument } from '../models/Document';
 import { getId } from './counters';
@@ -107,7 +108,7 @@ export const getOneDocument = async (req, res) => {
 
 export const getDocuments = async (req, res) => {
     try {
-        const { page = 1, limit = 25, type, contract: contractId, period, trackNumber, orig } = req.query;
+        const { page = 1, limit = 25, type, contract: contractId, period, trackNumber, orig, client } = req.query;
         const query: any = {};
 
         type && (query.type = type);
@@ -128,6 +129,18 @@ export const getDocuments = async (req, res) => {
 
         if (orig) {
             query.fileName = { '$exists': orig === 'has_orig'}
+        }
+
+        if (client) {
+            const clientDocument = await Client.findOne({ name: client });
+
+            if (clientDocument) {
+                const contracts = await Contract.find({ client: clientDocument });
+
+                if (contracts) {
+                    query.contract = { '$in': contracts }
+                }
+            }
         }
 
         trackNumber && (query.trackNumber = { $regex: trackNumber });

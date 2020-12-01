@@ -5,6 +5,7 @@ import './DocumentsPage.scss';
 
 import { Header } from '@features/Header/Header';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TextField, MenuItem, Link } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 
 import { DatePicker } from '@material-ui/pickers';
 import { IDocumentsPageProps } from '.';
@@ -42,8 +43,17 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
         this.props.onFiltersChange({ ...this.props.filters, trackNumber: value ? value : undefined });
     }
 
+    onChangeClient = (event) => {
+        const value = event.target.value;
+        this.props.onFiltersChange({ ...this.props.filters, client: value ? value : undefined });
+    }
+
+    onClientTextChange = (event) => {
+        this.props.getSuggestClients(event.target.value);
+    }
+
     render() {
-        const { items, total, page, changePage, filters } = this.props;
+        const { items, total, page, changePage, filters, suggestCliensts, suggestLoading } = this.props;
 
         return (
             <div className={cnDocumentsPage()}>
@@ -94,6 +104,26 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                         <MenuItem value={'no_orig'}>Нет оригинала</MenuItem>
                     </TextField>
                 </div>
+                <div className={cnDocumentsPage('Filters')} style={{ marginBottom: 32 }}>
+                    <Autocomplete
+                        style={{ flex: '1 1 auto' }}
+                        options={suggestCliensts || []}
+                        noOptionsText="Нет доступных вариантов"
+                        loadingText="Загрузка"
+                        filterOptions={(x) => x}
+                        loading={suggestLoading}
+                        size="small"
+                        onSelect={this.onChangeClient}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Клинет"
+                                variant="outlined"
+                                onChange={this.onClientTextChange}
+                            />
+                        )}
+                    />
+                </div>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -118,7 +148,9 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                                         <Link href={`/contract/${row.contract}`} target="_blank">#{row.contract}</Link>
                                     </TableCell>
                                     <TableCell align="center">{row.trackNumber}</TableCell>
-                                    <TableCell align="center"><Link href={row.file} target="_blank">Открыть</Link></TableCell>
+                                    <TableCell align="center">
+                                        {row.file ? <Link href={row.file} target="_blank">Открыть</Link> : '–'}
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

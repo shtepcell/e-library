@@ -16,6 +16,7 @@ export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, 
                 contract: filters.contract,
                 period: filters.period,
                 trackNumber: filters.trackNumber,
+                client: filters.client,
             }
         })
         .then(({ data }) => data);
@@ -33,6 +34,7 @@ export interface IDocumentsState {
         type?: string;
         orig?: string;
         trackNumber?: string;
+        client?: string;
     };
 }
 
