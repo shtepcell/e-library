@@ -12,7 +12,6 @@ export const onChangeType = createAction<string>('onChangeTypeDocument');
 export const onChangePeriod = createAction<number>('onChangePeriodDocument');
 export const onChangeDate = createAction<number>('onChangeDateDocument');
 export const onChangeTrack = createAction<string>('onChangeTrackDocument');
-export const onChangeOrig = createAction<boolean>('onChangeOrigDocument');
 export const onChangeComment = createAction<string>('onChangeComment');
 
 export const getDocument = createAsyncThunk<number>('getDoPartial<cument', (id) => {

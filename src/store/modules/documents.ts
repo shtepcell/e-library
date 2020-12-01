@@ -1,8 +1,6 @@
 import { request } from '@lib/request';
 import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { IContract } from '@typings/IContract';
 import { IDocument } from '@typings/IDocument';
-import { IAppState } from '..';
 
 export const changePage = createAction<number>('changePageDocuments');
 export const onFiltersChange = createAction<any>('onDocumentFiltersChange');
