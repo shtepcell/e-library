@@ -3,6 +3,7 @@ import { Contract } from '../models/Contract';
 import { Client } from '../models/Client';
 import { onError, onValidateError } from '../libs/validate';
 import { Document, IDocument } from '../models/Document';
+import { Garbage } from '../models/Garbage';
 import { getId } from './counters';
 import _ from 'lodash';
 
@@ -89,6 +90,24 @@ export const saveDocument = (req, res) => uploadToS3(req.file, async (fileUrl) =
 });
 
 
+export const deleteDocument = async (req, res) => {
+    try {
+        const document = await Document.findOne({ id: req.params.id });
+
+        if (document.file) {
+            const garbage = new Garbage({ url: document.file });
+
+            garbage.save();
+        }
+
+        await document.deleteOne();
+
+        return res.status(200).send(document);
+    } catch (err) {
+        return onError(req, res)(err);
+    }
+};
+
 export const getOneDocument = async (req, res) => {
     try {
         const { id } = req.params;
@@ -103,7 +122,6 @@ export const getOneDocument = async (req, res) => {
         return onError(req, res)(err);
     }
 };
-
 
 
 export const getDocuments = async (req, res) => {

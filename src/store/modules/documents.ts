@@ -5,7 +5,7 @@ import { IDocument } from '@typings/IDocument';
 export const changePage = createAction<number>('changePageDocuments');
 export const onFiltersChange = createAction<any>('onDocumentFiltersChange');
 
-export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, filters = {} } = {}, { getState }) => {
+export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, filters = {} } = {}) => {
     return request
         .get('/documents', {
             params: {
@@ -19,6 +19,12 @@ export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, 
                 client: filters.client,
             }
         })
+        .then(({ data }) => data);
+});
+
+export const onDeleteDocument = createAsyncThunk<any, any>('getDocuments', (id: number) => {
+    return request
+        .delete(`/document/${id}`)
         .then(({ data }) => data);
 })
 
@@ -65,6 +71,10 @@ export const documentssReducer = createReducer(initialState, (builder) => {
 
 export const documentsMiddleware = store => next => action => {
     switch (action.type) {
+        case onDeleteDocument.fulfilled.type:
+            window.location.reload();
+            break;
+
         case changePage.type:
             store.dispatch(getDocuments({ page: action.payload }));
             break;
@@ -74,6 +84,7 @@ export const documentsMiddleware = store => next => action => {
             break;
 
         case getDocuments.rejected.type:
+        case onDeleteDocument.rejected.type:
             console.error('Error', action.payload);
             break;
     }
