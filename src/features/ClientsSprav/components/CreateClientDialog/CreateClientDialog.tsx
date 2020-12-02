@@ -106,6 +106,7 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
         const {
             id, name, personalManager, deliveryMethod, regDate, department, externalId, inn, address,
             contactLastName, contactFirstName, contactMiddleName, contactEmail, contactPhone, contactPosition,
+            legalAddress,
         } = this.state.client;
 
         const { managerSuggest, managerSuggestLoading } = this.state;
@@ -185,13 +186,6 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                                 />
                             )}
                         />
-                        {/* <TextField
-                            className={cnCreateClientDialog('Field', { type: 'personalManager' })}
-                            value={personalManager}
-                            onChange={this.handlerClientChange('personalManager')}
-                            variant="outlined"
-                            label="Персональный менеджер" /> */}
-
                     </div>
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
@@ -247,9 +241,17 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                             value={address}
                             onChange={this.handlerClientChange('address')}
                             variant="outlined"
-                            label="Aдpec" />
+                            label="Почтовый адрес" />
                     </div>
 
+                    <div className={cnCreateClientDialog('Row')}>
+                        <TextField
+                            className={cnCreateClientDialog('Field', { type: 'adress' })}
+                            value={legalAddress}
+                            onChange={this.handlerClientChange('legalAddress')}
+                            variant="outlined"
+                            label="Юридический адрес" />
+                    </div>
 
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField

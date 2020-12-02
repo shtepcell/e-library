@@ -1,12 +1,13 @@
 import S3 from 'aws-sdk/clients/s3';
 import { Contract } from '../models/Contract';
+import { Client } from '../models/Client';
 import { onError, onValidateError } from '../libs/validate';
 import { Document, IDocument } from '../models/Document';
 import { getId } from './counters';
 import _ from 'lodash';
 
 const editableFields = [
-    'type', 'number', 'trackNumber', 'period', 'date', 'orig', 'fileName'
+    'type', 'number', 'trackNumber', 'period', 'date', 'fileName', 'comment'
 ]
 
 const S3Client = new S3({ endpoint: 'https://storage.yandexcloud.net', secretAccessKey: 'D4Ps5tVVrdvpOJJ1EEv9ntwO-T0JNXRpl28sQTmc', accessKeyId: 'HuuomsMnTqbVH5KSrUBT' });
@@ -34,9 +35,12 @@ export const uploadToS3 = (file: any, cb) => {
 
 export const createDocument = (req, res) => uploadToS3(req.file, async (fileUrl) => {
     try {
-        const { type, number, trackNumber, period, date, orig, contract: contractId, fileName } = req.body;
+        let { type, number, trackNumber, period, date, contract: contractId, fileName, comment } = req.body;
 
-        const document: IDocument = new Document({ type, number, trackNumber, period: new Date(Number(period)), date: new Date(Number(date)), orig, file: fileUrl, fileName });
+        const document: IDocument = new Document({
+            type, number, trackNumber, period: new Date(Number(period)),
+            date: new Date(Number(date)), file: fileUrl, fileName, comment
+        });
 
         document.contract = await Contract.findOne({ id: contractId });
 
@@ -104,7 +108,7 @@ export const getOneDocument = async (req, res) => {
 
 export const getDocuments = async (req, res) => {
     try {
-        const { page = 1, limit = 25, type, contract: contractId, period } = req.query;
+        const { page = 1, limit = 25, type, contract: contractId, period, trackNumber, orig, client } = req.query;
         const query: any = {};
 
         type && (query.type = type);
@@ -122,6 +126,24 @@ export const getDocuments = async (req, res) => {
 
             query.period = { $gte: startDate, $lt: endDate };
         }
+
+        if (orig) {
+            query.fileName = { '$exists': orig === 'has_orig'}
+        }
+
+        if (client) {
+            const clientDocument = await Client.findOne({ name: client });
+
+            if (clientDocument) {
+                const contracts = await Contract.find({ client: clientDocument });
+
+                if (contracts) {
+                    query.contract = { '$in': contracts }
+                }
+            }
+        }
+
+        trackNumber && (query.trackNumber = { $regex: trackNumber });
 
         const total = await Document.countDocuments(query);
 

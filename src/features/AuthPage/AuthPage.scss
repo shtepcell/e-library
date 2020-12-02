@@ -1,0 +1,25 @@
+.AuthPage {
+    width: 400px;
+    margin: 80px auto;
+
+    .MuiInputBase-root {
+        margin-bottom: 16px;
+    }
+
+    &-Hint {
+        font-size: 14px;
+        line-height: 130%;
+        margin-bottom: 20px;
+
+        color: #999;
+    }
+
+    &-Title {
+        font-size: 32px;
+        line-height: 110%;
+
+        margin-bottom: 8px;
+
+        font-weight: 500;
+    }
+}

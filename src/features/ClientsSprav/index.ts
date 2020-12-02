@@ -16,8 +16,6 @@ interface IDispatchToProps {
 export interface IClientsSpravProps extends IStateToProps, IDispatchToProps {};
 
 export function stateToProps({ clients }: IAppState): IStateToProps {
-    console.log(clients);
-
     return clients;
 }
 

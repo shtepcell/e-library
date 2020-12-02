@@ -6,7 +6,7 @@ export interface IDocument {
     date: number;
     period: number;
     contract: number;
-    orig: boolean;
-    file: string;
-    fileName: string;
+    file?: string;
+    fileName?: string;
+    comment?: string;
 };

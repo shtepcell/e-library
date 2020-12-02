@@ -14,6 +14,7 @@ export interface IClient extends mongoose.Document {
     regDate: Date;
     deliveryMethod: DeliveryType;
     address: string;
+    legalAddress?: string;
     contactFirstName: string;
     contactMiddleName: string;
     contactLastName: string;
@@ -53,6 +54,7 @@ const clientSchema = new Schema({
     },
     deliveryMethod: String,
     address: String,
+    legalAddress: String,
     description: String,
     contactFirstName: String,
     contactMiddleName: String,

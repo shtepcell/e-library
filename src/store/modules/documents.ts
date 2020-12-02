@@ -1,8 +1,6 @@
 import { request } from '@lib/request';
 import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { IContract } from '@typings/IContract';
 import { IDocument } from '@typings/IDocument';
-import { IAppState } from '..';
 
 export const changePage = createAction<number>('changePageDocuments');
 export const onFiltersChange = createAction<any>('onDocumentFiltersChange');
@@ -14,8 +12,11 @@ export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, 
                 limit: 25,
                 page: page,
                 type: filters.type,
+                orig: filters.orig,
                 contract: filters.contract,
                 period: filters.period,
+                trackNumber: filters.trackNumber,
+                client: filters.client,
             }
         })
         .then(({ data }) => data);
@@ -31,7 +32,9 @@ export interface IDocumentsState {
         contract?: string;
         period?: number;
         type?: string;
+        orig?: string;
         trackNumber?: string;
+        client?: string;
     };
 }
 

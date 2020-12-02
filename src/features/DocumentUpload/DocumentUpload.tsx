@@ -7,7 +7,6 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import { DOCUMENT_TYPES } from '@const/documents';
 
 import './DocumentUpload.scss';
-import { request } from '@lib/request';
 import { IDocumentUploadProps } from '.';
 
 const cnDocumentUpload = cn('DocumentUpload');
@@ -16,6 +15,16 @@ interface IOwnState {
     file?: File;
 }
 
+const texts = {
+    exist: {
+        loading: 'Сохранение',
+        action: 'Сохранить',
+    },
+    new: {
+        loading: 'Создание',
+        action: 'Создать',
+    },
+}
 export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IOwnState> {
     state: IOwnState = {}
 
@@ -39,7 +48,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     onSaveClick = () => {
-        const { id, number, type, period, date, trackNumber, orig, fileName } = this.props.draftDocument;
+        const { id, number, type, period, date, trackNumber, fileName, comment } = this.props.draftDocument;
 
         const formData = new FormData();
         formData.append('number', String(number));
@@ -47,10 +56,10 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
         formData.append('period', String(period));
         formData.append('date', String(date));
         formData.append('trackNumber', trackNumber);
-        formData.append('orig', String(orig));
-        formData.append('file', this.state.file);
-        formData.append('fileName', fileName);
+        this.state.file && formData.append('file', this.state.file);
+        fileName && formData.append('fileName', fileName);
         formData.append('contract', String(this.props.contractId));
+        (typeof comment === 'string') && formData.append('comment', comment);
 
         if (id) {
             formData.append('id', String(id));
@@ -61,8 +70,8 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     render() {
-        const { onClose, open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeOrig } = this.props;
-        const { number, type, period, date, trackNumber, orig, fileName } = draftDocument;
+        const { open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeComment } = this.props;
+        const { id, number, type, period, date, trackNumber, fileName, comment } = draftDocument;
 
         return (
             <Dialog className={cnDocumentUpload()} fullWidth maxWidth="sm" onClose={this.onCloseDialog} open={open}>
@@ -127,20 +136,19 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                                 label="Номер трека"
                                 onChange={(event) => onChangeTrack(event.target.value)}
                                 value={trackNumber || ''} />
+
+                        </div>
+                        <div className={cnDocumentUpload('Row')}>
+                            <TextField
+                                className={cnDocumentUpload('DocumentField', { type: 'comment' })}
+                                variant="outlined"
+                                label="Комментарий"
+                                multiline
+                                rowsMax={5}
+                                onChange={(event) => onChangeComment(event.target.value)}
+                                value={comment || ''} />
                         </div>
                         <div className={cnDocumentUpload('DialogButtons')}>
-                            <FormControlLabel
-                                className={cnDocumentUpload('DialogCheck')}
-                                control={
-                                    <Checkbox
-                                        onChange={(e, value) => onChangeOrig(value)}
-                                        value={orig}
-                                        name="checkedB"
-                                        color="primary"
-                                    />
-                                }
-                                label="Оригинал в архиве"
-                            />
                             {!fileName && (
                                 <>
                                     <input type="file" id="file" style={{ display: 'none' }} onChange={this.onSelectFile}/>
@@ -169,9 +177,9 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                         Отменить
                     </Button>
                     <Button onClick={this.onSaveClick} color="primary" variant="contained"
-                    disabled={!fileName || !period || !date || !number || loading}
+                    disabled={!period || !date || !number || loading}
                     >
-                        {loading ? 'Загрузка' : 'Загрузить'}
+                        {texts[id ? 'exist' : 'new'][loading ? 'loading' : 'action']}
                         {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
                     </Button>
                 </DialogActions>
