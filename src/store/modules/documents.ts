@@ -22,10 +22,8 @@ export const getDocuments = createAsyncThunk<any, any>('getDocuments', ({ page, 
         .then(({ data }) => data);
 });
 
-export const onDeleteDocument = createAsyncThunk<any, any>('getDocuments', (id: number) => {
-    return request
-        .delete(`/document/${id}`)
-        .then(({ data }) => data);
+export const onDeleteDocument = createAsyncThunk<any, any>('onDeleteDocument', (id: number) => {
+    return request.delete(`/document/${id}`);
 })
 
 export interface IDocumentsState {
@@ -72,6 +70,7 @@ export const documentssReducer = createReducer(initialState, (builder) => {
 export const documentsMiddleware = store => next => action => {
     switch (action.type) {
         case onDeleteDocument.fulfilled.type:
+            // console.log('HUUUUT');
             window.location.reload();
             break;
 

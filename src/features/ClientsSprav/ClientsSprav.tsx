@@ -36,6 +36,7 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
         this.props.getClients({});
         const pathParts = window.location.pathname.split('/');
 
+        // @ts-ignore
         if (pathParts.length === 4 && !isNaN(pathParts[3])) {
             console.log(pathParts);
 

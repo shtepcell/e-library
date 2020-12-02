@@ -184,9 +184,13 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.onOpenRemoveDialog} color="secondary">
-                        Удалить
-                    </Button>
+                    <div>
+                        {id && (
+                            <Button onClick={this.onOpenRemoveDialog} color="secondary">
+                                Удалить
+                            </Button>
+                        )}
+                    </div>
                     <DialogActions>
                         <Button onClick={this.onCloseDialog} color="primary">
                             Отменить

@@ -2,6 +2,8 @@ import _ from 'lodash';
 
 import { onValidateError, onError } from '../libs/validate';
 import { Manager } from '../models/Manager';
+import { Client } from '../models/Client';
+import { Contract } from '../models/Contract';
 import { getId } from './counters';
 
 export const createManager = async (req, res)  => {
@@ -67,6 +69,14 @@ export const getOneManager = async (req, res)  => {
     try {
         const manager = await Manager.findOne({ id: req.params.id }).lean();
 
+        const clients = await Client.find({ personalManager: manager._id }).select('id').lean();
+        const contracts = await Contract.find({ $or: [{ personalManager: manager._id }, { serviceManager: manager._id }] }).select('id').lean();
+
+        if (clients.length || contracts.length) {
+            // @ts-ignore
+            manager.isUsed = true;
+        }
+
         return res.send(manager);
     } catch (error) {
         return onError(req, res)(error);
@@ -75,9 +85,18 @@ export const getOneManager = async (req, res)  => {
 
 export const deleteManager = async (req, res)  => {
     try {
-        const manager = await Manager.deleteOne({ id: req.params.id }).lean();
+        const manager = await Manager.findOne({ id: req.params.id });
 
-        return res.send(manager);
+        const clients = await Client.find({ personalManager: manager }).select('id').lean();
+        const contracts = await Contract.find({ $or: [{ personalManager: manager }, { serviceManager: manager }] }).select('id').lean();
+
+        if (clients.length || contracts.length) {
+            return res.status(400).send({ clients, contracts });
+        }
+
+        await manager.deleteOne();
+
+        return res.send();
     } catch (error) {
         return onError(req, res)(error);
     }
