@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 import { IManager } from './Manager';
+import { IClient } from './Client';
 
 export interface IContract extends mongoose.Document {
     id: number;
@@ -10,6 +11,7 @@ export interface IContract extends mongoose.Document {
     conclusionDate: Date;
     endDate: Date;
     amount?: string;
+    client: IClient;
     serviceManager?: IManager;
     personalManager?: IManager;
     document?: string;

@@ -3,6 +3,7 @@ import createHttpError from 'http-errors';
 
 import { Manager } from '../models/Manager';
 import { Client } from '../models/Client';
+import { Contract } from '../models/Contract';
 import { onValidateError, onError } from '../libs/validate';
 import { getId } from './counters';
 
@@ -92,7 +93,7 @@ export const getOneClient = async (req, res)  => {
     }
 }
 
-export const saveClient = async (req, res)  => {
+export const saveClient = async (req, res) => {
     try {
         const clientData = _.pick(req.body, clientFields);
         const client = await Client.findOne({ id: Number(req.params.id) });
@@ -121,6 +122,30 @@ export const saveClient = async (req, res)  => {
         }
 
         return res.status(200).send(client);
+    } catch (error) {
+        return onError(req, res)(error);
+    }
+}
+
+export const deleteClient = async (req, res) => {
+    try {
+        const client = await Client.findOne({ id: req.params.id });
+
+        if (!client) {
+            return onError(req, res)(createHttpError(404));
+        }
+
+        const contracts = await Contract.find({ client }).select('id');
+
+        if (contracts.length) {
+            const ids = contracts.map(({ id }) => `#${id}`).join(', ');
+
+            return onError(req, res)(createHttpError(400, { message: `Клиент используется в контрактах: ${ids}` }));
+        }
+
+        await client.deleteOne();
+
+        return res.sendStatus(200);
     } catch (error) {
         return onError(req, res)(error);
     }

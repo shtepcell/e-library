@@ -68,7 +68,7 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
     }
 
     render() {
-        const { items, total, page, search, changePage } = this.props;
+        const { items, total, page, search, changePage, onDeleteClient } = this.props;
         const { selectedClient, showCreateDialog } = this.state;
 
         return (
@@ -80,7 +80,7 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
                     </Button>
                 </div>
 
-                {showCreateDialog && <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} client={selectedClient}/>}
+                {showCreateDialog && <CreateClientDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} client={selectedClient} onDeleteClient={onDeleteClient}/>}
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>

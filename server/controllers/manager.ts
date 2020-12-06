@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import createHttpError from 'http-errors';
 
 import { onValidateError, onError } from '../libs/validate';
 import { Manager } from '../models/Manager';
@@ -86,6 +87,10 @@ export const getOneManager = async (req, res)  => {
 export const deleteManager = async (req, res)  => {
     try {
         const manager = await Manager.findOne({ id: req.params.id });
+
+        if (!manager) {
+            return onError(req, res)(createHttpError(404));
+        }
 
         const clients = await Client.find({ personalManager: manager }).select('id').lean();
         const contracts = await Contract.find({ $or: [{ personalManager: manager }, { serviceManager: manager }] }).select('id').lean();
