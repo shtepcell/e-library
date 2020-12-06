@@ -4,7 +4,9 @@ import { bindActionCreators, Dispatch } from "@reduxjs/toolkit";
 import {
     onSelectFile, createDocument, onChangeDate, onChangeNumber, onChangePeriod, onChangeTrack,
     onChangeType, onRemoveFile, saveDocument, onCloseDialog, onChangeComment,
- } from "@store/modules/contractPage";
+} from "@store/modules/contractPage";
+
+import { onDeleteDocument } from '@store/modules/documents';
 
 import { IAppState } from "@store";
 
@@ -27,6 +29,7 @@ interface IDispatchToProps {
     onRemoveFile: typeof onRemoveFile;
     saveDocument: typeof saveDocument;
     onCloseDialog: typeof onCloseDialog;
+    onDeleteDocument: typeof onDeleteDocument;
 }
 
 export interface IDocumentUploadProps extends IStateToProps, IDispatchToProps {
@@ -46,7 +49,7 @@ export function dispatchToProps(dispatch: Dispatch): IDispatchToProps {
     return bindActionCreators({
         onSelectFile, createDocument, onChangeDate, onChangeNumber, onChangePeriod,
         onChangeTrack, onChangeType, onRemoveFile, saveDocument, onCloseDialog,
-        onChangeComment,
+        onChangeComment, onDeleteDocument,
     }, dispatch);
 }
 

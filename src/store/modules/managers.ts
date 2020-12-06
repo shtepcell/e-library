@@ -21,6 +21,10 @@ export const getManagers = createAsyncThunk<any, any | undefined>('getManagers',
         .then(({ data }) => data);
 })
 
+export const onDeleteManager = createAsyncThunk<any, any>('onDeleteManager', (id: number) => {
+    return request.delete(`/manager/${id}`);
+})
+
 export interface IManagersState {
     items: IManager[];
     total: number;
@@ -57,6 +61,10 @@ export const managersReducer = createReducer(initialState, (builder) => {
 
 export const managersMiddleware = store => next => action => {
     switch (action.type) {
+        case onDeleteManager.fulfilled.type:
+            window.location.reload();
+            break;
+
         case changePage.type:
             store.dispatch(getManagers({ page: action.payload }));
             break;
@@ -64,6 +72,11 @@ export const managersMiddleware = store => next => action => {
         case onSearch.type:
             store.dispatch(getManagers({ search: action.payload, page: 1 }));
             break;
+
+        case onDeleteManager.rejected.type:
+            console.error('Ошибка')
+            break;
+
     }
 
     next(action);

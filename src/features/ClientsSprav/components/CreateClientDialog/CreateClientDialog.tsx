@@ -8,6 +8,7 @@ import {
 import { IClient } from '@typings/IClient';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Departments } from '@const/departments';
+import { onDeleteClient } from '@store/modules/clients';
 import { request } from '@lib/request';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -19,6 +20,7 @@ interface IOwnProps {
     open?: boolean;
     client?: IClient;
     onClose?: () => void;
+    onDeleteClient?: typeof onDeleteClient;
 };
 
 interface IOwnState {
@@ -100,6 +102,10 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
 
         this.setState({ client: newClient });
     };
+
+    handleDeleteClient = () => {
+        this.props.onDeleteClient(this.state.client.id);
+    }
 
     render() {
         const { open, onClose } = this.props;
@@ -277,13 +283,23 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                     </div>
                 </DialogContent>
 
-                <DialogActions>
-                    <Button onClick={onClose} color="primary">
-                        Отменить
-                    </Button>
-                    <Button onClick={this.saveClickHandler} color="primary" variant="contained">
-                        {id ? 'Сохранить' : 'Создать'}
-                    </Button>
+                <DialogActions className={cnCreateClientDialog('Actions')}>
+                    <div>
+                        {id && (
+                            <Button onClick={this.handleDeleteClient} color="secondary">
+                                Удалить
+                            </Button>
+                        )}
+                    </div>
+
+                    <DialogActions>
+                        <Button onClick={onClose} color="primary">
+                            Отменить
+                        </Button>
+                        <Button onClick={this.saveClickHandler} color="primary" variant="contained">
+                            {id ? 'Сохранить' : 'Создать'}
+                        </Button>
+                    </DialogActions>
                 </DialogActions>
             </Dialog>
         )

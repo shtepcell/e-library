@@ -65,7 +65,7 @@ export class ManagersSpravBase extends PureComponent<IManagersSpravProps, IOwnSt
     }
 
     render() {
-        const { search, items, page, total, changePage } = this.props;
+        const { search, items, page, total, changePage, onDeleteManager } = this.props;
         const { selectedManager } = this.state;
 
         return (
@@ -77,7 +77,13 @@ export class ManagersSpravBase extends PureComponent<IManagersSpravProps, IOwnSt
                     </Button>
                 </div>
 
-                <CreateManagerDialog open={this.state.showCreateDialog} onClose={this.handlerCloseDialog} onCreateManager={this.onCreateManager} manager={selectedManager} />
+                <CreateManagerDialog
+                    open={this.state.showCreateDialog}
+                    onClose={this.handlerCloseDialog}
+                    onCreateManager={this.onCreateManager}
+                    onDeleteManager={onDeleteManager}
+                    manager={selectedManager} />
+
                 <TableContainer component={Paper} className={cnManagersSprav('Table')}>
                     <Table aria-label="simple table">
                         <TableHead>

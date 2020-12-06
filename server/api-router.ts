@@ -1,6 +1,6 @@
 import { createManager, getManagers, getOneManager, saveManager, deleteManager } from "./controllers/manager";
-import { getClients, createClient, getOneClient, saveClient } from "./controllers/clients";
-import { createDocument, getOneDocument, saveDocument, getDocuments } from "./controllers/documents";
+import { getClients, createClient, getOneClient, saveClient, deleteClient } from "./controllers/clients";
+import { createDocument, getOneDocument, saveDocument, getDocuments, deleteDocument } from "./controllers/documents";
 import { createContract, getContracts, getOneContract, saveContract, uploadContractDocument } from "./controllers/contracts";
 import multer from 'multer';
 
@@ -21,6 +21,7 @@ export const apiRouter = (app) => {
     app.get('/api/client/:id', getOneClient);
     app.post('/api/client', createClient);
     app.patch('/api/client/:id', saveClient);
+    app.delete('/api/client/:id', deleteClient);
 
     app.get('/api/contracts', getContracts);
     app.get('/api/contract/:id', getOneContract);
@@ -32,6 +33,7 @@ export const apiRouter = (app) => {
     app.post('/api/document', upload.single('file'), createDocument);
     app.put('/api/document/:id', upload.single('file'), saveDocument);
     app.get('/api/document/:id', getOneDocument);
+    app.delete('/api/document/:id', deleteDocument);
 
     // #########################################
 

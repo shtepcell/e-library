@@ -8,11 +8,13 @@ import { DOCUMENT_TYPES } from '@const/documents';
 
 import './DocumentUpload.scss';
 import { IDocumentUploadProps } from '.';
+import { ConfirmDialog } from '@components/ConfirmDialog/ConfirmDialog';
 
 const cnDocumentUpload = cn('DocumentUpload');
 
 interface IOwnState {
     file?: File;
+    openDialogRemove?: boolean;
 }
 
 const texts = {
@@ -47,6 +49,14 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
         setTimeout(this.props.onCloseDialog, 300);
     }
 
+    onOpenRemoveDialog = () => {
+        this.setState({ openDialogRemove: true });
+    }
+
+    onCloseRemoveDialog = () => {
+        this.props.onDeleteDocument(this.props.draftDocument.id);
+    }
+
     onSaveClick = () => {
         const { id, number, type, period, date, trackNumber, fileName, comment } = this.props.draftDocument;
 
@@ -72,6 +82,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     render() {
         const { open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeComment } = this.props;
         const { id, number, type, period, date, trackNumber, fileName, comment } = draftDocument;
+        const { openDialogRemove } = this.state;
 
         return (
             <Dialog className={cnDocumentUpload()} fullWidth maxWidth="sm" onClose={this.onCloseDialog} open={open}>
@@ -173,16 +184,29 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.onCloseDialog} color="primary">
-                        Отменить
-                    </Button>
-                    <Button onClick={this.onSaveClick} color="primary" variant="contained"
-                    disabled={!period || !date || !number || loading}
-                    >
-                        {texts[id ? 'exist' : 'new'][loading ? 'loading' : 'action']}
-                        {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
-                    </Button>
+                    <div>
+                        {id && (
+                            <Button onClick={this.onOpenRemoveDialog} color="secondary">
+                                Удалить
+                            </Button>
+                        )}
+                    </div>
+                    <DialogActions>
+                        <Button onClick={this.onCloseDialog} color="primary">
+                            Отменить
+                        </Button>
+                        <Button onClick={this.onSaveClick} color="primary" variant="contained" disabled={!period || !date || !number || loading}>
+                            {texts[id ? 'exist' : 'new'][loading ? 'loading' : 'action']}
+                            {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
+                        </Button>
+                    </DialogActions>
                 </DialogActions>
+                <ConfirmDialog
+                    onReject={this.onCloseRemoveDialog}
+                    onAgree={this.onCloseRemoveDialog}
+                    open={openDialogRemove}
+                    textHint="Документ исчезнет из базы навсегда, вложенный файл будет удален."
+                    textTitle="Вы уверены, что хотите удалить этот документ?" />
             </Dialog>
         )
     }

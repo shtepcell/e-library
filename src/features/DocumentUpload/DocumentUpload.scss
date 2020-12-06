@@ -33,6 +33,10 @@
         margin: 12px 0;
     }
 
+    .MuiDialogActions-root {
+        justify-content: space-between;
+    }
+
     &-DialogButtons {
         margin-left: -12px;
     }

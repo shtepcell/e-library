@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { cn } from '@bem-react/classname';
 import './CreateManagerDialog.scss';
 import {
-    Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem
+    Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField,
 } from '@material-ui/core';
 import { IManager } from '@typings/IManager';
 import { request } from '@lib/request';
-import { i18n } from '@lib/i18n';
+import { onDeleteManager } from '@store/modules/managers';
 
 const cnCreateManagerDialog = cn('CreateManagerDialog');
 
@@ -15,6 +15,7 @@ interface IOwnProps {
     manager?: IManager;
     onClose?: () => void;
     onCreateManager(manager: IManager): void;
+    onDeleteManager: typeof onDeleteManager;
 };
 
 interface IOwnState {
@@ -58,15 +59,15 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
         }
     }
 
-    // deleteManagerHandler = () => {
-    //     request.delete(`/manager/${this.state.manager.id}`).then(() => {
-    //         window.location.reload();
-    //     });
-    // }
+    onDeleteManager = () => {
+        const { id } = this.state.manager;
+
+        this.props.onDeleteManager(id);
+    }
 
     render() {
         const { open, onClose } = this.props;
-        const { firstName, middleName, lastName, id } = this.state.manager;
+        const { firstName, middleName, lastName, id, isUsed } = this.state.manager;
 
         const canCreate = firstName && middleName && lastName;
 
@@ -99,12 +100,21 @@ export class CreateManagerDialog extends Component<IOwnProps, IOwnState> {
                 </DialogContent>
 
                 <DialogActions className={cnCreateManagerDialog('Actions')}>
-                    <Button onClick={onClose} color="primary">
-                        Отменить
-                    </Button>
-                    <Button onClick={this.createManagerHandler} color="primary" variant="contained" disabled={!canCreate}>
-                        {id ? 'Сохранить' : 'Добавить'}
-                    </Button>
+                    <div>
+                        {!isUsed && id && (
+                            <Button onClick={this.onDeleteManager} color="secondary">
+                                Удалить
+                            </Button>
+                        )}
+                    </div>
+                    <DialogActions className={cnCreateManagerDialog('Actions')}>
+                        <Button onClick={onClose} color="primary">
+                            Отменить
+                        </Button>
+                        <Button onClick={this.createManagerHandler} color="primary" variant="contained" disabled={!canCreate}>
+                            {id ? 'Сохранить' : 'Добавить'}
+                        </Button>
+                    </DialogActions>
                 </DialogActions>
             </Dialog>
         )

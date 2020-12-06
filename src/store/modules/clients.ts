@@ -21,6 +21,12 @@ export const getClients = createAsyncThunk<any, any | undefined>('getClients', (
         .then(({ data }) => data);
 })
 
+export const onDeleteClient = createAsyncThunk<any, any>('onDeleteClient', (id: number) => {
+    return request.delete(`/client/${id}`).catch(({ response }) => {
+        throw response?.data?.message || 'Ошибка';
+    });
+})
+
 export interface IClientsState {
     items: IClient[];
     total: number;
@@ -54,6 +60,14 @@ export const clientsReducer = createReducer(initialState, (builder) => {
 
 export const clientsMiddleware = store => next => action => {
     switch (action.type) {
+        case onDeleteClient.fulfilled.type:
+            window.location.reload();
+            break;
+
+        case onDeleteClient.rejected.type:
+            alert(action.error.message);
+            break;
+
         case changePage.type:
             store.dispatch(getClients({ page: action.payload }));
             break;

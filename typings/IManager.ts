@@ -3,4 +3,5 @@ export interface IManager {
     firstName: string;
     middleName: string;
     lastName: string;
+    isUsed?: boolean;
 }
