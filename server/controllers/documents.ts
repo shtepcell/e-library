@@ -1,4 +1,6 @@
 import S3 from 'aws-sdk/clients/s3';
+import createHttpError from 'http-errors';
+
 import { Contract } from '../models/Contract';
 import { Client } from '../models/Client';
 import { onError, onValidateError } from '../libs/validate';
@@ -11,18 +13,45 @@ const editableFields = [
     'type', 'number', 'trackNumber', 'period', 'date', 'fileName', 'comment', 'deliveryMethod'
 ]
 
-const S3Client = new S3({ endpoint: 'https://storage.yandexcloud.net', secretAccessKey: 'D4Ps5tVVrdvpOJJ1EEv9ntwO-T0JNXRpl28sQTmc', accessKeyId: 'HuuomsMnTqbVH5KSrUBT' });
+const S3Client = new S3({
+    endpoint: 'https://storage.yandexcloud.net',
+    secretAccessKey: process.env.S3_SERET_KEY,
+    accessKeyId: process.env.S3_SECRET_ID,
+});
 
-export const uploadToS3 = (file: any, cb) => {
+function makeid(length) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+
+    for (let i = 0; i < length; i++) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+}
+
+export const uploadToS3 = (req, res, cb) => {
+    const { file, body } = req;
+
     if (!file) {
         cb();
 
         return;
     }
 
+    const splitedFileName = file.originalname.split('.');
+
+    if (!splitedFileName.length) {
+        return onError(req, res)(createHttpError(400));
+    }
+
+    const type = splitedFileName[splitedFileName.length - 1];
+    const fileName = splitedFileName.slice(0, splitedFileName.length - 1).join('.')
+
     S3Client.upload({
         Bucket: 'miranda',
-        Key: file.originalname,
+        Key: `${fileName}_${makeid(5)}.${type}`,
         Body: file.buffer,
         ContentType: file.mimetype,
     }, (err, data) => {
@@ -34,7 +63,7 @@ export const uploadToS3 = (file: any, cb) => {
     })
 }
 
-export const createDocument = (req, res) => uploadToS3(req.file, async (fileUrl) => {
+export const createDocument = (req, res) => uploadToS3(req, res, async (fileUrl) => {
     try {
         let { type, number, trackNumber, period, date, contract: contractId, fileName, comment, deliveryMethod } = req.body;
 
@@ -62,7 +91,7 @@ export const createDocument = (req, res) => uploadToS3(req.file, async (fileUrl)
     }
 });
 
-export const saveDocument = (req, res) => uploadToS3(req.file, async (fileUrl) => {
+export const saveDocument = (req, res) => uploadToS3(req, res, async (fileUrl) => {
     try {
         const documentData = _.pick(req.body, editableFields);
         const document = await Document.findOne({ id: req.params.id });

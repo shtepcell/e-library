@@ -74,7 +74,7 @@ export const saveContract = async (req, res)  => {
     return res.status(200).send(_.pick(contract, [...fields, 'id']));
 }
 
-export const uploadContractDocument = (req, res) => uploadToS3(req.file, async (fileUrl) => {
+export const uploadContractDocument = (req, res) => uploadToS3(req, res, async (fileUrl) => {
     const fileName = req.body.fileName;
     const contract = await Contract.findOne({ id: req.params.id });
 
