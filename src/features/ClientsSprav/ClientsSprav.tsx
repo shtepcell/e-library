@@ -54,8 +54,6 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
     }
 
     selectManagerHandler = (id: string) => () => {
-        console.log('sadasd', id);
-
         request
             .get(`/client/${id}`)
             .then(({ data }) => {

@@ -53,6 +53,10 @@ const documentSchema = new Schema({
         type: String,
         default: '',
     },
+    deliveryMethod: {
+        type: String,
+        required: true,
+    },
 });
 
 export const Document = mongoose.model<IDocument>('Document', documentSchema);

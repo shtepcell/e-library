@@ -9,4 +9,5 @@ export interface IDocument {
     file?: string;
     fileName?: string;
     comment?: string;
+    deliveryMethod: string;
 };

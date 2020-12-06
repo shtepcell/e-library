@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler } from 'react';
 import { cn } from '@bem-react/classname';
 import { Button, Checkbox, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, MenuItem, TextField } from '@material-ui/core';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { DatePicker, KeyboardDatePicker } from '@material-ui/pickers';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { DOCUMENT_TYPES } from '@const/documents';
@@ -58,7 +58,8 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     onSaveClick = () => {
-        const { id, number, type, period, date, trackNumber, fileName, comment } = this.props.draftDocument;
+        const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod } = this.props.draftDocument;
+        const { defaultDeliveryMethod } = this.props;
 
         const formData = new FormData();
         formData.append('number', String(number));
@@ -66,6 +67,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
         formData.append('period', String(period));
         formData.append('date', String(date));
         formData.append('trackNumber', trackNumber);
+        formData.append('deliveryMethod', deliveryMethod || defaultDeliveryMethod);
         this.state.file && formData.append('file', this.state.file);
         fileName && formData.append('fileName', fileName);
         formData.append('contract', String(this.props.contractId));
@@ -80,8 +82,8 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     render() {
-        const { open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeComment } = this.props;
-        const { id, number, type, period, date, trackNumber, fileName, comment } = draftDocument;
+        const { open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeComment, defaultDeliveryMethod, onChangeDelivery } = this.props;
+        const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod } = draftDocument;
         const { openDialogRemove } = this.state;
 
         return (
@@ -112,32 +114,29 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                             </TextField>
                         </div>
                         <div className={cnDocumentUpload('Row')}>
-                            <KeyboardDatePicker
+                            <DatePicker
+                                autoOk
                                 className={cnDocumentUpload('DocumentField', { type: 'period' })}
                                 views={['year', 'month']}
-                                disableToolbar
                                 value={period}
-                                onChange={(d) => onChangePeriod(d.valueOf())}
+                                onChange={v => onChangePeriod(v.valueOf())}
                                 format="MM.YYYY"
+                                defaultValue=""
                                 id="date-picker-dialog"
                                 label="Период"
                                 inputVariant="outlined"
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
+                                cancelLabel="Отменить"
                             />
-                            <KeyboardDatePicker
+                            <DatePicker
+                                autoOk
                                 className={cnDocumentUpload('DocumentField', { type: 'date' })}
-                                disableToolbar
+                                value={date}
+                                onChange={v => onChangeDate(v.valueOf())}
                                 format="DD.MM.YYYY"
                                 id="date-picker-dialog"
-                                value={date}
-                                onChange={(d) => onChangeDate(d.valueOf())}
                                 label="Дата отправки"
                                 inputVariant="outlined"
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
+                                cancelLabel="Отменить"
                             />
                         </div>
                         <div className={cnDocumentUpload('Row')}>
@@ -147,8 +146,25 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                                 label="Номер трека"
                                 onChange={(event) => onChangeTrack(event.target.value)}
                                 value={trackNumber || ''} />
+                        </div>
+                        <div className={cnDocumentUpload('Row')}>
+                            <TextField
+                                className={cnDocumentUpload('DocumentField', { type: 'delivery' })}
+                                select
+                                defaultValue={defaultDeliveryMethod}
+                                value={deliveryMethod}
+                                onChange={(event) => onChangeDelivery(event.target.value)}
+                                variant="outlined"
+                                label="Способ доставки документов"
+                                >
+                                    <MenuItem value="В офисе">В офисе</MenuItem>
+                                    <MenuItem value="Почта">Почта (простое письмо)</MenuItem>
+                                    <MenuItem value="Почта (заказное письмо с уведомлнием)">Почта (заказное письмо с уведомлнием)</MenuItem>
+                                    <MenuItem value="Курьер">Курьер</MenuItem>
+                            </TextField>
 
                         </div>
+
                         <div className={cnDocumentUpload('Row')}>
                             <TextField
                                 className={cnDocumentUpload('DocumentField', { type: 'comment' })}

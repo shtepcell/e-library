@@ -13,6 +13,7 @@ export const onChangePeriod = createAction<number>('onChangePeriodDocument');
 export const onChangeDate = createAction<number>('onChangeDateDocument');
 export const onChangeTrack = createAction<string>('onChangeTrackDocument');
 export const onChangeComment = createAction<string>('onChangeComment');
+export const onChangeDelivery = createAction<string>('onChangeDelivery');
 
 export const getDocument = createAsyncThunk<number>('getDoPartial<cument', (id) => {
     return request.get(`/document/${id}`).then(({ data }) => data);
@@ -69,6 +70,10 @@ export const contractPageReducer = createReducer(initialState, {
 
     [onSelectFile.type]: (state, action) => {
         state.draftDocument.fileName = action.payload;
+    },
+
+    [onChangeDelivery.type]: (state, action) => {
+        state.draftDocument.deliveryMethod = action.payload;
     },
 
     [onChangeDate.type]: (state, action) => {

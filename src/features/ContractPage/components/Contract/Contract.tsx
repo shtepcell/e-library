@@ -48,9 +48,10 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
         this.props.onSwitchDocumentDialog(false);
     }
 
-    renderDialog() {
+    renderDialog(defaultDeliveryMethod: string) {
         return (
             <DocumentUpload
+                defaultDeliveryMethod={defaultDeliveryMethod}
                 onClose={this.handleCloseDialog}
                 open={this.props.openDocumentDialog}
                 contractId={this.props.contract.id}
@@ -166,7 +167,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             <AddIcon />
                         </IconButton>
                     </div>
-                    {this.renderDialog()}
+                    {this.renderDialog(contract.client.deliveryMethod)}
                     <div className={cnContract('Documents')}>
                         {(documents || []).map(({ type, period, file, id }) => (
                             <DocumentItem type={type} period={period} file={file} onEditClick={() => onEditDocument(id)} />
