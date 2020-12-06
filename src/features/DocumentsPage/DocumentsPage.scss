@@ -33,12 +33,12 @@
             margin-right: 16px;
         }
 
-        &_type_type.MuiFormControl-root{
+        &_type_type.MuiFormControl-root {
             min-width: 160px;
         }
+    }
 
-        &_type_period.MuiFormControl-root{
-            max-width: 150px;
-        }
+    &-TableContainer {
+        max-width: 1200px;
     }
 }

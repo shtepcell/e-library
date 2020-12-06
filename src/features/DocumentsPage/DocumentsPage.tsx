@@ -124,14 +124,20 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                         )}
                     />
                 </div>
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} className={cnDocumentsPage('TableContainer')}>
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>№</TableCell>
-                                <TableCell align="left">Тип</TableCell>
-                                <TableCell align="center">Период</TableCell>
-                                <TableCell align="center">Контракт</TableCell>
+                                <TableCell>Клиент</TableCell>
+                                <TableCell align="center">
+                                    Контракт
+                                    <br />
+                                    Дата заключения
+                                </TableCell>
+                                <TableCell align="left">
+                                    Тип / Период
+                                </TableCell>
+                                <TableCell align="center">№</TableCell>
                                 <TableCell align="center">Номер трека</TableCell>
                                 <TableCell align="center">Файл</TableCell>
                             </TableRow>
@@ -139,14 +145,21 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                         <TableBody>
                             {items.map(row => (
                                 <TableRow className={cnDocumentsPage('Row')} key={row.id}>
-                                    <TableCell component="th" scope="row" align="left">
+                                    <TableCell width={300}>{row.contract.client.name}</TableCell>
+                                    <TableCell align="center">
+                                        <Link href={`/contract/${row.contract.id}`} target="_blank">#{row.contract.id}</Link>
+                                        <br />
+                                        {moment(row.contract.conclusionDate).format('DD.MM.YYYY')}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {row.type}
+                                        <br />
+                                        {moment(row.period).format('MM.YYYY')}
+                                    </TableCell>
+                                    <TableCell align="center" component="th" scope="row">
                                         {row.number}
                                     </TableCell>
-                                    <TableCell align="left">{row.type}</TableCell>
-                                    <TableCell align="center">{moment(row.period).format('MM.YYYY')}</TableCell>
-                                    <TableCell align="center">
-                                        <Link href={`/contract/${row.contract}`} target="_blank">#{row.contract}</Link>
-                                    </TableCell>
+
                                     <TableCell align="center">{row.trackNumber}</TableCell>
                                     <TableCell align="center">
                                         {row.file ? <Link href={row.file} target="_blank">Открыть</Link> : '–'}
@@ -156,6 +169,7 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
                 {Boolean(total) && (
                     <div className="Pagination">
                         <Pagination size="large" count={Math.ceil(total / 25) || 1} page={page} onChange={(event, value) => changePage(value)} />

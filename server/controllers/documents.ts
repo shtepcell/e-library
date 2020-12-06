@@ -13,6 +13,18 @@ const editableFields = [
     'type', 'number', 'trackNumber', 'period', 'date', 'fileName', 'comment', 'deliveryMethod'
 ]
 
+const populateContract = {
+    path: 'contract',
+    select: 'id client conclusionDate',
+    populate: {
+        path: 'client',
+        select: 'name'
+    },
+    options: {
+        lean: true
+    }
+}
+
 const S3Client = new S3({
     endpoint: 'https://storage.yandexcloud.net',
     secretAccessKey: process.env.S3_SERET_KEY,
@@ -198,15 +210,8 @@ export const getDocuments = async (req, res) => {
         let documents = await Document.find(query)
             .skip(limit * page - limit)
             .limit(Number(limit))
-            .populate('contract', 'id')
+            .populate(populateContract)
             .lean();
-
-        documents = documents.map(item => {
-            // @ts-ignore
-            item.contract = item.contract.id;
-
-            return item;
-        });
 
         return res.status(200).send({ items: documents, total });
     } catch (err) {

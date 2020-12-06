@@ -18,7 +18,7 @@ interface IOwnProps {
 };
 
 export class DocumentItem extends PureComponent<IOwnProps> {
-    onEditClick = (event) => {
+    onEditClick = (event?: React.MouseEvent) => {
         event.preventDefault();
         this.props.onEditClick();
     }

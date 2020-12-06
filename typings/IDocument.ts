@@ -1,3 +1,5 @@
+import { IContract } from "./IContract";
+
 export interface IDocument {
     id: number;
     number: number;
@@ -5,7 +7,7 @@ export interface IDocument {
     trackNumber?: string;
     date: number;
     period: number;
-    contract: number;
+    contract: IContract;
     file?: string;
     fileName?: string;
     comment?: string;
