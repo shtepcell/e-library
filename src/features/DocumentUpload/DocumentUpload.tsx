@@ -66,7 +66,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
         formData.append('type', type);
         formData.append('period', String(period));
         formData.append('date', String(date));
-        formData.append('trackNumber', trackNumber);
+        (typeof trackNumber === 'string')  && formData.append('trackNumber', trackNumber);
         formData.append('deliveryMethod', deliveryMethod || defaultDeliveryMethod);
         this.state.file && formData.append('file', this.state.file);
         fileName && formData.append('fileName', fileName);

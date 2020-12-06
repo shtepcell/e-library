@@ -10,6 +10,10 @@
     cursor: pointer;
     transition: all 0.1s;
 
+    &_noFile {
+        color: #999;
+    }
+
     &:hover {
         background-color: #f3f3f3;
 
