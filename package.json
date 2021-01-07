@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon",
-    "dev": "npm run build:dev & npm run server",
+    "dev": "npm run build:dev & MENV=development npm run server",
     "prod": "npm run server >> simple.log &",
     "build:prod": "webpack --config configs/webpack.config.js --mode=production",
     "build:dev": "webpack --config configs/webpack.config.js --mode=development --watch --hot"

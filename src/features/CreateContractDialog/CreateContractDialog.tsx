@@ -61,7 +61,16 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         const newContract = { ...this.state.contract };
 
         // @ts-ignore
-        newContract[field] = event.target.value || event.target.checked;
+        newContract[field] = event.target.value;
+
+        this.setState({ contract: newContract });
+    }
+
+    handleOrigChange = (event) => {
+        const newContract = { ...this.state.contract };
+
+        // @ts-ignore
+        newContract.orig = event.target.checked;
 
         this.setState({ contract: newContract });
     }
@@ -162,7 +171,6 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
             }
         })
     }
-
 
     onClientChange = (event) => {
         this.handlerContractChange('client')(event);
@@ -380,7 +388,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                         control={
                             <Checkbox
                                 checked={orig}
-                                onChange={this.handlerContractChange('orig')}
+                                onChange={this.handleOrigChange}
                                 name="checkedB"
                                 color="primary"
                             />

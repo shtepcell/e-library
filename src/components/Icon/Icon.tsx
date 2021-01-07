@@ -8,11 +8,12 @@ const cnIcon = cn('Icon');
 
 interface IIconProps extends IClassNameProps {
     view: string;
-    size: 's' | 'm' | 'l';
+    size: 's' | 'sm' | 'm' | 'l';
+    title: string;
 }
 
-export const Icon: FunctionComponent<IIconProps> = ({ view, size, className }) => {
+export const Icon: FunctionComponent<IIconProps> = ({ view, size, className, title }) => {
     return (
-        <span className={cnIcon({ view, size }, [className])} />
+        <span className={cnIcon({ view, size }, [className])} title={title}/>
     )
 }

@@ -9,6 +9,11 @@
             height: 8px;
         }
 
+        &_sm {
+            width: 12px;
+            height: 12px;
+        }
+
         &_m {
             width: 16px;
             height: 16px;
@@ -35,6 +40,10 @@
 
         &_plus-outlined {
             background-image: url('./assets/plus-outlined.svg');
+        }
+
+        &_check {
+            background-image: url('./assets/check.svg');
         }
     }
 }

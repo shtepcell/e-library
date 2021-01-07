@@ -70,7 +70,6 @@
 
     }
 
-
     &-NotFound {
         margin-top: 32px;
 
@@ -81,5 +80,9 @@
         font-size: 24px;
         font-weight: bold;
         line-height: 28px;
+    }
+
+    &-Check {
+        margin-left: 4px;
     }
 }

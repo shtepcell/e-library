@@ -6,6 +6,7 @@ import moment from 'moment';
 import './ContractsList.scss';
 import { Link } from '@components/Link/Link';
 import { getFullName } from '@lib/helper';
+import { Icon } from '@components/Icon';
 
 const cnContractsList = cn('ContractsList');
 
@@ -50,7 +51,7 @@ export class ContractsList extends PureComponent<IContractsListProps> {
     }
 
     renderContract(contract: IContract) {
-        const { client, id, status, conclusionDate } = contract;
+        const { client, id, status, conclusionDate, orig } = contract;
 
         return (
             <Link className={cnContractsList('Row')} href={`/contract/${id}`} key={id}>
@@ -58,7 +59,10 @@ export class ContractsList extends PureComponent<IContractsListProps> {
                     #{id}
                 </div>
                 <div className={cnContractsList('Column', { type: 'client' })}>
-                    <div className={cnContractsList('Client')}>{client.name}</div>
+                    <div className={cnContractsList('Client')}>
+                        {client.name}
+                        {orig && <Icon className={cnContractsList('Check')} view="check" size="sm" title="Есть оригинал" />}
+                    </div>
                     <div className={cnContractsList('Date')}>{moment(conclusionDate).format('DD.MM.YYYY')}</div>
                 </div>
                 <div className={cnContractsList('Column', { type: 'manager' })}>

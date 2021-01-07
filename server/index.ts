@@ -4,6 +4,9 @@ import cors from 'cors';
 import path from 'path';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import mockUSer from './mocks/user.json';
+
+const isDev = process.env.MENV === 'development';
 
 const LdapStrategy = require('passport-ldapauth').Strategy;
 
@@ -62,6 +65,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.post('/api/auth', (req, res, next) => {
+    if (isDev) {
+        const { mail, name, department, displayName } = mockUSer;
+
+        res.cookie('X-User-Mail', mail, { maxAge: MOUNTH });
+        res.cookie('X-User-Name', displayName || name, { maxAge: MOUNTH });
+        res.cookie('X-User-Department', department, { maxAge: MOUNTH });
+
+        return res.send(mockUSer);
+    }
+
     passport.authenticate('ldapauth', {}, function (err, user, info) {
         if (err) {
             return next(err);
@@ -76,7 +89,6 @@ app.post('/api/auth', (req, res, next) => {
         res.cookie('X-User-Mail', mail, { maxAge: MOUNTH });
         res.cookie('X-User-Name', displayName || name, { maxAge: MOUNTH });
         res.cookie('X-User-Department', department, { maxAge: MOUNTH });
-
 
         return res.send(user);
     })(req, res, next);
