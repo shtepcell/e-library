@@ -38,6 +38,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         contract: {
             type: 'Договор',
             status: 'Активен',
+            department: '',
             conclusionDate: new Date(),
             endDate: new Date(),
         },
@@ -51,6 +52,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
             this.setState({ contract: this.props.contract || {
                 type: 'Договор',
                 status: 'Активен',
+                department: '',
                 conclusionDate: new Date(),
                 endDate: new Date(),
             } });
@@ -118,20 +120,16 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         });
     }, 500);
 
-
-    getSuggestClient = _debounce(() => {
-        this.setState({ clientSuggest: [] });
-
+    getSuggestClient = _debounce((value) => {
         request.get('/clients', {
             params: {
-                search: this.state.contract.client,
+                search: value,
                 limit: 5,
             }
         }).then(({ data }) => {
             this.setState({ clientSuggest: data.items.map(({ name }) => name) })
         });
     }, 500);
-
 
     onPManagerChange = (event) => {
         this.handlerContractChange('personalManager')(event);
@@ -175,7 +173,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
     onClientChange = (event) => {
         this.handlerContractChange('client')(event);
 
-        this.getSuggestClient();
+        this.getSuggestClient(event.target.value);
     };
 
 
@@ -280,11 +278,11 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             noOptionsText="Нет доступных вариантов"
                             filterOptions={(x) => x}
                             value={client}
+                            onInputChange={this.onClientChange}
                             onSelect={this.onClientSelect}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    onChange={this.onClientChange}
                                     label="Клинет"
                                     variant="outlined"
                                     InputProps={{
@@ -330,7 +328,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             noOptionsText="Нет доступных вариантов"
                             filterOptions={(x) => x}
                             value={personalManager}
-                            onSelect={this.onPManagerSelect}
+                            onSelect={this.onPManageerSelect}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}

@@ -13,6 +13,7 @@ import { request } from '@lib/request';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getFullName } from '@lib/helper';
+import { AdressSuggest } from '@components/AdressSuggest';
 
 const cnCreateClientDialog = cn('CreateClientDialog');
 
@@ -107,6 +108,22 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
         this.props.onDeleteClient(this.state.client.id);
     }
 
+    onPostAdressChange = (value) => {
+        const newClient = { ...this.state.client };
+
+        newClient.address = value;
+
+        this.setState({ client: newClient });
+    }
+
+    onLegalAdressChange = (value) => {
+        const newClient = { ...this.state.client };
+
+        newClient.legalAddress = value;
+
+        this.setState({ client: newClient });
+    }
+
     render() {
         const { open, onClose } = this.props;
         const {
@@ -115,12 +132,14 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
             legalAddress,
         } = this.state.client;
 
+        const isDisabledCreate = !name || !externalId;
+
         const { managerSuggest, managerSuggestLoading } = this.state;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateClientDialog()}>
-                <DialogTitle id="simple-dialog-title">Клиент</DialogTitle>
                 <DialogContent>
+                    <h1>Клиент</h1>
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
@@ -215,9 +234,7 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                                 <MenuItem value="Курьер">Курьер</MenuItem>
                         </TextField>
                     </div>
-                </DialogContent>
-                <DialogTitle>Контактное лицо</DialogTitle>
-                <DialogContent>
+                    <h1>Контактное лицо</h1>
                     <div className={cnCreateClientDialog('Row')}>
                         <TextField
                             className={cnCreateClientDialog('Field', { type: 'name' })}
@@ -242,21 +259,11 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                     </div>
 
                     <div className={cnCreateClientDialog('Row')}>
-                        <TextField
-                            className={cnCreateClientDialog('Field', { type: 'adress' })}
-                            value={address}
-                            onChange={this.handlerClientChange('address')}
-                            variant="outlined"
-                            label="Почтовый адрес" />
+                        <AdressSuggest label="Почтовый адрес" value={address} onSelect={this.onPostAdressChange} />
                     </div>
 
                     <div className={cnCreateClientDialog('Row')}>
-                        <TextField
-                            className={cnCreateClientDialog('Field', { type: 'adress' })}
-                            value={legalAddress}
-                            onChange={this.handlerClientChange('legalAddress')}
-                            variant="outlined"
-                            label="Юридический адрес" />
+                        <AdressSuggest label="Юридический адрес" value={legalAddress} onSelect={this.onLegalAdressChange} />
                     </div>
 
                     <div className={cnCreateClientDialog('Row')}>
@@ -282,7 +289,6 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                             label="Телефон" />
                     </div>
                 </DialogContent>
-
                 <DialogActions className={cnCreateClientDialog('Actions')}>
                     <div>
                         {id && (
@@ -296,7 +302,7 @@ export class CreateClientDialog extends Component<IOwnProps, IOwnState> {
                         <Button onClick={onClose} color="primary">
                             Отменить
                         </Button>
-                        <Button onClick={this.saveClickHandler} color="primary" variant="contained">
+                        <Button onClick={this.saveClickHandler} color="primary" variant="contained" disabled={isDisabledCreate}>
                             {id ? 'Сохранить' : 'Создать'}
                         </Button>
                     </DialogActions>

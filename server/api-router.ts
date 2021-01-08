@@ -38,7 +38,7 @@ export const apiRouter = (app) => {
     // #########################################
 
     app.post('/api/suggest/adress', (req, res) => {
-        Kladr.getData({ query: req.body.value, oneString: 1, contentType: 'building', limit: 5, withParent: 1 }, (err, result) => {
+        Kladr.getData({ query: req.body.value, oneString: 1, contentType: 'building', withParent: 0 }, (err, result) => {
             res.json(result);
         });
     });
