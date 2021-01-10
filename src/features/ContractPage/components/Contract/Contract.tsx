@@ -112,14 +112,16 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             {moment(contract.conclusionDate).format('DD.MM.YYYY')}
                         </div>
                     </div>
-                    <div className={cnContract('Field', { type: 'service-manager' })}>
-                        <div className={cnContract('FieldName')}>
-                            Дата завершения действия
+                    {contract.endDate && (
+                        <div className={cnContract('Field', { type: 'service-manager' })}>
+                            <div className={cnContract('FieldName')}>
+                                Дата завершения действия
+                            </div>
+                            <div className={cnContract('FieldValue')}>
+                                {moment(contract.endDate).format('DD.MM.YYYY')}
+                            </div>
                         </div>
-                        <div className={cnContract('FieldValue')}>
-                            {moment(contract.endDate).format('DD.MM.YYYY')}
-                        </div>
-                    </div>
+                    )}
                     <div className={cnContract('Field', { type: 'service-manager' })}>
                         <div className={cnContract('FieldName')}>
                             Сервис-менеджер
@@ -166,7 +168,12 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                     </div>
                 </div>
                 <div className={cnContract('RightColumn')}>
-                    <Timeline documents={documents} onEditDocument={onEditDocument} onAddDocument={this.handleAddDocumentClick} />
+                    <Timeline
+                        from={contract.conclusionDate}
+                        to={contract.endDate}
+                        documents={documents}
+                        onEditDocument={onEditDocument}
+                        onAddDocument={this.handleAddDocumentClick} />
                     {this.renderDialog(contract.client.deliveryMethod)}
 {/*
                     <div className={cnContract('Title')}>

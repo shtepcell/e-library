@@ -40,7 +40,6 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
             status: 'Активен',
             department: '',
             conclusionDate: new Date(),
-            endDate: new Date(),
         },
         personalSuggest: [],
         serviceSuggest: [],
@@ -171,6 +170,10 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
     }
 
     onClientChange = (event) => {
+        if (!event) {
+            return;
+        }
+
         this.handlerContractChange('client')(event);
 
         this.getSuggestClient(event.target.value);
@@ -228,7 +231,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName, id } = this.state.contract;
         const { serviceSuggest, personalSuggest, clientSuggest, loading } = this.state;
 
-        const disabledCreate = loading || !type || !department || !status || !serviceManager || !personalManager || !conclusionDate || !endDate || !client;
+        const disabledCreate = loading || !type || !department || !status || !serviceManager || !personalManager || !conclusionDate || !client;
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateContractDialog()}>
@@ -372,13 +375,12 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             disableToolbar
                             format="DD.MM.YYYY"
                             id="date-picker-dialog"
-                            label="Дата завершения действия контракта"
-                            value={endDate}
+                            label="Дата завершения действия"
+                            value={endDate || ''}
+                            error={false}
+                            helperText=""
                             onChange={this.handleEndDateChange}
                             inputVariant="outlined"
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
                         />
                     </div>
                     <FormControlLabel

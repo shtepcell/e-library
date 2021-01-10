@@ -31,7 +31,7 @@ export const ConfirmDialog: FC<IConfirmDialogProps> = ({ open, onAgree, onReject
                         Нет
                     </Button>
                     <Button onClick={onAgree} color="primary" variant="contained" autoFocus>
-                        Да, уверен
+                        Да, удалить документ
                     </Button>
                 </DialogActions>
             </Dialog>

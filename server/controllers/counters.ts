@@ -4,7 +4,9 @@ export const getId = async (id: string): Promise<number> => {
     const counter = await Counter.findOneAndUpdate({ id }, { $inc: { value: 1 } });
 
     if (!counter) {
-        console.log(id);
+        const cnt = await createCounter(id);
+
+        return cnt.value;
     }
 
     return counter.value;

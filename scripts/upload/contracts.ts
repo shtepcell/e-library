@@ -22,7 +22,7 @@ import _ from 'lodash';
         }
 
         try {
-            await axios.post('http://127.0.0.1:8888/api/contract', newContract);
+            await axios.post('http://127.0.0.1:8888/api/contract', newContract, { params: { auth: '0' }});
         } catch (error) {
             console.log('Error', contract)
         }

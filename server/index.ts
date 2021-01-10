@@ -116,6 +116,10 @@ app.get('/logout', (req, res) => {
 app.use((req, res, next) => {
     const mail = req.cookies['X-User-Mail'];
 
+    if (isDev && req.query.auth === '0') {
+        return next();
+    }
+
     if (mail) {
         next();
     } else {

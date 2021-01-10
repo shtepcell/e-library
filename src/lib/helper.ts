@@ -17,15 +17,14 @@ interface generateMonthParams {
     to?: Date;
 }
 
-const fillMonths = (to = 12) => {
-    return
-}
-
 export const generateMonth = (params?: generateMonthParams) => {
-    const { from = startDate, to = Date.now() } = params || {};
+    let { from = startDate, to } = params || {};
 
-    const firstMonth = moment(from);
-    const endMonth = moment(to);
+    from = new Date(from);
+    to = new Date(to || Date.now());
+
+    const firstMonth = moment([from.getFullYear(), from.getMonth(), 1]);
+    const endMonth = moment([to.getFullYear(), to.getMonth(), 28]);
 
     // Кол-во месяцев между датами
     const diff = Math.ceil(endMonth.diff(firstMonth, 'month', true));

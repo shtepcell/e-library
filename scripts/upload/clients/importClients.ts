@@ -4,7 +4,9 @@ import moment from 'moment';
 import clients from '../data/clients.json';
 
 (async () => {
-    clients.forEach(item => {
+    for (let index = 0; index < clients.length; index++) {
+        const item = clients[index];
+
         const client = {
             externalId: item['ВНЕШНИЙ_ИДЕНТИФИКАТОР_КЛИЕНТА'].replace(',', ''),
             name: item['НАИМЕНОВАНИЕ'],
@@ -22,6 +24,6 @@ import clients from '../data/clients.json';
             personalManager: item['ПЕРСОНАЛЬНЫЙ_МЕНЕДЖЕР'],
         }
 
-        axios.post('http://127.0.0.1:8888/api/client', client).catch(error => {});
-    });
+        await axios.post('http://127.0.0.1:8888/api/client', client, { params: { auth: '0' }}).catch(error => {});
+    }
 })();
