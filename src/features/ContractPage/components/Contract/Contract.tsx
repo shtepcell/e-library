@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { cn } from '@bem-react/classname';
 
 import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import { IContract } from '@typings/IContract';
 
@@ -13,6 +12,8 @@ import { DocumentUpload } from '@features/DocumentUpload';
 import { DocumentItem } from '../DocumentItem/DocumentItem';
 import { IDocument } from '@typings/IDocument';
 import moment from 'moment';
+import { Timeline } from '@features/Timeline/Timeline';
+import { onPresetPeriod } from '@store/modules/contractPage';
 const cnContract = cn('Contract');
 
 interface IContractProps {
@@ -23,7 +24,8 @@ interface IContractProps {
 
     onEditClick?: () => void;
     onEditDocument?: (id: number) => void;
-    onSwitchDocumentDialog?: (value: boolean) => void;
+    onSwitchDocumentDialog?: (value: boolean, period?: string) => void;
+    onPresetPeriod: typeof onPresetPeriod;
 };
 
 interface IOwnState {
@@ -40,7 +42,10 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
         period: new Date(),
     }
 
-    handleAddDocumentClick = () => {
+    handleAddDocumentClick = (period?: string) => {
+        console.log(period);
+
+        this.props.onPresetPeriod(moment(period, 'MM.YYYY').valueOf());
         this.props.onSwitchDocumentDialog(true);
     }
 
@@ -161,18 +166,20 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                     </div>
                 </div>
                 <div className={cnContract('RightColumn')}>
+                    <Timeline documents={documents} onEditDocument={onEditDocument} onAddDocument={this.handleAddDocumentClick} />
+                    {this.renderDialog(contract.client.deliveryMethod)}
+{/*
                     <div className={cnContract('Title')}>
                         Документы
                         <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
                             <AddIcon />
                         </IconButton>
                     </div>
-                    {this.renderDialog(contract.client.deliveryMethod)}
                     <div className={cnContract('Documents')}>
                         {(documents || []).map(({ type, period, file, id }) => (
                             <DocumentItem type={type} period={period} file={file} onEditClick={() => onEditDocument(id)} />
                         ))}
-                    </div>
+                    </div> */}
                     {/* <div className={cnContract('DocumentsLink')}>
                         <Link href={`/documents?contarct=${contract.id}`} target="_blank">Посмотреть все документы контракта</Link>
                     </div> */}

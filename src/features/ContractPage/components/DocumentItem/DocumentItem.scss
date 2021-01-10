@@ -1,17 +1,27 @@
 .DocumentItem {
+    width: 100%;
+
     position: relative;
     display: flex;
     align-items: center;
-    margin: 0 -8px 4px -4px;
+    justify-content: start;
 
-    padding: 4px 8px 4px 4px;
+    padding: 8px;
+
+    margin-bottom: 8px;
+
+    background-color: #fff;
+    color: #000 !important;
+
     border-radius: 4px;
+
+    box-sizing: border-box;
 
     cursor: pointer;
     transition: all 0.1s;
 
     &_noFile {
-        color: #999;
+        opacity: 0.6;
     }
 
     &:hover {
@@ -27,8 +37,6 @@
     }
 
     &-Name {
-        flex: 1 0 auto;
-
         margin-left: 4px;
 
         font-size: 14px;

@@ -44,7 +44,7 @@ function makeid(length) {
 }
 
 export const uploadToS3 = (req, res, cb) => {
-    const { file, body } = req;
+    const { file } = req;
 
     if (!file) {
         cb();
@@ -116,6 +116,11 @@ export const saveDocument = (req, res) => uploadToS3(req, res, async (fileUrl) =
         Object.keys(documentData).forEach(key => {
             document[key] = documentData[key];
         });
+
+        if (!documentData.fileName) {
+            document.fileName = undefined;
+            document.file = undefined;
+        }
 
         const validateError = document.validateSync();
 

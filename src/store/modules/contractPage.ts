@@ -4,6 +4,7 @@ import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { IDocument } from '@typings/IDocument';
 
 export const onSwitchDocumentDialog = createAction<boolean>('onSwitchDocumentDialog');
+export const onPresetPeriod = createAction<number>('onPreSetPeriod');
 export const onSelectFile = createAction<string>('onSelectFileDocument');
 export const onCloseDialog = createAction('onCloseDialogDocument');
 export const onRemoveFile = createAction<string>('onRemoveFileDocument');
@@ -66,6 +67,10 @@ export const contractPageReducer = createReducer(initialState, {
 
     [onSwitchDocumentDialog.type]: (state, action) => {
         state.openDocumentDialog = action.payload;
+    },
+
+    [onPresetPeriod.type]: (state, action) => {
+        state.draftDocument.period = action.payload;
     },
 
     [onSelectFile.type]: (state, action) => {

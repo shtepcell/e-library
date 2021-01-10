@@ -1,0 +1,59 @@
+.Timeline {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    text-align: center;
+
+    padding: 0 0 24px 0;
+    width: 270px;
+
+    overflow: scroll;
+
+    background-color: #38484E;
+
+    color: #fff;
+
+    &-Period {
+        display: inline-block;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 120%;
+
+        padding: 20px 16px;
+
+        background-color: #38484E;
+        z-index: 1;
+
+        &_current {
+            color: #43DF65;
+        }
+    }
+
+    &-Divider {
+        border: 1px solid #fff;
+        height: 0;
+
+        position: relative;
+        top: -33px;
+
+        z-index: -1;
+
+        &_current {
+            border-color: #43DF65;
+        }
+    }
+
+    &-Docs {
+        padding: 0 16px;
+    }
+
+    .MuiButtonBase-root {
+        background-color: #38484E;
+
+        &:hover {
+            background-color: #fff;
+        }
+    }
+}

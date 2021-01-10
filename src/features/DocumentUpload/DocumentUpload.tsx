@@ -9,6 +9,7 @@ import { DOCUMENT_TYPES } from '@const/documents';
 import './DocumentUpload.scss';
 import { IDocumentUploadProps } from '.';
 import { ConfirmDialog } from '@components/ConfirmDialog/ConfirmDialog';
+import moment from 'moment';
 
 const cnDocumentUpload = cn('DocumentUpload');
 
@@ -86,6 +87,8 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
         const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod } = draftDocument;
         const { openDialogRemove } = this.state;
 
+        const nextMonth = new Date().getMonth() + 1;
+
         return (
             <Dialog className={cnDocumentUpload()} fullWidth maxWidth="sm" onClose={this.onCloseDialog} open={open}>
                 <DialogTitle id="simple-dialog-title">Загрузка документа</DialogTitle>
@@ -126,6 +129,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                                 label="Период"
                                 inputVariant="outlined"
                                 cancelLabel="Отменить"
+                                maxDate={moment(new Date()).set('month', nextMonth).set('date', -1)}
                             />
                             <DatePicker
                                 autoOk
@@ -191,6 +195,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                         {fileName && (
                             <div className={cnDocumentUpload('Row')}>
                                 <Chip
+                                    style={{ maxWidth: 350 }}
                                     icon={<DescriptionIcon />}
                                     label={fileName}
                                     onDelete={this.onRemoveFile}

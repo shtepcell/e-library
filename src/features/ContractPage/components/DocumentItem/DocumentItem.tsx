@@ -12,7 +12,6 @@ const cnDocumentItem = cn('DocumentItem');
 
 interface IOwnProps {
     type: string;
-    period: Date;
     file?: string;
     onEditClick: VoidFunction;
 };
@@ -24,13 +23,12 @@ export class DocumentItem extends PureComponent<IOwnProps> {
     }
 
     render() {
-        const { type, period, file, } = this.props;
+        const { type, file, } = this.props;
 
         return (
             <LinkSimple normal className={cnDocumentItem({ noFile: !file })} href={file} onClick={!file ? this.onEditClick : undefined} target="_blank">
                <DescriptionIcon color="primary" />
                <div className={cnDocumentItem('Name')}>{type}</div>
-               <div className={cnDocumentItem('Date')}>{moment(period).format('MM.YYYY')}</div>
                <Link component="span" className={cnDocumentItem('Edit')} onClick={this.onEditClick}>Править</Link>
             </LinkSimple>
         )

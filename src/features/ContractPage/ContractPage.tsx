@@ -45,7 +45,7 @@ export class ContractPageBase extends PureComponent<IContractPageProps, IContrac
     }
 
     render() {
-        const { draftDocument, getDocument, onSwitchDocumentDialog, openDocumentDialog } = this.props;
+        const { draftDocument, getDocument, onSwitchDocumentDialog, openDocumentDialog, onPresetPeriod } = this.props;
         const { loading, contract, openDialog, documents } = this.state;
 
         if (loading) {
@@ -68,6 +68,7 @@ export class ContractPageBase extends PureComponent<IContractPageProps, IContrac
                         documents={documents}
                         draftDocument={draftDocument}
                         onSwitchDocumentDialog={onSwitchDocumentDialog}
+                        onPresetPeriod={onPresetPeriod}
                         openDocumentDialog={openDocumentDialog}
                         onEditDocument={getDocument} />
                     <CreateContractDialog open={openDialog} onClose={this.handlerDialog(false)} contract={{
