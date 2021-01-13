@@ -8,7 +8,7 @@ import { Document } from '../models/Document';
 import { getId } from './counters';
 import { uploadToS3 } from './documents';
 
-const fields = ['client', 'personalManager', 'serviceManager', 'orig', 'status', 'conclusionDate', 'endDate', 'department', 'type', 'amount'];
+const fields = ['client', 'personalManager', 'serviceManager', 'orig', 'status', 'conclusionDate', 'endDate', 'department', 'type', 'amount', 'orderNumber'];
 
 export const createContract = async (req, res)  => {
     const data = _.pick(req.body, fields);

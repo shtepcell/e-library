@@ -70,7 +70,6 @@ export const documentssReducer = createReducer(initialState, (builder) => {
 export const documentsMiddleware = store => next => action => {
     switch (action.type) {
         case onDeleteDocument.fulfilled.type:
-            // console.log('HUUUUT');
             window.location.reload();
             break;
 

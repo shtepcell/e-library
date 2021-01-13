@@ -228,7 +228,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
 
     render() {
         const { open, onClose } = this.props;
-        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName, id } = this.state.contract;
+        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName, id, orderNumber } = this.state.contract;
         const { serviceSuggest, personalSuggest, clientSuggest, loading } = this.state;
 
         const disabledCreate = loading || !type || !department || !status || !serviceManager || !personalManager || !conclusionDate || !client;
@@ -331,7 +331,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             noOptionsText="Нет доступных вариантов"
                             filterOptions={(x) => x}
                             value={personalManager}
-                            onSelect={this.onPManageerSelect}
+                            onSelect={this.onPManagerSelect}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -382,6 +382,14 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             onChange={this.handleEndDateChange}
                             inputVariant="outlined"
                         />
+                    </div>
+                    <div className={cnCreateContractDialog('Row')}>
+                        <TextField
+                            className={cnCreateContractDialog('Field', { type: 'orderNumber' })}
+                            value={orderNumber}
+                            onChange={this.handlerContractChange('orderNumber')}
+                            variant="outlined"
+                            label="Номер договора" />
                     </div>
                     <FormControlLabel
                         className={cnCreateContractDialog('DialogCheck')}

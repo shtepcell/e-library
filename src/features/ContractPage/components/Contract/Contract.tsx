@@ -102,6 +102,16 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             {contract.department}
                         </div>
                     </div>
+                    {contract.orderNumber && (
+                    <div className={cnContract('Field', { type: 'order-number' })}>
+                            <div className={cnContract('FieldName')}>
+                                Номер договора
+                            </div>
+                            <div className={cnContract('FieldValue')}>
+                                {contract.orderNumber}
+                            </div>
+                        </div>
+                    )}
                     <div className={cnContract('Field', { type: 'service-manager' })}>
                         <div className={cnContract('FieldName')}>
                             Дата заключения

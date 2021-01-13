@@ -6,6 +6,7 @@ import { IClient } from './Client';
 export interface IContract extends mongoose.Document {
     id: number;
     department: string;
+    orderNumber?: string;
     type: string;
     status: string;
     conclusionDate: Date;
@@ -24,6 +25,9 @@ const contractSchema = new Schema({
     id: {
         type: Number,
         unique: true,
+    },
+    orderNumber: {
+        type: String,
     },
     department: String,
     client: {

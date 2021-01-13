@@ -5,6 +5,8 @@ export interface IContract {
     status: string;
     type: string;
 
+    orderNumber: string;
+
     conclusionDate: Date;
     endDate: Date;
 
