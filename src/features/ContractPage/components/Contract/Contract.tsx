@@ -43,8 +43,6 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
     }
 
     handleAddDocumentClick = (period?: string) => {
-        console.log(period);
-
         this.props.onPresetPeriod(moment(period, 'MM.YYYY').valueOf());
         this.props.onSwitchDocumentDialog(true);
     }

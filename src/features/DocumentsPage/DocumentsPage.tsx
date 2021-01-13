@@ -11,6 +11,7 @@ import { DatePicker } from '@material-ui/pickers';
 import { IDocumentsPageProps } from '.';
 import moment from 'moment';
 import { Pagination } from '@material-ui/lab';
+import { DOCUMENT_TYPES } from '@const/documents';
 
 const cnDocumentsPage = cn('DocumentsPage');
 
@@ -68,11 +69,7 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                         onChange={this.onChangeType}
                     >
                         <MenuItem value=""><em>Не важно</em></MenuItem>
-                        <MenuItem value={'Акт оказанных услуг'}>Акт оказанных услуг</MenuItem>
-                        <MenuItem value={'Акт сверки'}>Акт сверки</MenuItem>
-                        <MenuItem value={'Бланк заказа'}>Бланк заказа</MenuItem>
-                        <MenuItem value={'Письмо'}>Письмо</MenuItem>
-                        <MenuItem value={'Претензия'}>Претензия</MenuItem>
+                        {DOCUMENT_TYPES.map((item, id) => <MenuItem key={id} value={item}>{item}</MenuItem>)}
                     </TextField>
                     <DatePicker
                         autoOk

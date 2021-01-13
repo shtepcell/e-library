@@ -38,8 +38,6 @@ export class ClientsSpravBase extends PureComponent<IClientsSpravProps, IOwnStat
 
         // @ts-ignore
         if (pathParts.length === 4 && !isNaN(pathParts[3])) {
-            console.log(pathParts);
-
             this.selectManagerHandler(pathParts[3])();
         }
 
