@@ -69,7 +69,7 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                     >
                         <MenuItem value=""><em>Не важно</em></MenuItem>
                         <MenuItem value={'Акт оказанных услуг'}>Акт оказанных услуг</MenuItem>
-                        <MenuItem value={'Акт свертки'}>Акт свертки</MenuItem>
+                        <MenuItem value={'Акт сверки'}>Акт сверки</MenuItem>
                         <MenuItem value={'Бланк заказа'}>Бланк заказа</MenuItem>
                         <MenuItem value={'Письмо'}>Письмо</MenuItem>
                         <MenuItem value={'Претензия'}>Претензия</MenuItem>
