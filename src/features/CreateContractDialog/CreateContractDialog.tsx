@@ -31,6 +31,7 @@ interface IOwnState {
     serviceSuggest: string[];
     clientSuggest: string[];
     loading?: boolean;
+    fileChanged: boolean;
 };
 
 export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
@@ -44,6 +45,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         personalSuggest: [],
         serviceSuggest: [],
         clientSuggest: [],
+        fileChanged: false,
     }
 
     componentDidUpdate(prevProps) {
@@ -182,7 +184,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
 
     onSelectFile = (event) => {
         const file = event.target.files[0];
-        this.setState({ contract: { ...this.state.contract, fileName: file.name, file } });
+        this.setState({ contract: { ...this.state.contract, fileName: file.name, file }, fileChanged: true });
     }
 
     onRemoveFile = () => {
@@ -191,7 +193,7 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         delete contract.file;
         delete contract.fileName;
 
-        this.setState({ contract });
+        this.setState({ contract, fileChanged: true });
     }
 
     uploadFile = (id: string) => {
@@ -214,7 +216,9 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
 
         if (this.state.contract.id) {
             request.patch(`/contract/${this.state.contract.id}`, this.state.contract)
-                .then(() => this.uploadFile(this.state.contract.id))
+                .then(() => {
+                    this.state.fileChanged && this.uploadFile(this.state.contract.id);
+                })
                 .then(() => window.location.reload())
                 .catch(() => this.setState({ loading: true }));
         } else {
