@@ -216,7 +216,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                         <Button onClick={this.onCloseDialog} color="primary">
                             Отменить
                         </Button>
-                        <Button onClick={this.onSaveClick} color="primary" variant="contained" disabled={!period || !date || !number || loading}>
+                        <Button onClick={this.onSaveClick} color="primary" variant="contained" disabled={!period || !date || loading}>
                             {texts[id ? 'exist' : 'new'][loading ? 'loading' : 'action']}
                             {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
                         </Button>
