@@ -23,7 +23,6 @@ const documentSchema = new Schema({
     },
     number: {
         type: Number,
-        required: true,
     },
     type: {
         type: String,

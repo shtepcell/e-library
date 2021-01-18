@@ -4,7 +4,7 @@ export const onValidateError = (req, res) => validationError => {
     const errors = {};
 
     Object.keys(validationError.errors).forEach(error => {
-        console.log(error);
+        console.warn('ValidationError: ', error);
 
         errors[error] = validationError?.errors[error]?.properties?.message;
     });
