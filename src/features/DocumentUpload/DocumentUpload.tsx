@@ -55,6 +55,10 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     onCloseRemoveDialog = () => {
+        this.setState({ openDialogRemove: false });
+    }
+
+    onAcceptRemoveDocument = () => {
         this.props.onDeleteDocument(this.props.draftDocument.id);
     }
 
@@ -224,7 +228,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                 </DialogActions>
                 <ConfirmDialog
                     onReject={this.onCloseRemoveDialog}
-                    onAgree={this.onCloseRemoveDialog}
+                    onAgree={this.onAcceptRemoveDocument}
                     open={openDialogRemove}
                     textHint="Документ исчезнет из базы навсегда, вложенный файл будет удален."
                     textTitle="Вы уверены, что хотите удалить этот документ?" />
