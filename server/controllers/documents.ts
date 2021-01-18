@@ -15,7 +15,7 @@ const editableFields = [
 
 const populateContract = {
     path: 'contract',
-    select: 'id client conclusionDate',
+    select: 'id client conclusionDate orderNumber',
     populate: {
         path: 'client',
         select: 'name'

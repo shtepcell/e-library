@@ -130,11 +130,15 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                                     Контракт
                                     <br />
                                     Дата заключения
+                                    <br />
+                                    № договора
                                 </TableCell>
                                 <TableCell align="left">
                                     Тип / Период
                                 </TableCell>
-                                <TableCell align="center">№</TableCell>
+                                <TableCell align="center">
+                                    № документа
+                                </TableCell>
                                 <TableCell align="center">Номер трека</TableCell>
                                 <TableCell align="center">Файл</TableCell>
                             </TableRow>
@@ -147,6 +151,8 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                                         <Link href={`/contract/${row.contract.id}`} target="_blank">#{row.contract.id}</Link>
                                         <br />
                                         {moment(row.contract.conclusionDate).format('DD.MM.YYYY')}
+                                        <br />
+                                        {row.contract.orderNumber || '–'}
                                     </TableCell>
                                     <TableCell align="left">
                                         {row.type}
