@@ -102,7 +102,6 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                             <TextField
                                 className={cnDocumentUpload('DocumentField', { type: 'number' })}
                                 label="Номер документа"
-                                type="number"
                                 onChange={(event) => onChangeNumber(event.target.value)}
                                 variant="outlined"
                                 value={number}
