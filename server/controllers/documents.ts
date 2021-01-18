@@ -85,10 +85,6 @@ export const createDocument = (req, res) => uploadToS3(req, res, async (fileUrl)
             deliveryMethod,
         });
 
-        if (number) {
-            document.number = number;
-        }
-
         document.contract = await Contract.findOne({ id: contractId });
 
         const validateError = document.validateSync();
