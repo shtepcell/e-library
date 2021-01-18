@@ -22,7 +22,7 @@ const documentSchema = new Schema({
         unique: true,
     },
     number: {
-        type: Number,
+        type: String,
     },
     type: {
         type: String,

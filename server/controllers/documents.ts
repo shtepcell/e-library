@@ -80,10 +80,14 @@ export const createDocument = (req, res) => uploadToS3(req, res, async (fileUrl)
         let { type, number, trackNumber, period, date, contract: contractId, fileName, comment, deliveryMethod } = req.body;
 
         const document: IDocument = new Document({
-            type, number, trackNumber, period: new Date(Number(period)),
+            type, trackNumber, period: new Date(Number(period)),
             date: new Date(Number(date)), file: fileUrl, fileName, comment,
             deliveryMethod,
         });
+
+        if (number) {
+            document.number = number;
+        }
 
         document.contract = await Contract.findOne({ id: contractId });
 
