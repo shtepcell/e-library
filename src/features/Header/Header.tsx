@@ -1,12 +1,7 @@
 import React, { PureComponent } from 'react';
 import { cn } from '@bem-react/classname';
-import TextField from '@material-ui/core/TextField';
-import ErrorIcon from '@material-ui/icons/Error';
-import WorkIcon from '@material-ui/icons/Work';
 
 import './Header.scss';
-import TooltipBase from '@material-ui/core/Tooltip';
-import { withStyles } from '@material-ui/core/styles';
 
 const cnHeader = cn('Header');
 
@@ -15,13 +10,6 @@ interface IHeaderProps {
 
     params?: any;
 };
-
-const Tooltip = withStyles((theme) => ({
-    tooltip: {
-      fontSize: 14,
-    },
-  }))(TooltipBase);
-
 export class Header extends PureComponent<IHeaderProps> {
     renderMainHeader() {
         return (

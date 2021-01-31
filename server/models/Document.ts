@@ -21,6 +21,11 @@ const documentSchema = new Schema({
         type: Number,
         unique: true,
     },
+    withPeriod: {
+        type: Boolean,
+        default: true,
+        required: true,
+    },
     number: {
         type: String,
     },
@@ -31,7 +36,6 @@ const documentSchema = new Schema({
     trackNumber: String,
     period: {
         type: Date,
-        required: true,
     },
     file: {
         type: String,
@@ -41,7 +45,6 @@ const documentSchema = new Schema({
     },
     date: {
         type: Date,
-        required: true,
     },
     contract: {
         type: Schema.Types.ObjectId,
@@ -54,7 +57,6 @@ const documentSchema = new Schema({
     },
     deliveryMethod: {
         type: String,
-        required: true,
     },
 });
 

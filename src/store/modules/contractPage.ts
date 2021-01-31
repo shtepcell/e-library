@@ -47,6 +47,7 @@ const initialState: IContractPageState = {
         type: DOCUMENT_TYPES[0],
         period: new Date().valueOf(),
         date: new Date().valueOf(),
+        withPeriod: true,
     }
 };
 
@@ -54,8 +55,8 @@ export const contractPageReducer = createReducer(initialState, {
     [getDocument.fulfilled.type]: (state, action) => {
         let { date, period, ...documentData } = action.payload;
 
-        date = new Date(date).valueOf();
-        period = new Date(period).valueOf();
+        date && (date = new Date(date).valueOf());
+        period && (period = new Date(period).valueOf());
         state.draftDocument = {
             date,
             period,
@@ -71,6 +72,10 @@ export const contractPageReducer = createReducer(initialState, {
 
     [onPresetPeriod.type]: (state, action) => {
         state.draftDocument.period = action.payload;
+
+        if (!action.payload) {
+            state.draftDocument.withPeriod = false;
+        }
     },
 
     [onSelectFile.type]: (state, action) => {

@@ -63,14 +63,15 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
     }
 
     onSaveClick = () => {
-        const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod } = this.props.draftDocument;
+        const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod, withPeriod } = this.props.draftDocument;
         const { defaultDeliveryMethod } = this.props;
 
         const formData = new FormData();
         (typeof number === 'string') && formData.append('number', String(number));
         formData.append('type', type);
-        formData.append('period', String(period));
-        formData.append('date', String(date));
+        formData.append('withPeriod', String(withPeriod));
+        period && formData.append('period', String(period));
+        date && formData.append('date', String(date));
         (typeof trackNumber === 'string') && formData.append('trackNumber', trackNumber);
         formData.append('deliveryMethod', deliveryMethod || defaultDeliveryMethod);
         this.state.file && formData.append('file', this.state.file);
@@ -88,7 +89,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
 
     render() {
         const { open, loading, draftDocument, onChangeDate, onChangePeriod, onChangeNumber, onChangeTrack, onChangeType, onChangeComment, defaultDeliveryMethod, onChangeDelivery } = this.props;
-        const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod } = draftDocument;
+        const { id, number, type, period, date, trackNumber, fileName, comment, deliveryMethod, withPeriod } = draftDocument;
         const { openDialogRemove } = this.state;
 
         const nextMonth = new Date().getMonth() + 1;
@@ -119,58 +120,61 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                                 ))}
                             </TextField>
                         </div>
-                        <div className={cnDocumentUpload('Row')}>
-                            <DatePicker
-                                autoOk
-                                className={cnDocumentUpload('DocumentField', { type: 'period' })}
-                                views={['year', 'month']}
-                                value={period}
-                                onChange={v => onChangePeriod(v.valueOf())}
-                                format="MM.YYYY"
-                                defaultValue=""
-                                id="date-picker-dialog"
-                                label="Период"
-                                inputVariant="outlined"
-                                cancelLabel="Отменить"
-                                maxDate={moment(new Date()).set('month', nextMonth).set('date', -1)}
-                            />
-                            <DatePicker
-                                autoOk
-                                className={cnDocumentUpload('DocumentField', { type: 'date' })}
-                                value={date}
-                                onChange={v => onChangeDate(v.valueOf())}
-                                format="DD.MM.YYYY"
-                                id="date-picker-dialog"
-                                label="Дата отправки"
-                                inputVariant="outlined"
-                                cancelLabel="Отменить"
-                            />
-                        </div>
-                        <div className={cnDocumentUpload('Row')}>
-                            <TextField
-                                className={cnDocumentUpload('DocumentField', { type: 'track' })}
-                                variant="outlined"
-                                label="Номер трека"
-                                onChange={(event) => onChangeTrack(event.target.value)}
-                                value={trackNumber || ''} />
-                        </div>
-                        <div className={cnDocumentUpload('Row')}>
-                            <TextField
-                                className={cnDocumentUpload('DocumentField', { type: 'delivery' })}
-                                select
-                                defaultValue={defaultDeliveryMethod}
-                                value={deliveryMethod}
-                                onChange={(event) => onChangeDelivery(event.target.value)}
-                                variant="outlined"
-                                label="Способ доставки документов"
-                                >
-                                    <MenuItem value="В офисе">В офисе</MenuItem>
-                                    <MenuItem value="Почта">Почта (простое письмо)</MenuItem>
-                                    <MenuItem value="Почта (заказное письмо с уведомлнием)">Почта (заказное письмо с уведомлнием)</MenuItem>
-                                    <MenuItem value="Курьер">Курьер</MenuItem>
-                            </TextField>
-
-                        </div>
+                        {withPeriod && (
+                            <>
+                                <div className={cnDocumentUpload('Row')}>
+                                    <DatePicker
+                                        autoOk
+                                        className={cnDocumentUpload('DocumentField', { type: 'period' })}
+                                        views={['year', 'month']}
+                                        value={period}
+                                        onChange={v => onChangePeriod(v.valueOf())}
+                                        format="MM.YYYY"
+                                        defaultValue=""
+                                        id="date-picker-dialog"
+                                        label="Период"
+                                        inputVariant="outlined"
+                                        cancelLabel="Отменить"
+                                        maxDate={moment(new Date()).set('month', nextMonth).set('date', -1)}
+                                    />
+                                    <DatePicker
+                                        autoOk
+                                        className={cnDocumentUpload('DocumentField', { type: 'date' })}
+                                        value={date}
+                                        onChange={v => onChangeDate(v.valueOf())}
+                                        format="DD.MM.YYYY"
+                                        id="date-picker-dialog"
+                                        label="Дата отправки"
+                                        inputVariant="outlined"
+                                        cancelLabel="Отменить"
+                                    />
+                                </div>
+                                <div className={cnDocumentUpload('Row')}>
+                                    <TextField
+                                        className={cnDocumentUpload('DocumentField', { type: 'track' })}
+                                        variant="outlined"
+                                        label="Номер трека"
+                                        onChange={(event) => onChangeTrack(event.target.value)}
+                                        value={trackNumber || ''} />
+                                </div>
+                                <div className={cnDocumentUpload('Row')}>
+                                    <TextField
+                                        className={cnDocumentUpload('DocumentField', { type: 'delivery' })}
+                                        select
+                                        defaultValue={defaultDeliveryMethod}
+                                        value={deliveryMethod}
+                                        onChange={(event) => onChangeDelivery(event.target.value)}
+                                        variant="outlined"
+                                        label="Способ доставки документов"
+                                        >
+                                            <MenuItem value="В офисе">В офисе</MenuItem>
+                                            <MenuItem value="Почта">Почта (простое письмо)</MenuItem>
+                                            <MenuItem value="Почта (заказное письмо с уведомлнием)">Почта (заказное письмо с уведомлнием)</MenuItem>
+                                            <MenuItem value="Курьер">Курьер</MenuItem>
+                                    </TextField>
+                                </div>
+                            </>
+                        )}
 
                         <div className={cnDocumentUpload('Row')}>
                             <TextField
@@ -219,7 +223,7 @@ export class DocumentUploadBase extends React.Component<IDocumentUploadProps, IO
                         <Button onClick={this.onCloseDialog} color="primary">
                             Отменить
                         </Button>
-                        <Button onClick={this.onSaveClick} color="primary" variant="contained" disabled={!period || !date || loading}>
+                        <Button onClick={this.onSaveClick} color="primary" variant="contained" disabled={withPeriod && !period || !date || loading}>
                             {texts[id ? 'exist' : 'new'][loading ? 'loading' : 'action']}
                             {loading && <CircularProgress style={{ width: 16, height: 16, marginLeft: 8 }} />}
                         </Button>

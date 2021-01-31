@@ -3,6 +3,7 @@ import { cn } from '@bem-react/classname';
 
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
+import AddIcon from '@material-ui/icons/Add';
 import { IContract } from '@typings/IContract';
 
 import './Contract.scss';
@@ -43,9 +44,10 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
     }
 
     handleAddDocumentClick = (period?: string) => {
-        this.props.onPresetPeriod(moment(period, 'MM.YYYY').valueOf());
+        this.props.onPresetPeriod(period ? moment(period, 'MM.YYYY').valueOf() : undefined);
         this.props.onSwitchDocumentDialog(true);
     }
+
 
     handleCloseDialog = () => {
         this.props.onSwitchDocumentDialog(false);
@@ -156,16 +158,6 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             </div>
                         </div>
                     )}
-                    {contract.fileName && (
-                        <div className={cnContract('Field', { type: 'personal-manager' })}>
-                            <div className={cnContract('FieldName')}>
-                                Вложение
-                            </div>
-                            <div className={cnContract('FieldValue')}>
-                                <Link href={contract.file} target="_blank">{contract.fileName}</Link>
-                            </div>
-                        </div>
-                    )}
                     <div className={cnContract('Field', { type: 'original' })}>
                         <div className={cnContract('FieldName')}>
                             Оригинал в архиве
@@ -174,30 +166,29 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             {contract.orig ? 'Да' : 'Нет'}
                         </div>
                     </div>
+                    <div className={cnContract('Attachment')}>
+                        <div className={cnContract('Title')}>
+                            Вложения
+                            <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={() => this.handleAddDocumentClick()}>
+                                <AddIcon />
+                            </IconButton>
+                        </div>
+                        <div className={cnContract('Documents')}>
+                            {(documents.filter(({ withPeriod }) => withPeriod === false) || []).map(({ type, file, id }) => (
+                                <DocumentItem type={type} file={file} onEditClick={() => onEditDocument(id)} />
+                            ))}
+                        </div>
+                    </div>
                 </div>
+
                 <div className={cnContract('RightColumn')}>
                     <Timeline
                         from={contract.conclusionDate}
                         to={contract.endDate}
-                        documents={documents}
+                        documents={documents.filter(({ withPeriod }) => withPeriod === true)}
                         onEditDocument={onEditDocument}
                         onAddDocument={this.handleAddDocumentClick} />
                     {this.renderDialog(contract.client.deliveryMethod)}
-{/*
-                    <div className={cnContract('Title')}>
-                        Документы
-                        <IconButton className={cnContract('TitleButton')} color="primary" size="small" onClick={this.handleAddDocumentClick}>
-                            <AddIcon />
-                        </IconButton>
-                    </div>
-                    <div className={cnContract('Documents')}>
-                        {(documents || []).map(({ type, period, file, id }) => (
-                            <DocumentItem type={type} period={period} file={file} onEditClick={() => onEditDocument(id)} />
-                        ))}
-                    </div> */}
-                    {/* <div className={cnContract('DocumentsLink')}>
-                        <Link href={`/documents?contarct=${contract.id}`} target="_blank">Посмотреть все документы контракта</Link>
-                    </div> */}
                 </div>
             </div>
         )

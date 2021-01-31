@@ -12,4 +12,5 @@ export interface IDocument {
     fileName?: string;
     comment?: string;
     deliveryMethod: string;
+    withPeriod: boolean;
 };

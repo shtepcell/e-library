@@ -130,8 +130,6 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                                     Контракт
                                     <br />
                                     Дата заключения
-                                    <br />
-                                    № договора
                                 </TableCell>
                                 <TableCell align="left">
                                     Тип / Период
@@ -148,16 +146,15 @@ export class DocumentsPageBase extends PureComponent<IDocumentsPageProps> {
                                 <TableRow className={cnDocumentsPage('Row')} key={row.id}>
                                     <TableCell width={300}>{row.contract.client.name}</TableCell>
                                     <TableCell align="center">
-                                        <Link href={`/contract/${row.contract.id}`} target="_blank">#{row.contract.id}</Link>
+                                        <Link href={`/contract/${row.contract.id}`} target="_blank">{row.contract.orderNumber || '#' + row.contract.id}</Link>
                                         <br />
                                         {moment(row.contract.conclusionDate).format('DD.MM.YYYY')}
                                         <br />
-                                        {row.contract.orderNumber || '–'}
                                     </TableCell>
                                     <TableCell align="left">
                                         {row.type}
                                         <br />
-                                        {moment(row.period).format('MM.YYYY')}
+                                        {row.period && moment(row.period).format('MM.YYYY')}
                                     </TableCell>
                                     <TableCell align="center" component="th" scope="row">
                                         {row.number}

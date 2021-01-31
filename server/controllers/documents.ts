@@ -77,13 +77,21 @@ export const uploadToS3 = (req, res, cb) => {
 
 export const createDocument = (req, res) => uploadToS3(req, res, async (fileUrl) => {
     try {
-        let { type, number, trackNumber, period, date, contract: contractId, fileName, comment, deliveryMethod } = req.body;
+        let { type, number, trackNumber, period, date, contract: contractId, fileName, comment, deliveryMethod, withPeriod } = req.body;
 
         const document: IDocument = new Document({
-            type, trackNumber, period: new Date(Number(period)),
-            date: new Date(Number(date)), file: fileUrl, fileName, comment,
+            type,
+            number,
+            withPeriod,
+            trackNumber,
+            file: fileUrl,
+            fileName,
+            comment,
             deliveryMethod,
         });
+
+        date && (document.date = new Date(Number(date)));
+        period && (document.period = new Date(Number(period)));
 
         document.contract = await Contract.findOne({ id: contractId });
 
@@ -108,8 +116,8 @@ export const saveDocument = (req, res) => uploadToS3(req, res, async (fileUrl) =
         const documentData = _.pick(req.body, editableFields);
         const document = await Document.findOne({ id: req.params.id });
 
-        documentData.period = new Date(Number(documentData.period));
-        documentData.date = new Date(Number(documentData.date));
+        documentData.period && (documentData.period = new Date(Number(documentData.period)));
+        documentData.date && (documentData.date = new Date(Number(documentData.date)));
 
         fileUrl && (document.file = fileUrl);
 
