@@ -62,4 +62,26 @@
         opacity: 0;
         right: 8px;
     }
+
+    &-Comment {
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+
+        margin-left: 8px;
+    }
+
+    &-CommentIcon {
+        flex: 0 0 16px;
+
+        width: 16px;
+        height: 16px;
+
+        margin-right: 4px;
+
+
+        background: url('./comment.svg') no-repeat;
+        background-size: cover;
+    }
 }

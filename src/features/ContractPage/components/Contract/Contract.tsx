@@ -174,8 +174,8 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             </IconButton>
                         </div>
                         <div className={cnContract('Documents')}>
-                            {(documents.filter(({ withPeriod }) => withPeriod === false) || []).map(({ type, file, id }) => (
-                                <DocumentItem type={type} file={file} onEditClick={() => onEditDocument(id)} />
+                            {(documents.filter(({ withPeriod }) => withPeriod === false) || []).map(({ type, file, id, comment }) => (
+                                <DocumentItem type={type} file={file} comment={comment} onEditClick={() => onEditDocument(id)} />
                             ))}
                         </div>
                     </div>
