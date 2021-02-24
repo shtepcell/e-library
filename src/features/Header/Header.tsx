@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { cn } from '@bem-react/classname';
 
 import './Header.scss';
+import { ExcelButton } from '@components/ExcelButton/ExcelButton';
 
 const cnHeader = cn('Header');
 
@@ -16,6 +17,7 @@ export class Header extends PureComponent<IHeaderProps> {
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
                     <div className={cnHeader('Name')}>Контракты</div>
+                    <ExcelButton className={cnHeader('Excel')} />
                 </div>
                 <div className={cnHeader('Right')}>
                     {/* <TextField className={cnHeader('Search')} variant="outlined" size='small' label="Поиск" type="search" /> */}
@@ -31,6 +33,7 @@ export class Header extends PureComponent<IHeaderProps> {
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
                     <div className={cnHeader('Name')}>Контракт #{window.location.pathname.split('/')[2]}</div>
+                    <ExcelButton className={cnHeader('Excel')} />
                     {/* <Tooltip className={cnHeader('Tooltip')} title="В работе" placement="bottom-start" arrow>
                         <WorkIcon color="primary" className={cnHeader('Icon')} />
                     </Tooltip>
@@ -50,6 +53,7 @@ export class Header extends PureComponent<IHeaderProps> {
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
                     <div className={cnHeader('Name')}>Документы</div>
+                    <ExcelButton className={cnHeader('Excel')} />
                 </div>
             </div>
         );
