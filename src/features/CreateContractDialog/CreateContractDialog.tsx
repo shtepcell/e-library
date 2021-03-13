@@ -196,34 +196,15 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         this.setState({ contract, fileChanged: true });
     }
 
-    uploadFile = (id: string) => {
-        const { file, fileName } = this.state.contract;
-
-        const formData = new FormData();
-
-        file && formData.append('file', file);
-        fileName && formData.append('fileName', fileName);
-
-        return request.post(`/contract/${id}/file`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-        });
-    }
-
     createHandler = () => {
         this.setState({ loading: true });
 
         if (this.state.contract.id) {
             request.patch(`/contract/${this.state.contract.id}`, this.state.contract)
-                .then(() => {
-                    this.state.fileChanged && this.uploadFile(this.state.contract.id);
-                })
                 .then(() => window.location.reload())
                 .catch(() => this.setState({ loading: true }));
         } else {
             request.post('/contract', this.state.contract)
-                .then(({ data: { id } }) => this.uploadFile(id))
                 .then(() => window.location.reload())
                 .catch(() => this.setState({ loading: true }));
         }
@@ -409,19 +390,12 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                     />
                     <>
                     <input type="file" id="contract-file" style={{ display: 'none' }} onChange={this.onSelectFile}/>
-                    {fileName ? (
+                    {fileName && (
                         <Chip
                             icon={<DescriptionIcon />}
                             label={fileName}
                             onDelete={this.onRemoveFile}
                         />
-                    ) : (
-                        <label htmlFor="contract-file">
-                            <Button color="primary" component="span">
-                                <CloudUploadIcon className={cnCreateContractDialog('UploadIcon')} />
-                                Выбрать файл
-                            </Button>
-                        </label>
                     )}
                 </>
                 </DialogContent>

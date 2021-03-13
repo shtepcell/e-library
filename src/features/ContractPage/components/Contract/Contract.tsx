@@ -158,6 +158,16 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             </div>
                         </div>
                     )}
+                    {contract.file && (
+                        <div className={cnContract('Field', { type: 'file' })}>
+                            <div className={cnContract('FieldName')}>
+                                Файл <i>(устаревшее поле)</i>
+                            </div>
+                            <div className={cnContract('FieldValue')}>
+                                <Link target="_blank" href={contract.file}>{contract.fileName || 'Вложение'}</Link>
+                            </div>
+                        </div>
+                    )}
                     <div className={cnContract('Field', { type: 'original' })}>
                         <div className={cnContract('FieldName')}>
                             Оригинал в архиве
