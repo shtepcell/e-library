@@ -29,7 +29,7 @@ const clientSchema = new Schema({
         unique: true,
     },
     externalId: {
-        type: Number,
+        type: String,
         unique: true,
         required: true,
     },
