@@ -28,19 +28,13 @@ export class Header extends PureComponent<IHeaderProps> {
 
     renderContractHeader() {
         const { params = {} } = this.props;
+        const contractId = window.location.pathname.split('/')[2];
 
         return (
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
-                    <div className={cnHeader('Name')}>Контракт #{window.location.pathname.split('/')[2]}</div>
-                    {/* <ExcelButton className={cnHeader('Excel')} /> */}
-                    {/* <Tooltip className={cnHeader('Tooltip')} title="В работе" placement="bottom-start" arrow>
-                        <WorkIcon color="primary" className={cnHeader('Icon')} />
-                    </Tooltip>
-                    <div className={cnHeader('Name')}>Контракт #321</div>
-                    <div className={cnHeader('ContractStatus')}>
-                        Активен
-                    </div> */}
+                    <div className={cnHeader('Name')}>Контракт #{contractId}</div>
+                    <ExcelButton className={cnHeader('Excel')} href={`/export/contract/${contractId}`}/>
                 </div>
                 <div className={cnHeader('Right')}>
                 </div>
