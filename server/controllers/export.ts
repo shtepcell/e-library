@@ -1,6 +1,9 @@
+import { generateMonth } from '../../src/lib/helper';
 import xl from 'excel4node';
 import _get from 'lodash/get';
+import moment from 'moment';
 import { Contract } from '../models/Contract';
+import { Document } from '../models/Document';
 
 const managerConverter = ({ lastName, firstName, middleName }) => [lastName, firstName, middleName].join(' ');
 
@@ -21,19 +24,49 @@ const contractFields = [
 ];
 
 const createContractHeader = (ws) => {
+    const months = generateMonth();
+
     contractFields.forEach(({ name }, index) => {
         ws.cell(1, index + 1).string(name);
     });
+
+    months.forEach((item, index) => {
+        ws.cell(1, index + contractFields.length + 1 ).string(item);
+        ws.column(index + contractFields.length + 1).setWidth(19);
+    })
 }
 
-const contractMapper = (ws) => (contract, row) => {
+const contractMapper = async (contract, row, ws) => {
+    const documents = await Document.find({ contract: contract._id, withPeriod: true }).lean();
+
+    const months = generateMonth();
+
     contractFields.forEach(({ path, type, converter }, index) => {
         const value = _get(contract, path);
 
         if (value !== undefined) {
-            ws.cell(row + 2, index + 1)[type](converter ? converter(value) : value);
+            ws.cell(row + 2, index + 1)[type](converter ? converter(value) : value).style({ alignment: { vertical: 'center' }});
         }
     });
+
+    const documentsHash = {};
+
+    documents.forEach((doc) => {
+        const period = moment(doc.period).format('MM.YYYY');
+
+        const idx = months.indexOf(period);
+
+        if (idx >= 0) {
+            if (documentsHash[period]) {
+                documentsHash[period].push(doc.type);
+            } else {
+                documentsHash[period] = [doc.type];
+            }
+
+            ws.cell(row + 2, contractFields.length + idx + 1).string(documentsHash[period].join('\n')).style({ alignment: { wrapText: true }, font: { size: 12 } });
+        }
+    })
+
 }
 
 export const contractExporter = async (req, res) => {
@@ -44,7 +77,10 @@ export const contractExporter = async (req, res) => {
 
     const contracts = await Contract.find({ id: req.params.id }).populate('client serviceManager personalManager');
 
-    contracts.forEach(contractMapper(ws));
+    for (let i = 0; i < contracts.length; i++) {
+        const contract = contracts[i];
+        await contractMapper(contract, i, ws);
+    }
 
     return wb.write('Excel.xlsx', res);
 }
