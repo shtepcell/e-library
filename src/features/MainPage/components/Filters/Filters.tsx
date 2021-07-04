@@ -4,7 +4,7 @@ import { Statuses } from '../../../../const/statuses';
 import { i18n } from '@lib/i18n';
 
 import './Filters.scss';
-import { CircularProgress, MenuItem, TextField } from '@material-ui/core';
+import { MenuItem, TextField, Link } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { IFiltersProps } from '.';
 
@@ -49,15 +49,18 @@ export class FiltersBase extends PureComponent<IFiltersProps> {
         this.props.onChange('manager', value ? value : undefined);
     }
 
-
     render() {
-        const { loading, suggestedClients, suggestedManagers} = this.props;
+        const { loading, suggestedClients, suggestedManagers, filters } = this.props;
+        const { id, status, type, orig, client, manager } = filters || {};
 
         return (
             <div className={cnFilters()}>
-                <h2>Поисковые фильтры</h2>
+                <div className={cnFilters('Header')}>
+                    <h2 className={cnFilters('Title')}>Поисковые фильтры</h2>
+                    <Link href="?">Очистить фильтры</Link>
+                </div>
                 <div className={cnFilters('Row')}>
-                    <TextField style={{ width: 120, marginRight: 12 }} variant="outlined" size="small" label="ID" type="search" onChange={this.onChangeId}/>
+                    <TextField style={{ width: 120, marginRight: 12 }} variant="outlined" size="small" label="ID" type="search" onChange={this.onChangeId} value={id} />
                     <TextField
                         style={{ width: 150, marginRight: 12 }}
                         select
@@ -65,6 +68,7 @@ export class FiltersBase extends PureComponent<IFiltersProps> {
                         variant="outlined"
                         label="Статус"
                         size="small"
+                        value={status || ''}
                     >
                         <MenuItem value=""><em>Не важно</em></MenuItem>
                         {Statuses.map(item=> <MenuItem value={i18n(item)}>{i18n(item)}</MenuItem>)}
@@ -76,6 +80,7 @@ export class FiltersBase extends PureComponent<IFiltersProps> {
                         variant="outlined"
                         label="Тип контракта"
                         size="small"
+                        value={type || ''}
                     >
                         <MenuItem value=""><em>Не важно</em></MenuItem>
                         <MenuItem value="Договор">Договор</MenuItem>
@@ -88,6 +93,7 @@ export class FiltersBase extends PureComponent<IFiltersProps> {
                         variant="outlined"
                         label="Оригинал в архиве"
                         size="small"
+                        value={orig || ''}
                     >
                         <MenuItem value=""><em>Не важно</em></MenuItem>
                         <MenuItem value="1">Да</MenuItem>
@@ -103,6 +109,7 @@ export class FiltersBase extends PureComponent<IFiltersProps> {
                         loading={loading}
                         size="small"
                         onSelect={this.onChangeClient}
+                        value={client || ''}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -121,6 +128,7 @@ export class FiltersBase extends PureComponent<IFiltersProps> {
                         loading={loading}
                         loadingText="Загрузка..."
                         onSelect={this.onChangeManager}
+                        value={manager || ''}
                         renderInput={(params) => (
                             <TextField
                                 {...params}

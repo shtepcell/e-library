@@ -1,6 +1,16 @@
 .Filters {
     padding: 16px 0;
 
+    &-Header {
+        display: flex;
+
+        align-items: center;
+    }
+
+    &-Title {
+        margin-right: 24px;
+    }
+
     h2 {
         color: #3e3e3e;
     }

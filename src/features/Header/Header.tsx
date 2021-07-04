@@ -17,7 +17,9 @@ export class Header extends PureComponent<IHeaderProps> {
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
                     <div className={cnHeader('Name')}>Контракты</div>
-                    {/* <ExcelButton className={cnHeader('Excel')} /> */}
+                    <ExcelButton className={cnHeader('Excel')} onClick={() => {
+                        window.open('/export/contracts' + window.location.search);
+                    }}/>
                 </div>
                 <div className={cnHeader('Right')}>
                     {/* <TextField className={cnHeader('Search')} variant="outlined" size='small' label="Поиск" type="search" /> */}
@@ -34,7 +36,7 @@ export class Header extends PureComponent<IHeaderProps> {
             <div className={cnHeader()}>
                 <div className={cnHeader('Left')}>
                     <div className={cnHeader('Name')}>Контракт #{contractId}</div>
-                    <ExcelButton className={cnHeader('Excel')} href={`/export/contract/${contractId}`}/>
+                    <ExcelButton className={cnHeader('Excel')} href={`/export/contracts?id=${contractId}`}/>
                 </div>
                 <div className={cnHeader('Right')}>
                 </div>

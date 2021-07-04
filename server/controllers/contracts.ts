@@ -92,37 +92,43 @@ export const uploadContractDocument = (req, res) => uploadToS3(req, res, async (
     return res.status(200).send(_.pick(contract, [...fields, 'id']));
 })
 
-export const getContracts = async (req, res)  => {
-    try {
-        const query = _.pick(req.query, ['id', 'type', 'status', 'orig', 'client', 'serviceManager']);
-        if (query.orig === '' || !query.orig) {
-            delete query.orig;
+export const buildContractQuery = async (req) => {
+    const query = _.pick(req.query, ['id', 'type', 'status', 'orig', 'client', 'serviceManager']);
+
+    if (query.orig === '' || !query.orig) {
+        delete query.orig;
+    } else {
+        query.orig = Boolean(Number(query.orig));
+    }
+
+    if (query.client) {
+        const client = await Client.findOne({ name: query.client });
+
+        if (client) {
+            query.client = client;
         } else {
-            query.orig = Boolean(Number(query.orig));
+            delete query.client;
         }
+    }
 
-        if (query.client) {
-            const client = await Client.findOne({ name: query.client });
+    if (query.serviceManager) {
+        const [lastName, firstName, middleName] = query.serviceManager.split(' ');
+        // @ts-ignore
+        const manager = await Manager.findOne({lastName, firstName, middleName});
 
-            if (client) {
-                query.client = client;
-            } else {
-                delete query.client;
-            }
+        if (manager) {
+            query.serviceManager = manager;
+        } else {
+            delete query.serviceManager;
         }
+    }
 
-        if (query.serviceManager) {
-            const [lastName, firstName, middleName] = query.serviceManager.split(' ');
-            // @ts-ignore
-            const manager = await Manager.findOne({lastName, firstName, middleName});
+    return query;
+}
 
-            if (manager) {
-                query.serviceManager = manager;
-            } else {
-                delete query.serviceManager;
-            }
-        }
-
+export const getContracts = async (req, res) => {
+    try {
+        const query = await buildContractQuery(req);
         const limit = 25;
 
         const total = await Contract.countDocuments(query);

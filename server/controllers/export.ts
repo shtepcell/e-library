@@ -4,6 +4,7 @@ import _get from 'lodash/get';
 import moment from 'moment';
 import { Contract } from '../models/Contract';
 import { Document } from '../models/Document';
+import { buildContractQuery } from './contracts';
 
 const managerConverter = ({ lastName, firstName, middleName }) => [lastName, firstName, middleName].join(' ');
 
@@ -75,7 +76,9 @@ export const contractExporter = async (req, res) => {
 
     createContractHeader(ws);
 
-    const contracts = await Contract.find({ id: req.params.id }).populate('client serviceManager personalManager');
+    const query = await buildContractQuery(req);
+
+    const contracts = await Contract.find(query).populate('client serviceManager personalManager');
 
     for (let i = 0; i < contracts.length; i++) {
         const contract = contracts[i];

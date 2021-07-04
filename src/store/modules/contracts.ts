@@ -46,6 +46,15 @@ const initialState: IContractsState = {
     filters: {},
 };
 
+const serialize = function (obj) {
+    var str = [];
+    for (var p in obj)
+        if (obj.hasOwnProperty(p) && obj[p] !== undefined) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+    return str.join("&");
+}
+
 export const contractsReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(getContracts.fulfilled, (state, action) => {
@@ -58,6 +67,11 @@ export const contractsReducer = createReducer(initialState, (builder) => {
         })
 
         .addCase(onFiltersChange, (state, action) => {
+            if (history.pushState) {
+                var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?' + serialize(action.payload);
+                window.history.pushState({ path: newurl }, '', newurl);
+            }
+
             state.filters = action.payload;
             state.page = 1;
         })

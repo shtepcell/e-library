@@ -134,7 +134,7 @@ app.use((req, res, next) => {
 
 apiRouter(app);
 
-app.get('/export/contract/:id', contractExporter);
+app.get('/export/contracts', contractExporter);
 
 app.get('*', (req, res) => {
     return res.sendFile(path.resolve('static/project.html'));

@@ -48,7 +48,16 @@ export class MainPageBase extends PureComponent<IContractsSpravProps, IMainPageS
     }
 
     componentDidMount() {
-        this.props.getContracts({});
+        const search = location.search.substring(1);
+        
+        let filters = {};
+
+        try {
+            filters = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+        } catch (err) {}
+        
+        this.props.onFiltersChange(filters);
+        this.props.getContracts(filters);
     }
 
     render() {
