@@ -9,6 +9,7 @@ export interface IContract {
 
     conclusionDate: Date;
     endDate: Date;
+    startDate?: Date;
 
     amount: string;
 

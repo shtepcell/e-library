@@ -86,6 +86,14 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
         this.setState({ contract: newContract });
     };
 
+    handleStartDateChange = (date) => {
+        const newContract = { ...this.state.contract };
+
+        newContract['startDate'] = date;
+
+        this.setState({ contract: newContract });
+    };
+
     handleEndDateChange = (date) => {
         const newContract = { ...this.state.contract };
 
@@ -213,10 +221,10 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
 
     render() {
         const { open, onClose } = this.props;
-        const { type, department, status, serviceManager, personalManager, conclusionDate, endDate, amount, client, orig, fileName, id, orderNumber } = this.state.contract;
+        const { type, department, status, serviceManager, personalManager, conclusionDate, startDate, endDate, amount, client, orig, fileName, id, orderNumber } = this.state.contract;
         const { serviceSuggest, personalSuggest, clientSuggest, loading } = this.state;
 
-        const disabledCreate = loading || !type || !department || !status || !serviceManager || !personalManager || !conclusionDate || !client;
+        const disabledCreate = !id && !loading && (!type || !department || !status || !serviceManager || !personalManager || !conclusionDate || !startDate || !client);
 
         return (
             <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" className={cnCreateContractDialog()}>
@@ -346,20 +354,17 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                             className={cnCreateContractDialog('Field', { type: 'dateOfConclusion' })}
                             disableToolbar
                             format="DD.MM.YYYY"
-                            id="date-picker-dialog"
+                            id="date-conclusion-picker-dialog"
                             label="Дата заключения контракта"
                             value={conclusionDate}
                             onChange={this.handleConclusionDateChange}
                             inputVariant="outlined"
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
                         />
                         <KeyboardDatePicker
                             className={cnCreateContractDialog('Field', { type: 'endDate' })}
                             disableToolbar
                             format="DD.MM.YYYY"
-                            id="date-picker-dialog"
+                            id="date-end-picker-dialog"
                             label="Дата завершения действия"
                             value={endDate || ''}
                             error={false}
@@ -369,7 +374,17 @@ export class CreateContractDialog extends Component<IOwnProps, IOwnState> {
                         />
                     </div>
                     <div className={cnCreateContractDialog('Row')}>
-                        <TextField
+                        <KeyboardDatePicker
+                            className={cnCreateContractDialog('Field', { type: 'startDate' })}
+                            disableToolbar
+                            format="DD.MM.YYYY"
+                            id="date-start-picker-dialog"
+                            label="Дата начала предоставления услуг"
+                            value={startDate || conclusionDate}
+                            onChange={this.handleStartDateChange}
+                            inputVariant="outlined"
+                        />
+                         <TextField
                             className={cnCreateContractDialog('Field', { type: 'orderNumber' })}
                             value={orderNumber}
                             onChange={this.handlerContractChange('orderNumber')}

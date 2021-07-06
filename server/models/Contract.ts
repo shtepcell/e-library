@@ -9,6 +9,7 @@ export interface IContract extends mongoose.Document {
     orderNumber?: string;
     type: string;
     status: string;
+    startDate?: Date;
     conclusionDate: Date;
     endDate: Date;
     amount?: string;
@@ -45,6 +46,7 @@ const contractSchema = new Schema({
         required: true,
         default: 'active'
     },
+    startDate: Date,
     conclusionDate: Date,
     endDate: Date,
     amount: String,

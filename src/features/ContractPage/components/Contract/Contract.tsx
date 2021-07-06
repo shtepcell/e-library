@@ -122,6 +122,16 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
                             {moment(contract.conclusionDate).format('DD.MM.YYYY')}
                         </div>
                     </div>
+                    {contract.startDate && (
+                        <div className={cnContract('Field', { type: 'service-manager' })}>
+                            <div className={cnContract('FieldName')}>
+                                Дата начала предоставления услуг
+                            </div>
+                            <div className={cnContract('FieldValue')}>
+                                {moment(contract.startDate).format('DD.MM.YYYY')}
+                            </div>
+                        </div>
+                    )}
                     {contract.endDate && (
                         <div className={cnContract('Field', { type: 'service-manager' })}>
                             <div className={cnContract('FieldName')}>
@@ -193,7 +203,7 @@ export class Contract extends PureComponent<IContractProps, IOwnState> {
 
                 <div className={cnContract('RightColumn')}>
                     <Timeline
-                        from={contract.conclusionDate}
+                        from={contract.startDate || contract.conclusionDate}
                         to={contract.endDate}
                         documents={documents.filter(({ withPeriod }) => withPeriod === true)}
                         onEditDocument={onEditDocument}

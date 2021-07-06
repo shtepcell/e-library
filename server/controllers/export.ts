@@ -17,6 +17,7 @@ const contractFields = [
     { name: 'Департамент', path: 'department', type: 'string' },
     { name: 'Клиент', path: 'client.name', type: 'string' },
     { name: 'Дата заключения', path: 'conclusionDate', type: 'date' },
+    { name: 'Дата начала предоставления услуг', path: 'startDate', type: 'date' },
     { name: 'Дата завершения', path: 'endDate', type: 'date' },
     { name: 'Сумма контракта', path: 'amount', type: 'string' },
     { name: 'Сервис-менеджер', path: 'serviceManager', type: 'string', converter: managerConverter },
